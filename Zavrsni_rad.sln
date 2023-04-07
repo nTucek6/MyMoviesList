@@ -37,9 +37,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Profile", "Service
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Discussions", "Services.Discussions\Services.Discussions.csproj", "{5A9CA5A1-A755-4782-8448-6D44524000B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.MovieSearch", "MovieSearch\Services.MovieSearch.csproj", "{16DF915E-DE42-4DA7-B79B-148AF458AD3F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.MovieSearch", "Services.MovieSearch\Services.MovieSearch.csproj", "{16DF915E-DE42-4DA7-B79B-148AF458AD3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMoviesList.EnumExtension", "MyMoviesList.Extensions\MyMoviesList.EnumExtension.csproj", "{CCF09D61-BC3B-4CE6-8FAB-A2F94F79D5EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyMoviesList.EnumExtension", "MyMoviesList.Extensions\MyMoviesList.EnumExtension.csproj", "{CCF09D61-BC3B-4CE6-8FAB-A2F94F79D5EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
