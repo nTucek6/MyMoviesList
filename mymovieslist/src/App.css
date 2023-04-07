@@ -1,0 +1,196 @@
+/* Footer setup */
+
+html
+{
+    height:100%;
+}
+
+/*
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+*/
+
+body {
+    min-height: 100%;
+    position: relative;
+    margin: 0;
+    padding-bottom: 6rem;
+}
+
+.footer-custom {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+
+body,input,select
+{
+  font-style: italic;
+}
+
+.footer-custom {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height:auto;
+}
+
+
+/* end ............................... */
+
+.App {
+    text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Navigation css for site name */
+
+#site-name
+{
+ font-family: 'cursive';
+ font-size:x-large;
+}
+
+/* end ............................... */
+
+
+/* Navigation css for login and register button */
+
+.navigation-login
+{
+  color: #000000;
+}
+
+.navigation-login:hover
+{
+  color: #ffffff;
+}
+
+.navigation-register
+{
+  color: #ffffff;
+}
+
+.navigation-register:hover
+{
+  color: #D3D3D3;
+} 
+
+
+@media (min-width:991.2px) 
+{
+  .navigation-login
+  {
+  margin-right: 5px;
+  }
+}
+
+@media (max-width:991.2px) 
+{
+  .navigation-lr
+  {
+    display: inline;
+  }
+
+    .navigation-p {
+        display: inline;
+    }
+
+
+  .navigation-login
+  {
+  margin-bottom: 5px;
+  }
+}
+
+/* end ............................... */
+
+/* Navigation css for search form and links */
+
+
+.navigation-custom
+{
+  background-color: #375a91;
+
+}
+
+.dropdown-custom > a
+{
+  color:#ffffff;
+}
+
+.dropdown-custom > a:hover
+{
+  color:#D3D3D3;
+}
+
+
+
+@media (min-width:991.2px) 
+{
+  .navigation-select
+  {
+  margin-right: 5px;
+  }
+  .navigation-input
+  {
+  margin-right: 5px;
+  width:25%;
+  }
+}
+
+@media (max-width:991.2px) 
+{
+  .navigation-select
+  {
+  margin-bottom: 5px;
+  }
+  .navigation-input
+  {
+  margin-bottom: 5px;
+  }
+}
+
+/* end ............................... */
+
+
+
