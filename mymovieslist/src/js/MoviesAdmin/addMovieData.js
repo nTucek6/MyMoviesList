@@ -2,6 +2,7 @@ import Select from 'react-select'
 import { useEffect, useState } from 'react';
 import GetGenresAPI from './getGenres';
 import UpdateMovie from './UpdateMovie';
+import previewImage from '../../img/preview.jpg';
 
 const MovieModalData = ({ setIsOpen }) => {
 
@@ -21,6 +22,9 @@ const MovieModalData = ({ setIsOpen }) => {
     const [GetWriters, setGetWriters] = useState([]);
     const [GetActors, setGetActors] = useState([]);
 
+    const [selectedFile, setSelectedFile] = useState();
+    const [preview, setPreview] = useState()
+
     useEffect(() => {
         GetGenresAPI({ setGetGenres });
     }, []);
@@ -30,6 +34,36 @@ const MovieModalData = ({ setIsOpen }) => {
         console.log(Genres);
 
     }, [Genres]);
+
+
+    const imageStyle = {
+        height:"400px",
+        width:"300px",
+    }
+
+    useEffect(() => {
+        if (!selectedFile) {
+            setPreview(undefined)
+            return
+        }
+
+    
+        const objectUrl = URL.createObjectURL(selectedFile)
+        setPreview(objectUrl)
+
+        // free memory when ever this component is unmounted
+        return () => URL.revokeObjectURL(objectUrl)
+    }, [selectedFile])
+
+
+    const onSelectFile = e => {
+        if (!e.target.files || e.target.files.length === 0) {
+            setSelectedFile(undefined)
+            return
+        }
+        setSelectedFile(e.target.files[0])
+    }
+
 
     const handleSubmit = async e => {
         e.preventDefault();
@@ -110,7 +144,12 @@ const MovieModalData = ({ setIsOpen }) => {
                 </div>
 
                 <div className="form-group mb-2">
-                    <input type="file" className="form-control" />
+                    <input type="file" className="form-control" onChange={onSelectFile} />
+                </div>
+
+                
+                <div className='d-flex justify-content-center mb-2'>
+                  {(preview !== undefined) ?   <img src={preview} style={imageStyle} alt='preview' /> : <img src={previewImage} style={imageStyle} alt='preview' />}
                 </div>
 
                 <hr />

@@ -194,3 +194,14 @@ body,input,select
 
 
 
+/* Modal css */
+
+
+.modal-custom
+{
+  position:absolute;
+  overflow:scroll;
+}
+
+
+/* end ............................... */

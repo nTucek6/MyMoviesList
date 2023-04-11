@@ -1,6 +1,6 @@
-import Select from 'react-select'
 import { useEffect, useState } from 'react';
 import UpdatePerson from './UpdatePerson';
+import previewImage from '../../img/preview.jpg';
 
 
 const PersonModalData = ({ setIsOpen }) => {
@@ -9,13 +9,38 @@ const PersonModalData = ({ setIsOpen }) => {
     const [LastName, setLastName] = useState(null);
     const [BirthDate, setBirthDate] = useState(null);
     const [BirthPlace, setBirthPlace] = useState(null);
-    const [PersonImageURL, setPersonImageURL] = useState(null);
- 
-    useEffect(() =>
-    {
-        setPersonImageURL("dsds")
-    }, []);
 
+    const [selectedFile, setSelectedFile] = useState();
+    const [preview, setPreview] = useState()
+
+    const imageStyle = {
+        height:"400px",
+        width:"300px",
+    }
+
+  
+
+    useEffect(() => {
+        if (!selectedFile) {
+            setPreview(undefined)
+            return
+        }
+
+        const objectUrl = URL.createObjectURL(selectedFile)
+        setPreview(objectUrl)
+
+        // free memory when ever this component is unmounted
+        return () => URL.revokeObjectURL(objectUrl)
+    }, [selectedFile])
+
+
+    const onSelectFile = e => {
+        if (!e.target.files || e.target.files.length === 0) {
+            setSelectedFile(undefined)
+            return
+        }
+        setSelectedFile(e.target.files[0])
+    }
 
     const handleSubmit = async e => {
         e.preventDefault();
@@ -25,9 +50,8 @@ const PersonModalData = ({ setIsOpen }) => {
             LastName,
             BirthDate,
             BirthPlace,
-            PersonImageURL
+            selectedFile
         }).then(function (response) {
-
         });
     }
 
@@ -52,8 +76,13 @@ const PersonModalData = ({ setIsOpen }) => {
                 </div>
 
                 <div className="form-group mb-2">
-                   <input type="file" className="form-control" />
+                   <input type="file" className="form-control" onChange={onSelectFile} />
                 </div>
+
+                <div className='d-flex justify-content-center'>
+                  {(preview !== undefined) ?   <img src={preview} style={imageStyle} alt='preview' /> : <img src={previewImage} style={imageStyle} alt='preview' />}
+                </div>
+
 
                 <div className="mt-2 d-flex flex-row-reverse">
                     <button type="submit" className="btn btn-outline-info mt-3 p-2">Add person</button>
