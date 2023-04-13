@@ -5,6 +5,9 @@ import { ThreeDots } from 'react-loader-spinner';
 import customStyles from '../../js/PersonAdmin/customStyles';
 import LoadPeople from '../../js/PersonAdmin/LoadPeople';
 import GetPeopleCount from '../../js/PersonAdmin/GetPeopleCount';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPenToSquare} from '@fortawesome/free-solid-svg-icons'
+import { format } from 'date-fns'
 
 export default function PersonAdmin()
 {
@@ -93,6 +96,9 @@ export default function PersonAdmin()
                                 <th>Rbr.</th>
                                 <th>FirstName</th>
                                 <th>LastName</th>
+                                <th>Birth date</th>
+                                <th>Birth place</th>
+                                <th>Image</th>
                                 <th>Edit</th>
                             </tr>
                         </thead>
@@ -101,7 +107,12 @@ export default function PersonAdmin()
                                 return (
                                     <tr key={p.id}>
                                         <td>{index + 1}</td>
-                                        <td>{p.firstname}</td>
+                                        <td>{p.firstName}</td>
+                                        <td>{p.lastName}</td>
+                                        <td>{format(new Date(p.birthDate), 'dd/MM/yyyy')}</td>
+                                        <td>{p.birthPlace}</td>
+                                        <td><img alt='' height={50} width={50} src={"data:image/png;base64,"+p.personImageData} /></td>
+                                        <td><button className='btn'><FontAwesomeIcon icon={faPenToSquare} /></button></td>
                                     </tr>
                                 )
                             })

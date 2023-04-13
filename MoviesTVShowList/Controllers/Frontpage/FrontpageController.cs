@@ -19,16 +19,18 @@ namespace MyMoviesList.Controllers.Frontpage
         public async Task<List<MoviesEntity>> GetRecentMovies()
         {
 
-               var data = await myMoviesListContext.Movies.Select(s => new MoviesEntity 
-             {
-                 Id = s.Id,
-                 MovieName = s.MovieName,
-                 MovieImageURL = s.MovieImageURL
-             }
+            var data = await myMoviesListContext.Movies.Select(s => new MoviesEntity
+            {
+                Id = s.Id,
+                MovieName = s.MovieName,
+                MovieImageData = s.MovieImageData
+            }
 
-             ).ToListAsync(); 
+          ).ToListAsync();
 
-             return data;
+            return data;
+
+
         }
 
 

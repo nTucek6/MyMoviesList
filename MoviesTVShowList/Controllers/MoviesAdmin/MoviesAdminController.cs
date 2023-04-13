@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Services.MoviesAdmin;
+using Services.PersonAdmin;
 
 namespace MyMoviesList.Controllers.MoviesAdmin
 {
@@ -37,6 +38,15 @@ namespace MyMoviesList.Controllers.MoviesAdmin
             var count = await addMovieService.GetMoviesCount();
 
             return Ok(count);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> SaveMovie([FromForm]SaveMovie movie)
+        {
+            await addMovieService.SaveMovie(movie);
+
+            return Ok();
         }
 
 

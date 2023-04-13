@@ -14,13 +14,11 @@ export default async function LoadPeople({ people, setPeople, setIsCompleted,pos
         }
     })
         .then(function (response) {
-            if (response) {
                 setPeople([
                     ...people,
                     ...response.data
                 ]);
                 setIsCompleted(true);
-            }
         })
         .catch(function (response) {
             console.log(response);

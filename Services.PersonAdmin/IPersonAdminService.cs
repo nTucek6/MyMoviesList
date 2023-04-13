@@ -5,9 +5,9 @@ namespace Services.PersonAdmin
 {
     public interface IPersonAdminService
     {
-        Task SavePerson(PeopleEntity person);
+        Task SavePerson(Person person);
 
-        Task<List<PeopleEntity>> GetPeople();
+        Task<List<PeopleEntity>> GetPeople(int PostPerPage, int Page, string? Search);
         Task<int> GetPeopleCount();
     }
 }

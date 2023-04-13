@@ -1,4 +1,5 @@
 import { useLocation } from "react-router-dom";
+import { format } from 'date-fns'
 
 export default function Discussion() {
     const location = useLocation();
@@ -8,7 +9,7 @@ export default function Discussion() {
     return (
         <>
             <div className="container">
-                <h6>Time created: {data.timePosted}</h6>
+                <h6>Time created: {format(new Date(data.timePosted), 'dd.MM.yyyy HH:mm:ss')}</h6>
                 <hr />
                 <h5 className="mb-3">Discussion title: {data.title}</h5>
                 <p>{data.discussion}</p>

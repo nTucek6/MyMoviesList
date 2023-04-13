@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import config from './../../config.json';
 import { useNavigate } from "react-router-dom";
 //import { ProgressBar } from 'react-loader-spinner';
+import { format } from 'date-fns'
 
 export default function GetDiscussions() {
     const [Discussions, setDiscussions] = useState([]);
@@ -41,7 +42,7 @@ export default function GetDiscussions() {
                         <div className="col mb-3" key={discussion.id}>
                             <div style={{cursor:"pointer"}} onClick={() => toDiscussion('discussion/' + discussion.title, discussion)}>
                                 <h5>{discussion.title}</h5>
-                                <h6>User: {discussion.user.username}, posted: {discussion.timePosted}</h6>
+                                <h6>User: {discussion.user.username}, posted: {format(new Date(discussion.timePosted), 'dd.MM.yyyy HH:mm:ss')}</h6>
                             </div>
                         </div>
                     )

@@ -1,4 +1,5 @@
 ﻿using Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.PersonAdmin;
 
@@ -15,14 +16,15 @@ namespace MyMoviesList.Controllers.PersonAdmin
             this.personAdminService = personAdminService;
         }
 
-        public async Task<IActionResult> GetPeople()
+        public async Task<IActionResult> GetPeople(int PostPerPage, int Page, string? Search)
         {
-            var people = await personAdminService.GetPeople();
+            var people = await personAdminService.GetPeople(PostPerPage,Page,Search);
 
-            return Ok();
+            return Ok(people);
         }
 
-        public async Task<IActionResult> SavePerson(PeopleEntity person)
+        [HttpPost]
+        public async Task<IActionResult> SavePerson([FromForm]Person person)
         {
             await personAdminService.SavePerson(person);
 

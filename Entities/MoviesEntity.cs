@@ -22,6 +22,6 @@
 
         public decimal? Rating { get; set; }
 
-        public string MovieImageURL { get; set; }
+        public byte[] MovieImageData { get; set; }
     }
 }

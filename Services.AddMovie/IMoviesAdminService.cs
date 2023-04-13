@@ -8,7 +8,7 @@ namespace Services.MoviesAdmin
       Task<List<GenresSelect>> GetGenres();
       Task<List<Movies>> GetMovies(int PostPerPage, int Page, string? Search);
       Task<int> GetMoviesCount();
-       
+      Task SaveMovie(SaveMovie movie);
 
 
     }

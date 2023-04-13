@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import UpdatePerson from './UpdatePerson';
 import previewImage from '../../img/preview.jpg';
-
+import { useNavigate } from 'react-router-dom';
 
 const PersonModalData = ({ setIsOpen }) => {
 
@@ -10,8 +10,10 @@ const PersonModalData = ({ setIsOpen }) => {
     const [BirthDate, setBirthDate] = useState(null);
     const [BirthPlace, setBirthPlace] = useState(null);
 
-    const [selectedFile, setSelectedFile] = useState();
-    const [preview, setPreview] = useState()
+    const [personImage, setPersonImage] = useState();
+    const [preview, setPreview] = useState();
+
+    const navigate = useNavigate();
 
     const imageStyle = {
         height:"400px",
@@ -19,39 +21,41 @@ const PersonModalData = ({ setIsOpen }) => {
     }
 
   
-
     useEffect(() => {
-        if (!selectedFile) {
+        if (!personImage) {
             setPreview(undefined)
             return
         }
 
-        const objectUrl = URL.createObjectURL(selectedFile)
+        const objectUrl = URL.createObjectURL(personImage)
         setPreview(objectUrl)
 
         // free memory when ever this component is unmounted
         return () => URL.revokeObjectURL(objectUrl)
-    }, [selectedFile])
+    }, [personImage])
 
 
     const onSelectFile = e => {
         if (!e.target.files || e.target.files.length === 0) {
-            setSelectedFile(undefined)
+            setPersonImage(undefined)
             return
         }
-        setSelectedFile(e.target.files[0])
+        setPersonImage(e.target.files[0])
     }
 
     const handleSubmit = async e => {
         e.preventDefault();
         setIsOpen(false);
-        await UpdatePerson({
-            FirstName,
-            LastName,
-            BirthDate,
-            BirthPlace,
-            selectedFile
-        }).then(function (response) {
+
+        const Person = new FormData();
+        Person.append("FirstName", FirstName);
+        Person.append("LastName", LastName);
+        Person.append("BirthDate", BirthDate);
+        Person.append("BirthPlace", BirthPlace);
+        Person.append("PersonImage", personImage);
+
+        await UpdatePerson({Person}).then(function (response) {
+            navigate(0);
         });
     }
 

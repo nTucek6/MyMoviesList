@@ -1,9 +1,9 @@
 ﻿using Entities;
-
+using Microsoft.AspNetCore.Http;
 
 namespace Services.MoviesAdmin
 {
-    public class Movies
+    public class SaveMovie
     {
         public int Id { get; set; }
 
@@ -23,7 +23,7 @@ namespace Services.MoviesAdmin
 
         public decimal Duration { get; set; }
 
-        public byte[] MovieImageData { get; set; }
+        public IFormFile MovieImageData { get; set; }
 
     }
 }

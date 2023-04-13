@@ -8,7 +8,7 @@ namespace Entities
         public string LastName { get; set; }
         public DateTime BirthDate { get; set; }
         public string BirthPlace { get; set; }
-        public string PersonImageURL { get; set; }
+        public byte[] PersonImageData { get; set; }
 
     }
 }

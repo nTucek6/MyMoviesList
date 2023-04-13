@@ -1,18 +1,19 @@
 import config from './../../config.json';
 import axios from "axios";
 
-export default async function UpdatePerson (Person)
-{
+export default async function UpdatePerson({ Person }) {
+   
     await axios({
-        method: "post",
+        method: "POST",
         url: config.SERVER_URL + "PersonAdmin/SavePerson",
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
         data: Person
     })
         .then(function (response) {
-            if (response) {
-            
-            }
+            console.log(response);
+          
         })
         .catch(function (response) {
             console.log(response);

@@ -1,11 +1,7 @@
 ﻿using Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DatabaseContext;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Services.PersonAdmin
 {
@@ -19,33 +15,57 @@ namespace Services.PersonAdmin
             this.myMoviesListContext = myMoviesListContext;
         }
 
-        public async Task<List<PeopleEntity>> GetPeople()
+        public async Task<List<PeopleEntity>> GetPeople(int PostPerPage, int Page, string? Search)
         {
-            var people = await myMoviesListContext.People.Select(p =>
-                new PeopleEntity 
+            Expression<Func<PeopleEntity, bool>> predicate = x => true;
+
+            if (!String.IsNullOrEmpty(Search))
+            {
+                predicate = x => x.FirstName.Contains(Search) || x.LastName.Contains(Search);
+            }
+
+            var people = await myMoviesListContext.People
+                .Where(predicate)
+                .OrderBy(o => o.FirstName)
+                .Select(p =>
+                new PeopleEntity
                 {
                     Id = p.Id,
                     FirstName = p.FirstName,
                     LastName = p.LastName,
                     BirthDate = p.BirthDate,
-                    BirthPlace = p.BirthPlace
+                    BirthPlace = p.BirthPlace,
+                    PersonImageData = p.PersonImageData
                 }
-                ).ToListAsync();
+                )
+                .Skip((Page - 1) * PostPerPage)
+                .Take(PostPerPage)
+                .ToListAsync();
             return people;
+
         }
 
-        public async Task SavePerson(PeopleEntity person)
+        public async Task SavePerson(Person person)
         {
-           await myMoviesListContext.People.AddAsync(new PeopleEntity 
-           {
-               FirstName = person.FirstName,
-               LastName = person.LastName,
-               BirthDate= person.BirthDate,
-               BirthPlace= person.BirthPlace,
-               PersonImageURL = person.PersonImageURL
-           });
+            byte[] s = null;
+            using (var ms = new MemoryStream())
+             {
+               person.PersonImage.CopyTo(ms);
+                s = ms.ToArray();
+              // s = Convert.ToBase64String(fileBytes);
+               // act on the Base64 data
+              }
 
-           await myMoviesListContext.SaveChangesAsync();
+            await myMoviesListContext.People.AddAsync(new PeopleEntity
+            {
+                FirstName = person.FirstName,
+                LastName = person.LastName,
+                BirthDate = person.BirthDate,
+                BirthPlace = person.BirthPlace,
+                PersonImageData = s
+            });
+
+            await myMoviesListContext.SaveChangesAsync();
 
         }
 
@@ -53,7 +73,7 @@ namespace Services.PersonAdmin
         {
             var count = await myMoviesListContext.People.CountAsync();
 
-            return count;
+            return 0;
         }
 
     }
