@@ -2,6 +2,8 @@
 using DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Microsoft.AspNetCore.Http;
+using System;
 
 namespace Services.PersonAdmin
 {
@@ -47,26 +49,40 @@ namespace Services.PersonAdmin
 
         public async Task SavePerson(Person person)
         {
-            byte[] s = null;
-            using (var ms = new MemoryStream())
-             {
-               person.PersonImage.CopyTo(ms);
-                s = ms.ToArray();
-              // s = Convert.ToBase64String(fileBytes);
-               // act on the Base64 data
-              }
-
-            await myMoviesListContext.People.AddAsync(new PeopleEntity
+           
+            if(person.Id > 0)
             {
-                FirstName = person.FirstName,
-                LastName = person.LastName,
-                BirthDate = person.BirthDate,
-                BirthPlace = person.BirthPlace,
-                PersonImageData = s
-            });
+                var personDb = await myMoviesListContext.People.Where(w => w.Id == person.Id).FirstOrDefaultAsync();
+                personDb.FirstName = person.FirstName;
+                personDb.LastName = person.LastName;
+                personDb.BirthDate = person.BirthDate;
+                personDb.BirthPlace = person.BirthPlace;
+
+                if(person.PersonImage != null)
+                {
+                    personDb.PersonImageData = ImageToByte(person.PersonImage);
+                }
+
+
+                myMoviesListContext.Update(personDb);
+
+
+            }
+            else
+            {
+                byte[] s = ImageToByte(person.PersonImage);
+
+                await myMoviesListContext.People.AddAsync(new PeopleEntity
+                {
+                    FirstName = person.FirstName,
+                    LastName = person.LastName,
+                    BirthDate = person.BirthDate,
+                    BirthPlace = person.BirthPlace,
+                    PersonImageData = s
+                });
+            }
 
             await myMoviesListContext.SaveChangesAsync();
-
         }
 
         public async Task<int> GetPeopleCount()
@@ -75,6 +91,23 @@ namespace Services.PersonAdmin
 
             return 0;
         }
+
+
+
+        private byte[] ImageToByte(IFormFile image)
+        {
+            byte[] s = null;
+            using (var ms = new MemoryStream())
+            {
+                image.CopyTo(ms);
+                s = ms.ToArray();
+
+            }
+
+            return s;
+
+        }
+
 
     }
 }

@@ -49,6 +49,14 @@ namespace MyMoviesList.Controllers.MoviesAdmin
             return Ok();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetPeopleSelect()
+        {
+            var people = await addMovieService.GetPeopleSelect();
+
+            return Ok(people);
+        }
+
 
 
     }

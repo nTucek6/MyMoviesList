@@ -19,7 +19,7 @@ function SetProfileId(Id)
 export default function Navigation() {
 
     function IsUserLogged() {
-        const token = getToken();
+    const token = getToken();
 
         function LogOut() {
             localStorage.clear();

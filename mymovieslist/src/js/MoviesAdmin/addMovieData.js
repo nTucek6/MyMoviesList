@@ -3,9 +3,11 @@ import { useEffect, useState } from 'react';
 import GetGenresAPI from './getGenres';
 import UpdateMovie from './UpdateMovie';
 import previewImage from '../../img/preview.jpg';
+import GetPeopleSelect from './GetPeopleSelect';
 
-const MovieModalData = ({ setIsOpen }) => {
+const MovieModalData = ({ setIsOpen,movie,setLoadingBar }) => {
 
+    const [Id, setId] = useState(0);
     const [MovieName, setMovieName] = useState(null);
     const [Duration, setDuration] = useState(0);
     const [Synopsis, setSynopsis] = useState(null);
@@ -14,7 +16,7 @@ const MovieModalData = ({ setIsOpen }) => {
     const [Director, setDirector] = useState([]);
     const [Writers, setWriters] = useState([]);
     const [Actors, setActors] = useState([]);
-    const [MovieImageURL, setMovieImageURL] = useState(null);
+  //  const [MovieImageURL, setMovieImageURL] = useState(null);
 
 
     const [GetGenres, setGetGenres] = useState([]);
@@ -27,13 +29,33 @@ const MovieModalData = ({ setIsOpen }) => {
 
     useEffect(() => {
         GetGenresAPI({ setGetGenres });
+        GetPeopleSelect({setGetDirector,setGetWriters,setGetActors})
     }, []);
 
     useEffect(() => {
       if(Genres.length > 0)
         console.log(Genres);
 
-    }, [Genres]);
+    }, [Genres]); 
+
+
+
+    useEffect(()=>{
+        if(movie != null)
+        {
+            setId(movie.id);
+            setMovieName(movie.movieName);
+            setDuration(movie.duration);
+           // setReleaseDate(new Date(movie.releaseDate).toISOString().split('T')[0]);
+            setDirector(movie.director);
+            setActors(movie.Actors);
+           // setGenres(G)
+
+            setPreview("data:image/png;base64,"+movie.movieImageData);
+            
+        }
+    },[]);
+
 
 
     const imageStyle = {
@@ -67,23 +89,27 @@ const MovieModalData = ({ setIsOpen }) => {
 
     const handleSubmit = async e => {
         e.preventDefault();
-        await UpdateMovie({
-            MovieName,
-            Duration,
-            Synopsis,
-            ReleaseDate,
-            Genres,
-            Director,
-            Writers,
-            Actors,
-            MovieImageURL
-        }).then(function (response) {
+        setIsOpen(false);
+        setLoadingBar(true);
 
+        const Movie = new FormData();
+        Movie.append("Id", Id);
+        Movie.append("MovieName", MovieName);
+        Movie.append("Duration", Duration);
+        Movie.append("Synopsis", Synopsis);
+        Movie.append("Genres", Genres);
+        Movie.append("ReleaseDate", ReleaseDate);
+        Movie.append("Director", Director);
+        Movie.append("Writers", Writers);
+        Movie.append("Actors", Actors);
+        Movie.append("MovieImageData", selectedFile);
+
+        await UpdateMovie({Movie}).then(function (response) 
+        {
+            setLoadingBar(false);
         });
     }
 
-   
-    
     return (
         <>
             <form onSubmit={handleSubmit}>
@@ -119,7 +145,7 @@ const MovieModalData = ({ setIsOpen }) => {
                         isMulti
                         name="director"
                         placeholder="Select director"
-                        onChange={d => setDirector(d)}
+                        onChange={d => setDirector(d.map(x => x.value))}
                     />
                 </div>
 
@@ -129,7 +155,7 @@ const MovieModalData = ({ setIsOpen }) => {
                         isMulti
                         name="writers"
                         placeholder="Select writers"
-                        onChange={d => setWriters(d)} 
+                        onChange={d => setWriters(d.map(x => x.value))} 
                     />
                 </div>
 
@@ -139,7 +165,7 @@ const MovieModalData = ({ setIsOpen }) => {
                         isMulti
                         name="actors"
                         placeholder="Select actors"
-                        onChange={d => setActors(d)}  
+                        onChange={d => setActors(d.map(x => x.value))}  
                     />
                 </div>
 
@@ -155,7 +181,7 @@ const MovieModalData = ({ setIsOpen }) => {
                 <hr />
 
                 <div className="mt-2 d-flex flex-row-reverse">
-                    <button type='submit' className="btn btn-outline-danger mt-3 p-2">Add person</button>
+                    <button type='submit' className="btn btn-outline-danger mt-3 p-2">Add movie</button>
                     <button className="btn btn-outline-danger mt-3 p-2" onClick={() => setIsOpen(false)}>Close</button>
                 </div>
 

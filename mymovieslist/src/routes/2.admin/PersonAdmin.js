@@ -8,11 +8,14 @@ import GetPeopleCount from '../../js/PersonAdmin/GetPeopleCount';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare} from '@fortawesome/free-solid-svg-icons'
 import { format } from 'date-fns'
+import CRUDLoading from '../../js/modal/loading';
 
 export default function PersonAdmin()
 {
     const [people, setPeople] = useState([]);
     const [peopleCount, setPeopleCount] = useState(null);
+
+    const [person, setPerson] = useState(null);
 
     const postPerPage = 10;
     const [search, setSearch] = useState(null);
@@ -20,6 +23,7 @@ export default function PersonAdmin()
     const [isCompleted, setIsCompleted] = useState(false);
 
     const [modalIsOpen, setIsOpen] = useState(false);
+    const [loadingBar, setLoadingBar] = useState(false);
 
 
     useEffect(() => {
@@ -58,7 +62,9 @@ export default function PersonAdmin()
         setIsOpen(false);
     }
 
+
     function openModal() {
+        setPerson(null)
         setIsOpen(true);
     }
 
@@ -73,6 +79,13 @@ export default function PersonAdmin()
             return <button onClick={LoadMore} type="button" className="btn btn-danger" disabled>Load More</button>;
         }
     }
+
+    function UpdatePersonModal(person)
+    {
+        setPerson(person);
+        setIsOpen(true);
+    }
+
 
     return (
         <>
@@ -112,7 +125,7 @@ export default function PersonAdmin()
                                         <td>{format(new Date(p.birthDate), 'dd/MM/yyyy')}</td>
                                         <td>{p.birthPlace}</td>
                                         <td><img alt='' height={50} width={50} src={"data:image/png;base64,"+p.personImageData} /></td>
-                                        <td><button className='btn'><FontAwesomeIcon icon={faPenToSquare} /></button></td>
+                                        <td><button className='btn' onClick={()=>UpdatePersonModal(p)}><FontAwesomeIcon icon={faPenToSquare} /></button></td>
                                     </tr>
                                 )
                             })
@@ -137,8 +150,9 @@ export default function PersonAdmin()
 
                     )}
                 </div>
-
-                <ShowModal modalIsOpen={modalIsOpen} closeModal={closeModal} customStyles={customStyles} ModalData={() => PersonModalData({ setIsOpen })} text={"Add new person"} />
+                <ShowModal modalIsOpen={modalIsOpen} closeModal={closeModal} customStyles={customStyles} ModalData={() => PersonModalData({ setIsOpen,setLoadingBar,person })} text={"Add new person"} />
+                <CRUDLoading loadingBar={loadingBar} />
+               
             </div>
         </>
     );

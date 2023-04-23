@@ -9,6 +9,7 @@ namespace Services.MoviesAdmin
       Task<List<Movies>> GetMovies(int PostPerPage, int Page, string? Search);
       Task<int> GetMoviesCount();
       Task SaveMovie(SaveMovie movie);
+      Task<List<PeopleSelect>> GetPeopleSelect();
 
 
     }

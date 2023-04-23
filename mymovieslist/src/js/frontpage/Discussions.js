@@ -10,6 +10,7 @@ export default function Discussions() {
     const navigate = useNavigate();
     const PostPerPage = 5;
     const [Page,setPage] = useState(1);
+    let cancel;
 
     useEffect(() => {
         axios({
@@ -19,13 +20,15 @@ export default function Discussions() {
             params:{
                 PostPerPage:PostPerPage,
                 Page:Page
-            }
+            },
+           // cancelToken : new axios.CancelToken(c => cancel = c)
         })
             .then(function (response) {
                 setDiscussions(response.data);
 
             })
             .catch(function (response) {
+               // if(axios.isCancel(cancel)) return
                 console.log(response);
             });
     }, []);

@@ -2,7 +2,7 @@ import config from './../../config.json';
 import axios from "axios";
 
 export default async function UpdatePerson({ Person }) {
-   
+
     await axios({
         method: "POST",
         url: config.SERVER_URL + "PersonAdmin/SavePerson",
@@ -13,7 +13,6 @@ export default async function UpdatePerson({ Person }) {
     })
         .then(function (response) {
             console.log(response);
-          
         })
         .catch(function (response) {
             console.log(response);

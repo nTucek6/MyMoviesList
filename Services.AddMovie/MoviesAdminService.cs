@@ -1,6 +1,7 @@
 ﻿using DatabaseContext;
 using Entities;
 using Entities.Enum;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using MyMoviesList.EnumExtension;
 using System;
@@ -24,6 +25,19 @@ namespace Services.MoviesAdmin
           
             return genres;
         }
+
+        public async Task<List<PeopleSelect>> GetPeopleSelect()
+        {
+            var people = await myMoviesListContext.People.Select(s=> 
+            new PeopleSelect 
+            { 
+                value = s.Id, 
+                label = s.FirstName + " " + s.LastName}).ToListAsync();
+
+            return people;
+
+        }
+
 
         public async Task<List<Movies>> GetMovies(int PostPerPage, int Page, string? Search)
         {
@@ -62,12 +76,20 @@ namespace Services.MoviesAdmin
 
                 foreach (var a in act)
                 {
-                    actors.Add((PeopleEntity)myMoviesListContext.People.Where(p => p.Id == a.PersonId));
-                    director.Add((PeopleEntity)myMoviesListContext.People.Where(p => p.Id == a.PersonId));
-                    writters.Add((PeopleEntity)myMoviesListContext.People.Where(p => p.Id == a.PersonId));
+                    actors.Add(await myMoviesListContext.People.Where(p => p.Id == a.PersonId).FirstOrDefaultAsync());
                 }
 
-                foreach(string d in g)
+                foreach (var d in dir)
+                {
+                    director.Add(await myMoviesListContext.People.Where(p => p.Id == d.PersonId).FirstOrDefaultAsync());
+                }
+
+                foreach (var w in wri)
+                {
+                    writters.Add(await myMoviesListContext.People.Where(p => p.Id == w.PersonId).FirstOrDefaultAsync()); 
+                }
+
+                foreach (string d in g)
                 {
                     genres.Add(new GenresSelect
                     {
@@ -103,74 +125,153 @@ namespace Services.MoviesAdmin
 
         public async Task SaveMovie(SaveMovie movie)
         {
+            if(movie.Id > 0)
+            {
+                var movieDb = await myMoviesListContext.Movies.Where(w => w.Id == movie.Id).FirstOrDefaultAsync();
+
+                string genres = null;
+                int GenresCount = movie.Genres.Count();
+                int i = 1;
+                foreach (var g in movie.Genres)
+                {
+                    if (i != GenresCount)
+                    {
+                        genres += g + ", ";
+                    }
+                    else
+                    {
+                        genres += g;
+                    }
+                }
+
+                movieDb.MovieName = movie.MovieName;
+                movieDb.Synopsis = movie.Synopsis;
+                movieDb.Genres = genres;
+                movieDb.Duration = movie.Duration;
+                movieDb.ReleaseDate = movie.ReleaseDate;
+
+                if (movie.MovieImageData != null)
+                {
+                    movieDb.MovieImageData = ImageToByte(movie.MovieImageData);
+                }
+
+                await myMoviesListContext.SaveChangesAsync();
+
+
+                await myMoviesListContext.MoviesActors.Where(c => c.Id == movie.Id).ExecuteDeleteAsync();
+                await myMoviesListContext.MoviesDirector.Where(c => c.Id == movie.Id).ExecuteDeleteAsync();
+                await myMoviesListContext.MoviesWriters.Where(c => c.Id == movie.Id).ExecuteDeleteAsync();
+
+                foreach (var a in movie.Actors.Split(',').Reverse().ToList<string>())
+                {
+                    await myMoviesListContext.MoviesActors.AddAsync(new MoviesActors
+                    {
+                        MovieId = movie.Id,
+                        PersonId = Convert.ToInt32(a)
+                    });
+                }
+
+                foreach (var a in movie.Director.Split(',').Reverse().ToList<string>())
+                {
+                    await myMoviesListContext.MoviesDirector.AddAsync(new MoviesDirector
+                    {
+                        MovieId = movie.Id,
+                        PersonId = Convert.ToInt32(a)
+                    });
+                }
+
+                foreach (var a in movie.Writers.Split(',').Reverse().ToList<string>())
+                {
+                    await myMoviesListContext.MoviesWriters.AddAsync(new MoviesWriters
+                    {
+                        MovieId = movie.Id,
+                        PersonId = Convert.ToInt32(a)
+                    });
+                } 
+
+                await myMoviesListContext.SaveChangesAsync();
+
+            }
+            else
+            {
+                byte[] s = ImageToByte(movie.MovieImageData);
+               
+                string genres = null;
+
+                int GenresCount = movie.Genres.Count();
+                int i = 1;
+                foreach (var g in movie.Genres)
+                {
+                    if (i != GenresCount)
+                    {
+                        genres += g + ", ";
+                    }
+                    else
+                    {
+                        genres += g;
+                    }
+                }
+
+                await myMoviesListContext.Movies.AddAsync(new MoviesEntity
+                {
+                    MovieName = movie.MovieName,
+                    Synopsis = movie.Synopsis,
+                    Genres = genres,
+                    Duration = movie.Duration,
+                    ReleaseDate = movie.ReleaseDate,
+                    MovieImageData = s
+                });
+
+                await myMoviesListContext.SaveChangesAsync();
+
+                var m = await myMoviesListContext.Movies.Where(w => w.MovieName == movie.MovieName).Select(s => s.Id).FirstOrDefaultAsync();
+
+
+                foreach (var a in movie.Actors)
+                {
+                    await myMoviesListContext.MoviesActors.AddAsync(new MoviesActors
+                    {
+                        MovieId = m,
+                        PersonId = a
+                    });
+                }
+
+                foreach (var a in movie.Director)
+                {
+                    await myMoviesListContext.MoviesDirector.AddAsync(new MoviesDirector
+                    {
+                        MovieId = m,
+                        PersonId = a
+                    });
+                }
+
+                foreach (var a in movie.Writers)
+                {
+                    await myMoviesListContext.MoviesWriters.AddAsync(new MoviesWriters
+                    {
+                        MovieId = m,
+                        PersonId = a
+                    });
+                }
+            }
+
+            await myMoviesListContext.SaveChangesAsync();
+
+        }
+
+
+        private byte[] ImageToByte(IFormFile image)
+        {
             byte[] s = null;
             using (var ms = new MemoryStream())
             {
-                movie.MovieImageData.CopyTo(ms);
+                image.CopyTo(ms);
                 s = ms.ToArray();
+
             }
-
-            string genres = null;
-
-            int GenresCount = movie.Genres.Count();
-            int i = 1;
-            foreach (var g in movie.Genres)
-            {
-             if(i != GenresCount)
-                {
-                    genres += g.value + ", ";
-                }
-             else
-                {
-                    genres += g.value;
-                }
-            }
-
-            await myMoviesListContext.Movies.AddAsync(new MoviesEntity
-            {
-                MovieName = movie.MovieName,
-                Synopsis = movie.Synopsis,
-                Genres = genres,
-                Duration = movie.Duration,
-                ReleaseDate = movie.ReleaseDate,
-                MovieImageData = s
-            });
-
-            await myMoviesListContext.SaveChangesAsync();
-
-            var m = await myMoviesListContext.Movies.Where(w => w.MovieName == movie.MovieName).Select(s => s.Id).FirstOrDefaultAsync();
-
-
-            foreach (var a in movie.Actors)
-            {
-                await myMoviesListContext.MoviesActors.AddAsync(new MoviesActors
-                {
-                MovieId = m,
-                PersonId = a.Id
-                });
-            }
-
-            foreach (var a in movie.Director)
-            {
-                await myMoviesListContext.MoviesDirector.AddAsync(new MoviesDirector
-                {
-                    MovieId = m,
-                    PersonId = a.Id
-                });
-            }
-
-            foreach (var a in movie.Writers)
-            {
-                await myMoviesListContext.MoviesWriters.AddAsync(new MoviesWriters
-                {
-                    MovieId = m,
-                    PersonId = a.Id
-                });
-            }
-
-            await myMoviesListContext.SaveChangesAsync();
-
-
+            return s;
         }
+
+
     }
 }

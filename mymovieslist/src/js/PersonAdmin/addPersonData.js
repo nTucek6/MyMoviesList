@@ -3,14 +3,18 @@ import UpdatePerson from './UpdatePerson';
 import previewImage from '../../img/preview.jpg';
 import { useNavigate } from 'react-router-dom';
 
-const PersonModalData = ({ setIsOpen }) => {
 
-    const [FirstName, setFirstName] = useState(null);
-    const [LastName, setLastName] = useState(null);
-    const [BirthDate, setBirthDate] = useState(null);
-    const [BirthPlace, setBirthPlace] = useState(null);
 
-    const [personImage, setPersonImage] = useState();
+//const PersonModalData = ({ setIsOpen }) => {
+export default function PersonModalData({ setIsOpen,setLoadingBar,person }) {
+
+    const [Id, setId] = useState(0);
+    const [FirstName, setFirstName] = useState("");
+    const [LastName, setLastName] = useState("");
+    const [BirthDate, setBirthDate] = useState("");
+    const [BirthPlace, setBirthPlace] = useState("");
+
+    const [personImage, setPersonImage] = useState(null);
     const [preview, setPreview] = useState();
 
     const navigate = useNavigate();
@@ -32,7 +36,22 @@ const PersonModalData = ({ setIsOpen }) => {
 
         // free memory when ever this component is unmounted
         return () => URL.revokeObjectURL(objectUrl)
-    }, [personImage])
+    }, [personImage]);
+
+
+    useEffect(()=>{
+        if(person != null)
+        {
+            setId(person.id);
+            setFirstName(person.firstName);
+            setLastName(person.lastName);
+            setBirthDate(new Date(person.birthDate).toISOString().split('T')[0]);
+            setBirthPlace(person.birthPlace);
+
+            setPreview("data:image/png;base64,"+person.personImageData);
+            
+        }
+    },[]);
 
 
     const onSelectFile = e => {
@@ -46,8 +65,10 @@ const PersonModalData = ({ setIsOpen }) => {
     const handleSubmit = async e => {
         e.preventDefault();
         setIsOpen(false);
+        setLoadingBar(true);
 
         const Person = new FormData();
+        Person.append("Id", Id);
         Person.append("FirstName", FirstName);
         Person.append("LastName", LastName);
         Person.append("BirthDate", BirthDate);
@@ -55,6 +76,7 @@ const PersonModalData = ({ setIsOpen }) => {
         Person.append("PersonImage", personImage);
 
         await UpdatePerson({Person}).then(function (response) {
+            setLoadingBar(false);
             navigate(0);
         });
     }
@@ -64,19 +86,27 @@ const PersonModalData = ({ setIsOpen }) => {
         <>
             <form onSubmit={handleSubmit}>
                 <div className="form-group mb-2">
-                    <input type="text" placeholder="FirstName" className="form-control" onChange={d => setFirstName(d.target.value)} />
+                    <input type="text" placeholder="FirstName" className="form-control"
+                    value={FirstName} 
+                    onChange={d => setFirstName(d.target.value)} />
                 </div>
 
                 <div className="form-group mb-2">
-                    <input type="text" className="form-control" placeholder="LastName" onChange={d => setLastName(d.target.value)} />
+                    <input type="text" className="form-control" placeholder="LastName" 
+                      value={LastName} 
+                    onChange={d => setLastName(d.target.value)} />
                 </div>
 
                 <div className="form-group mb-2">
-                    <input type="date" className="form-control" placeholder="Birth date" onChange={d => setBirthDate(d.target.value)} />
+                    <input type="date" className="form-control" placeholder="Birth date" 
+                      value={BirthDate} 
+                    onChange={d => setBirthDate(d.target.value)} />
                 </div>
 
                 <div className="form-group mb-2">
-                    <input type="text" className="form-control" placeholder="Birth place" onChange={d => setBirthPlace(d.target.value)} />
+                    <input type="text" className="form-control" placeholder="Birth place" 
+                      value={BirthPlace} 
+                    onChange={d => setBirthPlace(d.target.value)} />
                 </div>
 
                 <div className="form-group mb-2">
@@ -93,9 +123,8 @@ const PersonModalData = ({ setIsOpen }) => {
                     <button className="btn btn-outline-danger mt-3 p-2" onClick={() => setIsOpen(false)}>Close</button>
                 </div>
             </form>
-          
         </>
     );
 }
 
-    export default PersonModalData
+   // export default PersonModalData

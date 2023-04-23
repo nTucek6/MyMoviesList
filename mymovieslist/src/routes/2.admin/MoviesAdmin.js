@@ -5,10 +5,14 @@ import LoadMovies from '../../js/MoviesAdmin/loadMovies';
 import { useEffect, useState } from 'react';
 import { ThreeDots } from 'react-loader-spinner';
 import GetMoviesCount from '../../js/MoviesAdmin/GetMoviesCount';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare} from '@fortawesome/free-solid-svg-icons';
+import CRUDLoading from '../../js/modal/loading';
 
 export default function MoviesAdmin()
 {
     const [movies, setMovies] = useState([]);
+    const [movie, setMovie] = useState(null);
     const [moviesCount,setMoviesCount] = useState(null);
 
     const postPerPage = 10;
@@ -17,6 +21,7 @@ export default function MoviesAdmin()
     const [isCompleted, setIsCompleted] = useState(false);
 
     const [modalIsOpen, setIsOpen] = useState(false);
+    const [loadingBar, setLoadingBar] = useState(false);
 
     useEffect(() => {
         GetMoviesCount({setMoviesCount});
@@ -55,6 +60,13 @@ export default function MoviesAdmin()
     function openModal() {
         setIsOpen(true);
     }
+
+    function UpdateMovieModal(movie)
+    {
+        setMovie(movie);
+        setIsOpen(true);
+    }
+
 
     const LoadMoreButton = () =>
     {
@@ -104,6 +116,7 @@ export default function MoviesAdmin()
                                     <tr key={movie.id}>
                                         <td>{index + 1}</td>
                                         <td>{movie.moviename}</td>
+                                        <td><button className='btn' onClick={()=>UpdateMovieModal(movie)}><FontAwesomeIcon icon={faPenToSquare} /></button></td>
                                     </tr>
                                 )
                             })
@@ -129,7 +142,8 @@ export default function MoviesAdmin()
                     )}
                 </div>
 
-                <ShowModal modalIsOpen={modalIsOpen} closeModal={closeModal} customStyles={customStyles} ModalData={() => MovieModalData({ setIsOpen })} text={"Add new movie"} />
+                <ShowModal modalIsOpen={modalIsOpen} closeModal={closeModal} customStyles={customStyles} ModalData={() => MovieModalData({ setIsOpen,movie,setLoadingBar })} text={"Add new movie"} />
+                <CRUDLoading loadingBar={loadingBar} />
         </div>
         </>
     );

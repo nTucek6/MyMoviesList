@@ -11,13 +11,21 @@ namespace Services.MoviesAdmin
 
         public string? Synopsis { get; set; }
 
-        public List<GenresSelect> Genres { get; set; }
+        /* public List<GenresSelect> Genres { get; set; }
 
-        public List<PeopleEntity> Director { get; set; }
+         public List<PeopleEntity> Director { get; set; }
 
-        public List<PeopleEntity> Writers { get; set; }
+         public List<PeopleEntity> Writers { get; set; }
 
-        public List<PeopleEntity> Actors { get; set; }
+         public List<PeopleEntity> Actors { get; set; } */
+
+        public string Genres { get; set; }
+
+        public string Director { get; set; }
+
+        public string Writers { get; set; }
+
+        public string Actors { get; set; }
 
         public DateTime ReleaseDate { get; set; }
 
