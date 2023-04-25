@@ -89,7 +89,7 @@ namespace Services.PersonAdmin
         {
             var count = await myMoviesListContext.People.CountAsync();
 
-            return 0;
+            return count;
         }
 
 

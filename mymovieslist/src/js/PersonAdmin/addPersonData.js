@@ -17,6 +17,8 @@ export default function PersonModalData({ setIsOpen,setLoadingBar,person }) {
     const [personImage, setPersonImage] = useState(null);
     const [preview, setPreview] = useState();
 
+    const [text,setText] = useState("Add person");
+
     const navigate = useNavigate();
 
     const imageStyle = {
@@ -42,6 +44,7 @@ export default function PersonModalData({ setIsOpen,setLoadingBar,person }) {
     useEffect(()=>{
         if(person != null)
         {
+            setText("Update person");
             setId(person.id);
             setFirstName(person.firstName);
             setLastName(person.lastName);
@@ -119,7 +122,7 @@ export default function PersonModalData({ setIsOpen,setLoadingBar,person }) {
 
 
                 <div className="mt-2 d-flex flex-row-reverse">
-                    <button type="submit" className="btn btn-outline-info mt-3 p-2">Add person</button>
+                    <button type="submit" className="btn btn-outline-info mt-3 p-2">{text}</button>
                     <button className="btn btn-outline-danger mt-3 p-2" onClick={() => setIsOpen(false)}>Close</button>
                 </div>
             </form>

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import config from './../../config.json';
 import { useNavigate } from "react-router-dom";
 //import { ProgressBar } from 'react-loader-spinner';
@@ -11,23 +11,31 @@ export default function GetDiscussions() {
     const PostPerPage = 20;
     const [Page,setPage] = useState(1);
 
-    useEffect(() => {
-        axios({
-            method: "get",
-            url: config.SERVER_URL + "Discussions/GetDiscussions",
-            headers: { 'Content-Type': 'application/json' },
-            params:{
-                PostPerPage:PostPerPage,
-                Page:Page
-            }
-        })
-            .then(function (response) {
-                setDiscussions(response.data);
+    const shouldLoadData = useRef(true);
 
+    useEffect(() => {
+
+        if(shouldLoadData.current)
+        {
+            shouldLoadData.current = false;
+            axios({
+                method: "get",
+                url: config.SERVER_URL + "Discussions/GetDiscussions",
+                headers: { 'Content-Type': 'application/json' },
+                params:{
+                    PostPerPage:PostPerPage,
+                    Page:Page
+                }
             })
-            .catch(function (response) {
-                console.log(response);
-            });
+                .then(function (response) {
+                    setDiscussions(response.data);
+    
+                })
+                .catch(function (response) {
+                    console.log(response);
+                });
+        }
+         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     if (Discussions.length > 0) {

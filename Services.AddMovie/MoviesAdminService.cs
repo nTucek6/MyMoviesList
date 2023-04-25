@@ -58,11 +58,11 @@ namespace Services.MoviesAdmin
 
             foreach (var movie in data)
             {
-                var act = myMoviesListContext.MoviesActors.Where(a => a.MovieId == movie.Id);
+                var act = await myMoviesListContext.MoviesActors.Where(a => a.MovieId == movie.Id).ToListAsync();
 
-                var dir = myMoviesListContext.MoviesDirector.Where(a => a.MovieId == movie.Id);
+                var dir = await myMoviesListContext.MoviesDirector.Where(a => a.MovieId == movie.Id).ToListAsync();
 
-                var wri = myMoviesListContext.MoviesDirector.Where(a => a.MovieId == movie.Id);
+                var wri = await myMoviesListContext.MoviesDirector.Where(a => a.MovieId == movie.Id).ToListAsync();
 
                 List<string> g = movie.Genres.Split(",").ToList();
 
@@ -76,17 +76,20 @@ namespace Services.MoviesAdmin
 
                 foreach (var a in act)
                 {
-                    actors.Add(await myMoviesListContext.People.Where(p => p.Id == a.PersonId).FirstOrDefaultAsync());
+                    var q = await myMoviesListContext.People.Where(p => p.Id == a.PersonId).FirstOrDefaultAsync();
+                    actors.Add(q);
                 }
 
                 foreach (var d in dir)
                 {
-                    director.Add(await myMoviesListContext.People.Where(p => p.Id == d.PersonId).FirstOrDefaultAsync());
+                    var q = await myMoviesListContext.People.Where(p => p.Id == d.PersonId).FirstOrDefaultAsync();
+                    director.Add(q);
                 }
 
                 foreach (var w in wri)
                 {
-                    writters.Add(await myMoviesListContext.People.Where(p => p.Id == w.PersonId).FirstOrDefaultAsync()); 
+                    var q = await myMoviesListContext.People.Where(p => p.Id == w.PersonId).FirstOrDefaultAsync();
+                    writters.Add(q); 
                 }
 
                 foreach (string d in g)
@@ -136,7 +139,7 @@ namespace Services.MoviesAdmin
                 {
                     if (i != GenresCount)
                     {
-                        genres += g + ", ";
+                        genres += g + ",";
                     }
                     else
                     {

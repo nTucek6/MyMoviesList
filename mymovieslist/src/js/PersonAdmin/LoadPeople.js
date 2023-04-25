@@ -3,8 +3,6 @@ import axios from "axios";
 
 export default async function LoadPeople({ people, setPeople, setIsCompleted,postPerPage,page,search })
 {
-   let cancel;
-
     await axios({
         method: "get",
         url: config.SERVER_URL + "PersonAdmin/GetPeople",
@@ -14,7 +12,6 @@ export default async function LoadPeople({ people, setPeople, setIsCompleted,pos
             Page: page,
             Search: search
         },
-        //cancelToken : new axios.CancelToken(c => cancel = c)
     })
         .then(function (response) {
                 setPeople([
@@ -24,9 +21,6 @@ export default async function LoadPeople({ people, setPeople, setIsCompleted,pos
                 setIsCompleted(true);
         })
         .catch(function (response) {
-            //if(axios.isCancel(cancel)) return
-            console.log(response);
+                console.log(response);
         });
-
-
 }

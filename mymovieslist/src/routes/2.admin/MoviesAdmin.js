@@ -2,18 +2,17 @@ import ShowModal from '../../js/modal/modal';
 import customStyles from '../../js/MoviesAdmin/customStyles';
 import MovieModalData from '../../js/MoviesAdmin/addMovieData';
 import LoadMovies from '../../js/MoviesAdmin/loadMovies';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ThreeDots } from 'react-loader-spinner';
 import GetMoviesCount from '../../js/MoviesAdmin/GetMoviesCount';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPenToSquare} from '@fortawesome/free-solid-svg-icons';
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import CRUDLoading from '../../js/modal/loading';
 
-export default function MoviesAdmin()
-{
+export default function MoviesAdmin() {
     const [movies, setMovies] = useState([]);
     const [movie, setMovie] = useState(null);
-    const [moviesCount,setMoviesCount] = useState(null);
+    const [moviesCount, setMoviesCount] = useState(null);
 
     const postPerPage = 10;
     const [search, setSearch] = useState(null);
@@ -23,9 +22,16 @@ export default function MoviesAdmin()
     const [modalIsOpen, setIsOpen] = useState(false);
     const [loadingBar, setLoadingBar] = useState(false);
 
+    const shouldLoadData = useRef(true);
+
+
     useEffect(() => {
-        GetMoviesCount({setMoviesCount});
-        LoadMovies({movies,setMovies,setIsCompleted,postPerPage,page,search});
+
+        if (shouldLoadData.current) {
+            shouldLoadData.current = false;
+            GetMoviesCount({ setMoviesCount });
+            LoadMovies({ movies, setMovies, setIsCompleted, postPerPage, page, search });
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -61,26 +67,22 @@ export default function MoviesAdmin()
         setIsOpen(true);
     }
 
-    function UpdateMovieModal(movie)
-    {
+    function UpdateMovieModal(movie) {
         setMovie(movie);
         setIsOpen(true);
     }
 
 
-    const LoadMoreButton = () =>
-    {
-        if(moviesCount === movies.length)
-        {
-            return(<button onClick={LoadMore} type="button" className="btn btn-danger" disabled> Load More</button>)
+    const LoadMoreButton = () => {
+        if (moviesCount === movies.length) {
+            return (<button onClick={LoadMore} type="button" className="btn btn-danger" disabled> Load More</button>)
         }
-        else
-        {
-            return(<button onClick={LoadMore} type="button" className="btn btn-danger">Load More</button>)
+        else {
+            return (<button onClick={LoadMore} type="button" className="btn btn-danger">Load More</button>)
         }
     }
 
- 
+
     return (
         <>
             <div className="container">
@@ -93,9 +95,9 @@ export default function MoviesAdmin()
                     <div className="form-group col-xs-3 col-md-4">
                         <input type="search" className="form-control mb-2" placeholder="Search..." onChange={s => Search(s.target.value)} />
                     </div>
-                   
+
                 </div>
-        
+
                 <div className="table-responsive">
                     <table className="table table-bordered table-hover table-condensed table-striped">
                         <thead>
@@ -115,8 +117,8 @@ export default function MoviesAdmin()
                                 return (
                                     <tr key={movie.id}>
                                         <td>{index + 1}</td>
-                                        <td>{movie.moviename}</td>
-                                        <td><button className='btn' onClick={()=>UpdateMovieModal(movie)}><FontAwesomeIcon icon={faPenToSquare} /></button></td>
+                                        <td>{movie.movieName}</td>
+                                        <td><button className='btn' onClick={() => UpdateMovieModal(movie)}><FontAwesomeIcon icon={faPenToSquare} /></button></td>
                                     </tr>
                                 )
                             })
@@ -142,9 +144,9 @@ export default function MoviesAdmin()
                     )}
                 </div>
 
-                <ShowModal modalIsOpen={modalIsOpen} closeModal={closeModal} customStyles={customStyles} ModalData={() => MovieModalData({ setIsOpen,movie,setLoadingBar })} text={"Add new movie"} />
+                <ShowModal modalIsOpen={modalIsOpen} closeModal={closeModal} customStyles={customStyles} ModalData={() => MovieModalData({ setIsOpen, movie, setLoadingBar })} text={"Add new movie"} />
                 <CRUDLoading loadingBar={loadingBar} />
-        </div>
+            </div>
         </>
     );
 }

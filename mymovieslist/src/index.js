@@ -12,3 +12,16 @@ root.render(
         <Footer />
   </React.StrictMode>
 );
+
+
+/*
+
+
+<React.StrictMode>
+<App />
+<Footer />
+</React.StrictMode>
+
+
+
+*/

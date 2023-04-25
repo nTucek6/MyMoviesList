@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import config from './../../config.json';
 import { useNavigate } from "react-router-dom";
 //import { ProgressBar } from 'react-loader-spinner';
@@ -10,27 +10,33 @@ export default function Discussions() {
     const navigate = useNavigate();
     const PostPerPage = 5;
     const [Page,setPage] = useState(1);
-    let cancel;
+   
+    const shouldLoadData = useRef(true);
 
     useEffect(() => {
-        axios({
-            method: "get",
-            url: config.SERVER_URL + "Discussions/GetDiscussions",
-            headers: { 'Content-Type': 'application/json' },
-            params:{
-                PostPerPage:PostPerPage,
-                Page:Page
-            },
-           // cancelToken : new axios.CancelToken(c => cancel = c)
-        })
-            .then(function (response) {
-                setDiscussions(response.data);
 
+        if(shouldLoadData.current)
+        {
+            shouldLoadData.current = false;
+            axios({
+                method: "get",
+                url: config.SERVER_URL + "Discussions/GetDiscussions",
+                headers: { 'Content-Type': 'application/json' },
+                params:{
+                    PostPerPage:PostPerPage,
+                    Page:Page
+                },
+              
             })
-            .catch(function (response) {
-               // if(axios.isCancel(cancel)) return
-                console.log(response);
-            });
+                .then(function (response) {
+                    setDiscussions(response.data);
+    
+                })
+                .catch(function (response) {
+                    console.log(response);
+                });
+        }
+         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     if (Discussions.length > 0) {

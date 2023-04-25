@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ThreeDots } from 'react-loader-spinner';
 import LoadUsers from '../../js/UsersAdmin/loadUsers';
 import GetUsersCount from '../../js/UsersAdmin/GetUsersCount';
@@ -12,10 +12,14 @@ export default function UsersAdmin() {
     const [page, setPage] = useState(1);
     const [isCompleted, setIsCompleted] = useState(false);
 
+    const shouldLoadData = useRef(true);
+
     useEffect(() => {
-        GetUsersCount({setUsersCount});
-       // setUsersCount(GetUsersCount());
-        LoadUsers({ users, setUsers, setIsCompleted, postPerPage, page, search });
+        if (shouldLoadData.current) {
+            shouldLoadData.current = false;
+            GetUsersCount({ setUsersCount });
+            LoadUsers({ users, setUsers, setIsCompleted, postPerPage, page, search });
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -32,11 +36,11 @@ export default function UsersAdmin() {
     }, [search]);
 
     const LoadMore = () => {
-       
-            setIsCompleted(false);
-            setPage(page + 1);
-        
-    
+
+        setIsCompleted(false);
+        setPage(page + 1);
+
+
     }
 
     const Search = (data) => {
@@ -46,12 +50,10 @@ export default function UsersAdmin() {
     }
 
     const LoadMoreButton = () => {
-        if(usersCount === users.length)
-        {
+        if (usersCount === users.length) {
             return (<button onClick={LoadMore} type="button" className="btn btn-danger" disabled>Load More</button>);
         }
-        else
-        {
+        else {
             return (<button onClick={LoadMore} type="button" className="btn btn-danger">Load More</button>)
         }
     }
@@ -87,21 +89,21 @@ export default function UsersAdmin() {
                     </table>
                 </div>
                 <div className="d-flex justify-content-center">
-                {isCompleted ? (
-                 <LoadMoreButton />
-                ) : (
-                    <ThreeDots
-                        height="80"
-                        width="80"
-                        radius="9"
-                        color="#4fa94d"
-                        ariaLabel="three-dots-loading"
-                        wrapperStyle={{}}
-                        wrapperClassName=""
-                        visible={true}
-                    />
+                    {isCompleted ? (
+                        <LoadMoreButton />
+                    ) : (
+                        <ThreeDots
+                            height="80"
+                            width="80"
+                            radius="9"
+                            color="#4fa94d"
+                            ariaLabel="three-dots-loading"
+                            wrapperStyle={{}}
+                            wrapperClassName=""
+                            visible={true}
+                        />
 
-                )}
+                    )}
                 </div>
             </div>
         </>

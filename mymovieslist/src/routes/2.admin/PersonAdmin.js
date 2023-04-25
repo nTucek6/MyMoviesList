@@ -1,23 +1,22 @@
 import ShowModal from '../../js/modal/modal';
 import PersonModalData from '../../js/PersonAdmin/addPersonData';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { ThreeDots } from 'react-loader-spinner';
 import customStyles from '../../js/PersonAdmin/customStyles';
 import LoadPeople from '../../js/PersonAdmin/LoadPeople';
 import GetPeopleCount from '../../js/PersonAdmin/GetPeopleCount';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPenToSquare} from '@fortawesome/free-solid-svg-icons'
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import { format } from 'date-fns'
 import CRUDLoading from '../../js/modal/loading';
 
-export default function PersonAdmin()
-{
+export default function PersonAdmin() {
     const [people, setPeople] = useState([]);
     const [peopleCount, setPeopleCount] = useState(null);
 
     const [person, setPerson] = useState(null);
 
-    const postPerPage = 10;
+    const postPerPage = 5;
     const [search, setSearch] = useState(null);
     const [page, setPage] = useState(1);
     const [isCompleted, setIsCompleted] = useState(false);
@@ -25,27 +24,40 @@ export default function PersonAdmin()
     const [modalIsOpen, setIsOpen] = useState(false);
     const [loadingBar, setLoadingBar] = useState(false);
 
+    const shouldLoadData = useRef(true);
+
+    const [text, setText] = useState(null);
 
     useEffect(() => {
-        GetPeopleCount({setPeopleCount});
-        LoadPeople({people,setPeople,setIsCompleted,postPerPage,page,search});
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    useEffect(() => {
-        LoadPeople({ people, setPeople, setIsCompleted, postPerPage, page, search });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [page]);
-
-    useEffect(() => {
-
-        setTimeout(() => {
+        if (shouldLoadData.current) {
+            shouldLoadData.current = false;
+            GetPeopleCount({ setPeopleCount });
             LoadPeople({ people, setPeople, setIsCompleted, postPerPage, page, search });
-        }, 400);
+        }
+        else if (page > 1) {
+            LoadPeople({ people, setPeople, setIsCompleted, postPerPage, page, search });
+        }
+        else if (search !== null) {
+             setTimeout(() => {
+                  LoadPeople({ people, setPeople, setIsCompleted, postPerPage, page, search });
+                }, 400); 
+
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [search]);
+    }, [page, search]);
 
-
+    /* useEffect(() => {
+        // LoadPeople({ people, setPeople, setIsCompleted, postPerPage, page, search });
+         // eslint-disable-next-line react-hooks/exhaustive-deps
+     }, [page]);
+ 
+     useEffect(() => {
+ 
+         setTimeout(() => {
+          // LoadPeople({ people, setPeople, setIsCompleted, postPerPage, page, search });
+         }, 400);
+         // eslint-disable-next-line react-hooks/exhaustive-deps
+     }, [search]); */
 
     const Search = (data) => {
         setPeople([]);
@@ -64,24 +76,23 @@ export default function PersonAdmin()
 
 
     function openModal() {
+        setText("Add new person");
         setPerson(null)
         setIsOpen(true);
     }
 
-    const LoadMoreButton = () =>
-    {
-        if(peopleCount === people.length)
-        {
-            return <button onClick={LoadMore} type="button" className="btn btn-danger" disabled>Load More</button>;
+    const LoadMoreButton = () => {
+        console.log(peopleCount);
+        if (peopleCount === people.length) {
+            return <button type="button" className="btn btn-danger" disabled>Load More</button>;
         }
-        else
-        {
-            return <button onClick={LoadMore} type="button" className="btn btn-danger" disabled>Load More</button>;
+        else {
+            return <button onClick={LoadMore} type="button" className="btn btn-danger" >Load More</button>;
         }
     }
 
-    function UpdatePersonModal(person)
-    {
+    function UpdatePersonModal(person) {
+        setText("Update person");
         setPerson(person);
         setIsOpen(true);
     }
@@ -124,8 +135,8 @@ export default function PersonAdmin()
                                         <td>{p.lastName}</td>
                                         <td>{format(new Date(p.birthDate), 'dd/MM/yyyy')}</td>
                                         <td>{p.birthPlace}</td>
-                                        <td><img alt='' height={50} width={50} src={"data:image/png;base64,"+p.personImageData} /></td>
-                                        <td><button className='btn' onClick={()=>UpdatePersonModal(p)}><FontAwesomeIcon icon={faPenToSquare} /></button></td>
+                                        <td><img alt='' height={50} width={50} src={"data:image/png;base64," + p.personImageData} /></td>
+                                        <td><button className='btn' onClick={() => UpdatePersonModal(p)}><FontAwesomeIcon icon={faPenToSquare} /></button></td>
                                     </tr>
                                 )
                             })
@@ -147,12 +158,11 @@ export default function PersonAdmin()
                             wrapperClassName=""
                             visible={true}
                         />
-
                     )}
                 </div>
-                <ShowModal modalIsOpen={modalIsOpen} closeModal={closeModal} customStyles={customStyles} ModalData={() => PersonModalData({ setIsOpen,setLoadingBar,person })} text={"Add new person"} />
+                <ShowModal modalIsOpen={modalIsOpen} closeModal={closeModal} customStyles={customStyles} ModalData={() => PersonModalData({ setIsOpen, setLoadingBar, person })} text={text} />
                 <CRUDLoading loadingBar={loadingBar} />
-               
+
             </div>
         </>
     );
