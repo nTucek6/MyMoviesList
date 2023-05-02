@@ -10,7 +10,7 @@ namespace Services.MovieSearch
     public interface IMovieSearchService
     {
 
-        Task<List<Movies>> GetMoviesByGenre();
+        Task<List<Movies>> GetMoviesByGenre(int genre);
 
     }
 }

@@ -8,7 +8,6 @@ export default function MovieSearch() {
         <>
             <div className="container">
                     <SearchBarMovies />
-
                 <div>
                     <h6>Genres</h6>
                     <hr />
@@ -16,9 +15,6 @@ export default function MovieSearch() {
                     <GetGenres />
                 </div>
                 </div>
-
-               
-
             </div>
         </>
     );

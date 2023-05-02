@@ -1,4 +1,6 @@
-﻿using Services.MoviesAdmin;
+﻿using DatabaseContext;
+using Microsoft.EntityFrameworkCore;
+using Services.MoviesAdmin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +11,33 @@ namespace Services.MovieSearch
 {
     public class MovieSearchService : IMovieSearchService
     {
-        public Task<List<Movies>> GetMoviesByGenre()
+        private readonly MyMoviesListContext myMoviesListContext;
+
+        public MovieSearchService(MyMoviesListContext myMoviesListContext)
         {
-            throw new NotImplementedException();
+            this.myMoviesListContext = myMoviesListContext;
         }
+
+
+
+        public async Task<List<Movies>> GetMoviesByGenre(int genre)
+        {
+
+            var movies = await myMoviesListContext.Movies
+                .OrderBy(o => o.MovieName)
+                .Where(q => q.Genres.Contains(genre.ToString()))
+                .Select(s=> new Movies 
+                {
+                    Id = s.Id,
+                    MovieName = s.MovieName,
+                    MovieImageData = s.MovieImageData
+                })
+                .ToListAsync();
+
+            return movies;
+        }
+
+
+
     }
 }

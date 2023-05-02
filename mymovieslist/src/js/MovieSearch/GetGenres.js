@@ -13,7 +13,6 @@ export default function GetGenres() {
 
         if (shouldLoadData.current) {
             shouldLoadData.current = false;
-            console.log("Hello world");
             axios({
                 method: "get",
                 url: config.SERVER_URL + "MoviesAdmin/GetGenres",
