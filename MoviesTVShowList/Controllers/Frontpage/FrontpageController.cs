@@ -2,6 +2,7 @@
 using Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Services.Frontpage;
 
 namespace MyMoviesList.Controllers.Frontpage
 {
@@ -9,27 +10,18 @@ namespace MyMoviesList.Controllers.Frontpage
     [ApiController]
     public class FrontpageController : Controller
     {
-        private MyMoviesListContext myMoviesListContext;
-        public FrontpageController(MyMoviesListContext _myMoviesListContext)
+        private readonly IFrontpageService frontpageService;
+        public FrontpageController(IFrontpageService frontpageService)
         {
-            myMoviesListContext = _myMoviesListContext;
+            this.frontpageService = frontpageService;
         }
 
         [HttpPost]
-        public async Task<List<MoviesEntity>> GetRecentMovies()
+        public async Task<IActionResult> GetRecentMovies()
         {
+            var recentMovies = await frontpageService.GetRecentMovies();
 
-            var data = await myMoviesListContext.Movies.Select(s => new MoviesEntity
-            {
-                Id = s.Id,
-                MovieName = s.MovieName,
-                MovieImageData = s.MovieImageData
-            }
-
-          ).ToListAsync();
-
-            return data;
-
+            return Ok(recentMovies);
 
         }
 

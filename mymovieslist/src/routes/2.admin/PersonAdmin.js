@@ -82,7 +82,6 @@ export default function PersonAdmin() {
     }
 
     const LoadMoreButton = () => {
-        console.log(peopleCount);
         if (peopleCount === people.length) {
             return <button type="button" className="btn btn-danger" disabled>Load More</button>;
         }
@@ -96,7 +95,6 @@ export default function PersonAdmin() {
         setPerson(person);
         setIsOpen(true);
     }
-
 
     return (
         <>

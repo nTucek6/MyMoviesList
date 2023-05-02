@@ -10,7 +10,6 @@ export default async function GetPeopleCount({setPeopleCount}) {
       
     })
         .then(function (response) {
-            console.log(response.data);
             setPeopleCount(response.data);
         })
         .catch(function (response) {

@@ -8,6 +8,7 @@ using Services.PersonAdmin;
 using Services.Profile;
 using Services.Discussions;
 using Services.MovieSearch;
+using Services.Frontpage;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,7 @@ builder.Services.AddTransient<IPersonAdminService, PersonAdminService>();
 builder.Services.AddTransient<IProfileService, ProfileService>();
 builder.Services.AddTransient<IDiscussionsService, DiscussionsService>();
 builder.Services.AddTransient<IMovieSearchService, MovieSearchService>();
+builder.Services.AddTransient<IFrontpageService, FrontpageService>();
 
 // ---------------------------------------------------------------------------------
 

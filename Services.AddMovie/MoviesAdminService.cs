@@ -62,7 +62,7 @@ namespace Services.MoviesAdmin
 
                 var dir = await myMoviesListContext.MoviesDirector.Where(a => a.MovieId == movie.Id).ToListAsync();
 
-                var wri = await myMoviesListContext.MoviesDirector.Where(a => a.MovieId == movie.Id).ToListAsync();
+                var wri = await myMoviesListContext.MoviesWriters.Where(a => a.MovieId == movie.Id).ToListAsync();
 
                 List<string> g = movie.Genres.Split(",").ToList();
 
@@ -70,7 +70,7 @@ namespace Services.MoviesAdmin
 
                 List<PeopleEntity> director = new List<PeopleEntity>();
 
-                List<PeopleEntity> writters = new List<PeopleEntity>();
+                List<PeopleEntity> writers = new List<PeopleEntity>();
 
                 List<GenresSelect> genres = new List<GenresSelect>();
 
@@ -89,7 +89,7 @@ namespace Services.MoviesAdmin
                 foreach (var w in wri)
                 {
                     var q = await myMoviesListContext.People.Where(p => p.Id == w.PersonId).FirstOrDefaultAsync();
-                    writters.Add(q); 
+                    writers.Add(q); 
                 }
 
                 foreach (string d in g)
@@ -107,7 +107,7 @@ namespace Services.MoviesAdmin
                     Id= movie.Id,
                     MovieName=movie.MovieName,
                     Actors = actors,
-                    Writers = writters,
+                    Writers = writers,
                     Director = director,
                     ReleaseDate = movie.ReleaseDate,
                     Duration = movie.Duration,
@@ -133,18 +133,22 @@ namespace Services.MoviesAdmin
                 var movieDb = await myMoviesListContext.Movies.Where(w => w.Id == movie.Id).FirstOrDefaultAsync();
 
                 string genres = null;
-                int GenresCount = movie.Genres.Count();
+
+                var genresList = movie.Genres.Split(",").ToList();
+
                 int i = 1;
-                foreach (var g in movie.Genres)
+                foreach (var g in genresList)
                 {
-                    if (i != GenresCount)
+                    if (i == genresList.Count)
                     {
-                        genres += g + ",";
+                        genres += g;
+                       
                     }
                     else
                     {
-                        genres += g;
+                        genres += g + ",";
                     }
+                    i++;
                 }
 
                 movieDb.MovieName = movie.MovieName;
@@ -161,9 +165,10 @@ namespace Services.MoviesAdmin
                 await myMoviesListContext.SaveChangesAsync();
 
 
-                await myMoviesListContext.MoviesActors.Where(c => c.Id == movie.Id).ExecuteDeleteAsync();
-                await myMoviesListContext.MoviesDirector.Where(c => c.Id == movie.Id).ExecuteDeleteAsync();
-                await myMoviesListContext.MoviesWriters.Where(c => c.Id == movie.Id).ExecuteDeleteAsync();
+                await myMoviesListContext.MoviesActors.Where(c => c.MovieId == movie.Id).ExecuteDeleteAsync();
+                await myMoviesListContext.MoviesDirector.Where(c => c.MovieId == movie.Id).ExecuteDeleteAsync();
+                await myMoviesListContext.MoviesWriters.Where(c => c.MovieId == movie.Id).ExecuteDeleteAsync();
+
 
                 foreach (var a in movie.Actors.Split(',').Reverse().ToList<string>())
                 {
@@ -201,18 +206,21 @@ namespace Services.MoviesAdmin
                
                 string genres = null;
 
-                int GenresCount = movie.Genres.Count();
+                var genresList = movie.Genres.Split(",").ToList();
+
                 int i = 1;
-                foreach (var g in movie.Genres)
+                foreach (var g in genresList)
                 {
-                    if (i != GenresCount)
-                    {
-                        genres += g + ", ";
-                    }
-                    else
+                    if (i == genresList.Count())
                     {
                         genres += g;
                     }
+                    else
+                    {
+                        genres += g + ",";
+                        
+                    }
+                    i++;
                 }
 
                 await myMoviesListContext.Movies.AddAsync(new MoviesEntity
@@ -222,7 +230,8 @@ namespace Services.MoviesAdmin
                     Genres = genres,
                     Duration = movie.Duration,
                     ReleaseDate = movie.ReleaseDate,
-                    MovieImageData = s
+                    MovieImageData = s,
+                    DateTimeAdded = DateTime.Now
                 });
 
                 await myMoviesListContext.SaveChangesAsync();
@@ -230,36 +239,37 @@ namespace Services.MoviesAdmin
                 var m = await myMoviesListContext.Movies.Where(w => w.MovieName == movie.MovieName).Select(s => s.Id).FirstOrDefaultAsync();
 
 
-                foreach (var a in movie.Actors)
+                foreach (var a in movie.Actors.Split(",").ToList())
                 {
                     await myMoviesListContext.MoviesActors.AddAsync(new MoviesActors
                     {
                         MovieId = m,
-                        PersonId = a
+                        PersonId = Convert.ToInt32(a)
                     });
                 }
 
-                foreach (var a in movie.Director)
+                foreach (var a in movie.Director.Split(",").ToList())
                 {
                     await myMoviesListContext.MoviesDirector.AddAsync(new MoviesDirector
                     {
                         MovieId = m,
-                        PersonId = a
+                        PersonId = Convert.ToInt32(a)
                     });
                 }
 
-                foreach (var a in movie.Writers)
+                foreach (var a in movie.Writers.Split(",").ToList())
                 {
                     await myMoviesListContext.MoviesWriters.AddAsync(new MoviesWriters
                     {
                         MovieId = m,
-                        PersonId = a
+                        PersonId = Convert.ToInt32(a)
                     });
                 }
+
+                await myMoviesListContext.SaveChangesAsync();
             }
 
-            await myMoviesListContext.SaveChangesAsync();
-
+            
         }
 
 

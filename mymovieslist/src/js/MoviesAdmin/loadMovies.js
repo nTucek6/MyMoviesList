@@ -19,6 +19,7 @@ export default async function LoadMovies({ movies, setMovies, setIsCompleted,pos
                     ...response.data
                 ]);
                 setIsCompleted(true);
+               
             }
         })
         .catch(function (response) {

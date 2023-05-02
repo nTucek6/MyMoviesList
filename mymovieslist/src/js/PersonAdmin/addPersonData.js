@@ -3,10 +3,8 @@ import UpdatePerson from './UpdatePerson';
 import previewImage from '../../img/preview.jpg';
 import { useNavigate } from 'react-router-dom';
 
-
-
 //const PersonModalData = ({ setIsOpen }) => {
-export default function PersonModalData({ setIsOpen,setLoadingBar,person }) {
+export default function PersonModalData({ setIsOpen, setLoadingBar, person }) {
 
     const [Id, setId] = useState(0);
     const [FirstName, setFirstName] = useState("");
@@ -17,16 +15,15 @@ export default function PersonModalData({ setIsOpen,setLoadingBar,person }) {
     const [personImage, setPersonImage] = useState(null);
     const [preview, setPreview] = useState();
 
-    const [text,setText] = useState("Add person");
+    const [text, setText] = useState("Add person");
 
     const navigate = useNavigate();
 
     const imageStyle = {
-        height:"400px",
-        width:"300px",
+        height: "400px",
+        width: "300px",
     }
 
-  
     useEffect(() => {
         if (!personImage) {
             setPreview(undefined)
@@ -41,9 +38,8 @@ export default function PersonModalData({ setIsOpen,setLoadingBar,person }) {
     }, [personImage]);
 
 
-    useEffect(()=>{
-        if(person != null)
-        {
+    useEffect(() => {
+        if (person != null) {
             setText("Update person");
             setId(person.id);
             setFirstName(person.firstName);
@@ -51,10 +47,9 @@ export default function PersonModalData({ setIsOpen,setLoadingBar,person }) {
             setBirthDate(new Date(person.birthDate).toISOString().split('T')[0]);
             setBirthPlace(person.birthPlace);
 
-            setPreview("data:image/png;base64,"+person.personImageData);
-            
+            setPreview("data:image/png;base64," + person.personImageData);
         }
-    },[]);
+    }, []);
 
 
     const onSelectFile = e => {
@@ -78,46 +73,45 @@ export default function PersonModalData({ setIsOpen,setLoadingBar,person }) {
         Person.append("BirthPlace", BirthPlace);
         Person.append("PersonImage", personImage);
 
-        await UpdatePerson({Person}).then(function (response) {
+        await UpdatePerson({ Person }).then(function (response) {
             setLoadingBar(false);
             navigate(0);
         });
     }
-
 
     return (
         <>
             <form onSubmit={handleSubmit}>
                 <div className="form-group mb-2">
                     <input type="text" placeholder="FirstName" className="form-control"
-                    value={FirstName} 
-                    onChange={d => setFirstName(d.target.value)} />
+                        value={FirstName}
+                        onChange={d => setFirstName(d.target.value)} />
                 </div>
 
                 <div className="form-group mb-2">
-                    <input type="text" className="form-control" placeholder="LastName" 
-                      value={LastName} 
-                    onChange={d => setLastName(d.target.value)} />
+                    <input type="text" className="form-control" placeholder="LastName"
+                        value={LastName}
+                        onChange={d => setLastName(d.target.value)} />
                 </div>
 
                 <div className="form-group mb-2">
-                    <input type="date" className="form-control" placeholder="Birth date" 
-                      value={BirthDate} 
-                    onChange={d => setBirthDate(d.target.value)} />
+                    <input type="date" className="form-control" placeholder="Birth date"
+                        value={BirthDate}
+                        onChange={d => setBirthDate(d.target.value)} />
                 </div>
 
                 <div className="form-group mb-2">
-                    <input type="text" className="form-control" placeholder="Birth place" 
-                      value={BirthPlace} 
-                    onChange={d => setBirthPlace(d.target.value)} />
+                    <input type="text" className="form-control" placeholder="Birth place"
+                        value={BirthPlace}
+                        onChange={d => setBirthPlace(d.target.value)} />
                 </div>
 
                 <div className="form-group mb-2">
-                   <input type="file" className="form-control" onChange={onSelectFile} />
+                    <input type="file" className="form-control" onChange={onSelectFile} />
                 </div>
 
                 <div className='d-flex justify-content-center'>
-                  {(preview !== undefined) ?   <img src={preview} style={imageStyle} alt='preview' /> : <img src={previewImage} style={imageStyle} alt='preview' />}
+                    {(preview !== undefined) ? <img src={preview} style={imageStyle} alt='preview' /> : <img src={previewImage} style={imageStyle} alt='preview' />}
                 </div>
 
 
@@ -129,5 +123,3 @@ export default function PersonModalData({ setIsOpen,setLoadingBar,person }) {
         </>
     );
 }
-
-   // export default PersonModalData

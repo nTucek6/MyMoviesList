@@ -1,33 +1,23 @@
-﻿import { useState,useEffect } from "react";
+﻿import { useState,useEffect,useRef } from "react";
 import Swiper from "./../../js/frontpage/swiper";
 import Discussions from "../../js/frontpage/Discussions";
-import axios from "axios";
-import config from './../../config.json';
 import { Link } from "react-router-dom";
+import LoadRecentMovies from "../../js/frontpage/LoadRecentMovies";
 
 export default function Frontpage() {
     const [RecentMovies, setRecentMovies] = useState(null);
 
+    const shouldLoadData = useRef(true);
+
     useEffect(() => {
-       // LoadRecentMovies();
+        if (shouldLoadData.current) {
+            shouldLoadData.current = false;
+            LoadRecentMovies({setRecentMovies})
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    async function LoadRecentMovies()
-    {
-    await axios({
-        method: "post",
-        url: config.SERVER_URL + "Frontpage/GetRecentMovies",
-        headers: { "Content-Type": "multipart/form-data" },
-         })
-        .then(function (response) {
-            setRecentMovies(response.data);
-            //console.log(response);
-        })
-        .catch(function (response) {
-          //handle error
-          //console.log(response);
-        });   
-    }
+    
 
     return (
         <>
