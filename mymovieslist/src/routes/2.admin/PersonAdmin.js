@@ -1,32 +1,25 @@
-import ShowModal from '../../js/modal/modal';
-import PersonModalData from '../../js/PersonAdmin/addPersonData';
 import { useEffect, useState, useRef } from 'react';
 import { ThreeDots } from 'react-loader-spinner';
-import customStyles from '../../js/PersonAdmin/customStyles';
 import LoadPeople from '../../js/PersonAdmin/LoadPeople';
 import GetPeopleCount from '../../js/PersonAdmin/GetPeopleCount';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import { format } from 'date-fns'
-import CRUDLoading from '../../js/modal/loading';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function PersonAdmin() {
     const [people, setPeople] = useState([]);
     const [peopleCount, setPeopleCount] = useState(null);
-
-    const [person, setPerson] = useState(null);
 
     const postPerPage = 5;
     const [search, setSearch] = useState(null);
     const [page, setPage] = useState(1);
     const [isCompleted, setIsCompleted] = useState(false);
 
-    const [modalIsOpen, setIsOpen] = useState(false);
-    const [loadingBar, setLoadingBar] = useState(false);
-
     const shouldLoadData = useRef(true);
 
-    const [text, setText] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (shouldLoadData.current) {
@@ -38,26 +31,13 @@ export default function PersonAdmin() {
             LoadPeople({ people, setPeople, setIsCompleted, postPerPage, page, search });
         }
         else if (search !== null) {
-             setTimeout(() => {
-                  LoadPeople({ people, setPeople, setIsCompleted, postPerPage, page, search });
-                }, 400); 
+            setTimeout(() => {
+                LoadPeople({ people, setPeople, setIsCompleted, postPerPage, page, search });
+            }, 400);
 
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page, search]);
-
-    /* useEffect(() => {
-        // LoadPeople({ people, setPeople, setIsCompleted, postPerPage, page, search });
-         // eslint-disable-next-line react-hooks/exhaustive-deps
-     }, [page]);
- 
-     useEffect(() => {
- 
-         setTimeout(() => {
-          // LoadPeople({ people, setPeople, setIsCompleted, postPerPage, page, search });
-         }, 400);
-         // eslint-disable-next-line react-hooks/exhaustive-deps
-     }, [search]); */
 
     const Search = (data) => {
         setPeople([]);
@@ -70,17 +50,6 @@ export default function PersonAdmin() {
         setPage(page + 1);
     }
 
-    function closeModal() {
-        setIsOpen(false);
-    }
-
-
-    function openModal() {
-        setText("Add new person");
-        setPerson(null)
-        setIsOpen(true);
-    }
-
     const LoadMoreButton = () => {
         if (peopleCount === people.length) {
             return <button type="button" className="btn btn-danger" disabled>Load More</button>;
@@ -90,19 +59,25 @@ export default function PersonAdmin() {
         }
     }
 
-    function UpdatePersonModal(person) {
-        setText("Update person");
-        setPerson(person);
-        setIsOpen(true);
+    const EditPerson = (link, data) => {
+        navigate(link, { state: data });
     }
 
     return (
         <>
             <div className="container">
 
+                <div>
+                    <Link to='/personadmin/viewpeople' className="btn btn-primary">View people</Link>
+                    <Link to='/personadmin/addeditperson' className="btn">Add person</Link>
+                </div>
+
+                <hr />
+
                 <div className="row" >
                     <div className="form-group col-xs-3 col-md-3">
-                        <button className="btn btn-primary " onClick={openModal}>Add person</button>
+                       { //<button className="btn btn-primary " onClick={openModal}>Add person</button>
+                       }
                     </div>
                     <div className="col-sm-1"></div>
                     <div className="form-group col-xs-3 col-md-4">
@@ -134,7 +109,7 @@ export default function PersonAdmin() {
                                         <td>{format(new Date(p.birthDate), 'dd/MM/yyyy')}</td>
                                         <td>{p.birthPlace}</td>
                                         <td><img alt='' height={50} width={50} src={"data:image/png;base64," + p.personImageData} /></td>
-                                        <td><button className='btn' onClick={() => UpdatePersonModal(p)}><FontAwesomeIcon icon={faPenToSquare} /></button></td>
+                                        <td><button className='btn' onClick={() => EditPerson("/personadmin/addeditperson",p)}><FontAwesomeIcon icon={faPenToSquare} /></button></td>
                                     </tr>
                                 )
                             })
@@ -158,8 +133,8 @@ export default function PersonAdmin() {
                         />
                     )}
                 </div>
-                <ShowModal modalIsOpen={modalIsOpen} closeModal={closeModal} customStyles={customStyles} ModalData={() => PersonModalData({ setIsOpen, setLoadingBar, person })} text={text} />
-                <CRUDLoading loadingBar={loadingBar} />
+            
+               
 
             </div>
         </>

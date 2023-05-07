@@ -1,12 +1,14 @@
+import { Link } from "react-router-dom"
 import Select from 'react-select'
 import { useEffect, useState } from 'react';
-import GetGenresAPI from './getGenres';
-import UpdateMovie from './UpdateMovie';
+import GetGenresAPI from "../../js/MoviesAdmin/getGenres";
+import UpdateMovie from "../../js/MoviesAdmin/UpdateMovie";
 import previewImage from '../../img/preview.jpg';
-import GetPeopleSelect from './GetPeopleSelect';
-import { useNavigate } from 'react-router-dom';
+import GetPeopleSelect from "../../js/MoviesAdmin/GetPeopleSelect";
+import { useNavigate,useLocation } from 'react-router-dom';
+import CRUDLoading from "../../js/modal/loading";
 
-const MovieModalData = ({ setIsOpen,movie,setLoadingBar }) => {
+export default function AddEditMovie() {
 
     const navigate = useNavigate();
     const [text, setText] = useState("Add movie");
@@ -27,18 +29,17 @@ const MovieModalData = ({ setIsOpen,movie,setLoadingBar }) => {
     const [GetActors, setGetActors] = useState([]);
 
     const [selectedFile, setSelectedFile] = useState();
-    const [preview, setPreview] = useState()
+    const [preview, setPreview] = useState();
+
+    const [loadingBar, setLoadingBar] = useState(false);
+
+    const location = useLocation();
+    const movie = location.state;
 
     useEffect(() => {
         GetGenresAPI({ setGetGenres });
         GetPeopleSelect({setGetDirector,setGetWriters,setGetActors})
     }, []);
-
-  /*  useEffect(() => {
-      
-       // console.log(Actors);
-
-    }, [Actors]); */
 
 
     useEffect(() => {
@@ -47,7 +48,6 @@ const MovieModalData = ({ setIsOpen,movie,setLoadingBar }) => {
             return
         }
 
-    
         const objectUrl = URL.createObjectURL(selectedFile)
         setPreview(objectUrl)
 
@@ -94,7 +94,6 @@ const MovieModalData = ({ setIsOpen,movie,setLoadingBar }) => {
     },[]);
 
 
-
     const imageStyle = {
         height:"400px",
         width:"300px",
@@ -109,10 +108,8 @@ const MovieModalData = ({ setIsOpen,movie,setLoadingBar }) => {
         setSelectedFile(e.target.files[0])
     }
 
-
     const handleSubmit = async e => {
         e.preventDefault();
-        setIsOpen(false);
         setLoadingBar(true);
 
         const Movie = new FormData();
@@ -129,13 +126,34 @@ const MovieModalData = ({ setIsOpen,movie,setLoadingBar }) => {
 
         await UpdateMovie({Movie}).then(function (response) 
         {
+            ClearData();
             setLoadingBar(false);
-            navigate(0);
         });
+    }
+
+    function ClearData()
+    {
+        setId(0);
+        setMovieName("");
+        setDuration("");
+        setReleaseDate("");
+        setSynopsis("");
+        setSelectedFile(null);
+        setDirector([]);
+        setActors([]);
+        setWriters([]);
+        setGenres([])
     }
 
     return (
         <>
+        <div className="container">
+            <div>
+                <Link to='/moviesadmin/viewmovies' className="btn ">View movies</Link>
+                <Link to='/moviesadmin/addeditmovie' className="btn btn-primary">Add movie</Link>
+            </div>
+            <hr />
+
             <form onSubmit={handleSubmit}>
                 <div className="form-group mb-2">
                     <input type="text" placeholder="Movie title" className="form-control" 
@@ -218,12 +236,15 @@ const MovieModalData = ({ setIsOpen,movie,setLoadingBar }) => {
 
                 <div className="mt-2 d-flex flex-row-reverse">
                     <button type='submit' className="btn btn-outline-danger mt-3 p-2">{text}</button>
-                    <button className="btn btn-outline-danger mt-3 p-2" onClick={() => setIsOpen(false)}>Close</button>
                 </div>
-
             </form>
 
+            <CRUDLoading loadingBar={loadingBar} />
+            </div>
         </>
-    );
+
+    )
+
+
+
 }
-export default MovieModalData

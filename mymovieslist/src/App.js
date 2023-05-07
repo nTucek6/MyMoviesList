@@ -18,6 +18,8 @@ import PrivateAdminModeratorRoutes from './utilities/PrivateAdminModeratorRoutes
 import LimitedRoutes from './utilities/LimitedRoutes';
 import Discussion from './routes/1.all/Discussion';
 import GenreMovies from './routes/1.all/GenreMovies';
+import AddEditPerson from './routes/2.admin/AddEditPerson';
+import AddEditMovie from './routes/2.admin/AddEditMovie';
 
 function App() {
    return (
@@ -42,8 +44,10 @@ function App() {
                </Route>
 
                <Route element={<PrivateAdminModeratorRoutes />}>
-                  <Route path="/moviesadmin" element={<MoviesAdmin />} exact />
-                  <Route path="/personadmin" element={<PersonAdmin />} exact />
+                  <Route path="/moviesadmin/viewmovies" element={<MoviesAdmin />} exact />
+                  <Route path="/moviesadmin/addeditmovie" element={<AddEditMovie />} exact />
+                  <Route path="/personadmin/viewpeople" element={<PersonAdmin />} exact />
+                  <Route path="/personadmin/addeditperson" element={<AddEditPerson />} exact />
                </Route>
 
                <Route element={<PrivateAdminRoutes />}>

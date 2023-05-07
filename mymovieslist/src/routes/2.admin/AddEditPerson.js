@@ -1,11 +1,11 @@
+import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import UpdatePerson from './UpdatePerson';
+import UpdatePerson from '../../js/PersonAdmin/UpdatePerson';
 import previewImage from '../../img/preview.jpg';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import CRUDLoading from '../../js/modal/loading';
 
-//const PersonModalData = ({ setIsOpen }) => {
-export default function PersonModalData({ setIsOpen, setLoadingBar, person }) {
-
+export default function AddEditPerson() {
     const [Id, setId] = useState(0);
     const [FirstName, setFirstName] = useState("");
     const [LastName, setLastName] = useState("");
@@ -15,9 +15,12 @@ export default function PersonModalData({ setIsOpen, setLoadingBar, person }) {
     const [personImage, setPersonImage] = useState(null);
     const [preview, setPreview] = useState();
 
+    const [loadingBar, setLoadingBar] = useState(false);
+
     const [text, setText] = useState("Add person");
 
-    const navigate = useNavigate();
+    const location = useLocation();
+    const person = location.state;
 
     const imageStyle = {
         height: "400px",
@@ -46,11 +49,9 @@ export default function PersonModalData({ setIsOpen, setLoadingBar, person }) {
             setLastName(person.lastName);
             setBirthDate(new Date(person.birthDate).toISOString().split('T')[0]);
             setBirthPlace(person.birthPlace);
-
             setPreview("data:image/png;base64," + person.personImageData);
         }
     }, []);
-
 
     const onSelectFile = e => {
         if (!e.target.files || e.target.files.length === 0) {
@@ -62,7 +63,6 @@ export default function PersonModalData({ setIsOpen, setLoadingBar, person }) {
 
     const handleSubmit = async e => {
         e.preventDefault();
-        setIsOpen(false);
         setLoadingBar(true);
 
         const Person = new FormData();
@@ -75,12 +75,29 @@ export default function PersonModalData({ setIsOpen, setLoadingBar, person }) {
 
         await UpdatePerson({ Person }).then(function (response) {
             setLoadingBar(false);
-            navigate(0);
+            ClearData();
         });
     }
 
-    return (
-        <>
+    function ClearData()
+    {
+        setId(0);
+        setFirstName("");
+        setLastName("");
+        setBirthDate("");
+        setBirthPlace("");
+        setPersonImage(null);
+    }
+
+    return (<>
+        <div className="container">
+
+            <div>
+                <Link to='/personadmin/viewpeople' className="btn">View people</Link>
+                <Link to='/personadmin/addeditperson' className="btn btn-primary">Add person</Link>
+            </div>
+            <hr />
+
             <form onSubmit={handleSubmit}>
                 <div className="form-group mb-2">
                     <input type="text" placeholder="FirstName" className="form-control"
@@ -117,9 +134,10 @@ export default function PersonModalData({ setIsOpen, setLoadingBar, person }) {
 
                 <div className="mt-2 d-flex flex-row-reverse">
                     <button type="submit" className="btn btn-outline-info mt-3 p-2">{text}</button>
-                    <button className="btn btn-outline-danger mt-3 p-2" onClick={() => setIsOpen(false)}>Close</button>
                 </div>
             </form>
-        </>
-    );
+            <CRUDLoading loadingBar={loadingBar} />
+        </div>
+    </>)
+
 }
