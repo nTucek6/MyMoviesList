@@ -10,5 +10,9 @@ namespace Services.UsersAdmin
     {
         Task<List<Users>> GetUsers(int PostPerPage, int Page, string? Search);
         Task<int> GetUsersCount();
+
+        Task<List<UserRole>> GetUserRoles();
+        Task ChangeUserRole(int UserId, int RoleId);
+
     }
 }

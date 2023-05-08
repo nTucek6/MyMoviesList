@@ -17,7 +17,6 @@ export default async function GetGenreMovies({movies,setMovies,postPerPage,page,
                     ...movies,
                     ...response.data
                 ]);
-                console.log(response.data);
             }
         })
         .catch(function (response) {

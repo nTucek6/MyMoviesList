@@ -24,6 +24,14 @@ namespace MyMoviesList.Controllers.MovieSearch
         }
 
 
+        [HttpGet]
+        public async Task<IActionResult> GetMovieInfo(int movieId)
+        {
+            var movie = await movieSearchService.GetMovieInfo(movieId);
+            return Ok(movie);
+        }
+
+
 
     }
 }

@@ -30,8 +30,8 @@ export default function GetRoleNavigation({getToken})
             <>
                     <Nav>
                     <NavDropdown title={<FontAwesomeIcon icon={faLock} />}>
-                            <NavDropdown.Item as={Link} to="/addmovie" className="" >Add movie</NavDropdown.Item>
-                            <NavDropdown.Item as={Link} to="/addperson" className="" >Add person</NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/moviesadmin/viewmovies" className=""><FontAwesomeIcon icon={faFilm} /> Edit movie</NavDropdown.Item>
+                        <NavDropdown.Item as={Link} to="/personadmin/viewpeople" className=""><FontAwesomeIcon icon={faUser} /> Edit person</NavDropdown.Item>
                         </NavDropdown>
                     </Nav >
             </>

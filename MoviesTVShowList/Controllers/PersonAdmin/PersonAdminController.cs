@@ -16,6 +16,7 @@ namespace MyMoviesList.Controllers.PersonAdmin
             this.personAdminService = personAdminService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> GetPeople(int PostPerPage, int Page, string? Search)
         {
             var people = await personAdminService.GetPeople(PostPerPage,Page,Search);

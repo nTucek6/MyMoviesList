@@ -30,5 +30,22 @@ namespace MyMoviesList.Controllers.UsersAdmin
         }
 
 
+        [HttpGet]
+        public async Task<IActionResult> GetUserRoles()
+        {
+            var roles = await usersService.GetUserRoles();
+
+            return Ok(roles);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ChangeUserRole(int UserId,int RoleId)
+        {
+            await usersService.ChangeUserRole(UserId,RoleId);
+            return Ok();
+        }
+
+
+
     }
 }

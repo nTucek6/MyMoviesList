@@ -18,8 +18,7 @@ namespace Services.MovieSearch
             this.myMoviesListContext = myMoviesListContext;
         }
 
-
-
+   
         public async Task<List<Movies>> GetMoviesByGenre(int genre)
         {
 
@@ -35,6 +34,24 @@ namespace Services.MovieSearch
                 .ToListAsync();
 
             return movies;
+        }
+
+        public async Task<Movies> GetMovieInfo(int movieId)
+        {
+            var movie = await myMoviesListContext.Movies
+                .Where(q=> q.Id == movieId)
+                .Select(s=> new Movies 
+                {
+                    MovieName= s.MovieName,
+                    MovieImageData = s.MovieImageData,
+                    Synopsis = s.Synopsis,
+                    ReleaseDate = s.ReleaseDate,
+                    Duration = s.Duration,
+
+
+                }).FirstOrDefaultAsync();
+
+            return movie;
         }
 
 

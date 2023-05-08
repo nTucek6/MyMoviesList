@@ -23,10 +23,7 @@ export default function GenreMovies() {
         GetGenreMovies({movies,setMovies,postPerPage,page,genre});
     }
     
-
-
     },[])
-
 
     return (
         <>

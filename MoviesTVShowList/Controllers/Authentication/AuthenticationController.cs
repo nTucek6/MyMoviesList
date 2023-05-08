@@ -63,25 +63,6 @@ namespace MyMoviesList.Controllers.Login
             return Ok();
         }
 
-
-     /*   [HttpPost("GetUsername")]
-        public async Task<string> GetUsername(string token)
-        {
-            var username = await authenticationService.ValidateToken(token);
-
-            return username;
-        }
-
-        [HttpPost("GetRole")]
-        public async Task<string> GetRole(string token)
-        {
-            var role = await authenticationService.GetRole(token);
-
-            return role;
-        } */
-
-
-
     }
 
 }

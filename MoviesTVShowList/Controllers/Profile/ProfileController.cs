@@ -14,6 +14,8 @@ namespace MyMoviesList.Controllers.Profile
             this.profileService = profileService;
         }
 
+
+        [HttpGet]
         public async Task<IActionResult> GetUserBio(int Id)
         {
             var userBio = await profileService.GetUserBio(Id);

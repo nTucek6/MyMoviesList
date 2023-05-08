@@ -1,7 +1,9 @@
-﻿using DatabaseContext;
+﻿using Azure;
+using DatabaseContext;
 using Entities;
 using Entities.Enum;
 using Microsoft.EntityFrameworkCore;
+using MyMoviesList.EnumExtension;
 using System.Data;
 using System.Linq.Expressions;
 
@@ -49,6 +51,30 @@ namespace Services.UsersAdmin
             var count = await myMoviesListContext.Users.Where(u=> u.RoleId != RolesEnum.Admin).CountAsync();
 
             return count;
+        }
+
+        public async Task<List<UserRole>> GetUserRoles()
+        {
+            var roles = Enum.GetValues(typeof(RolesEnum)).Cast<RolesEnum>().ToList().Where(u => u != RolesEnum.Admin).Select(x => new UserRole { Id = x, RoleName = x.ToString() }).ToList();
+
+            return roles;
+        }
+
+        public async Task ChangeUserRole(int UserId, int RoleId)
+        {
+            var user = await myMoviesListContext.Users.Where(q => q.Id == UserId).FirstOrDefaultAsync();
+
+            if (user != null)
+            {
+                user.RoleId = (RolesEnum)RoleId;
+                await myMoviesListContext.SaveChangesAsync();
+            }
+            else
+            {
+                throw new Exception("No user found");
+            }
+
+
         }
 
 

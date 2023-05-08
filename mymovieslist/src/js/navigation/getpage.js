@@ -20,7 +20,12 @@ export default function GetPage() {
     const isUsers = !!matchPath(location.pathname, '/users');
     const isDiscussion = !!matchPath(decodeURI(location.pathname), '/discussions/discussion/' + title);
     const isGenresMovies = !!matchPath(decodeURI(location.pathname), '/moviessearch/genre/' + title);
-
+    const isUsersAdmin = !!matchPath(location.pathname, '/usersadmin');
+    const isMoviesAdminView = !!matchPath(location.pathname, '/moviesadmin/viewmovies');
+    const isMoviesAdminAddEdit = !!matchPath(location.pathname, '/moviesadmin/addeditmovie');
+    const isPeopleAdminView = !!matchPath(location.pathname, '/personadmin/viewpeople');
+    const isPeopleAdminAddEdit = !!matchPath(location.pathname, '/personadmin/addeditperson');
+    const isMovieInfo = !!matchPath(decodeURI(location.pathname), '/movie/' + title); 
 
     if (isHome) {
         return <h6>Home page</h6>;
@@ -57,6 +62,30 @@ export default function GetPage() {
     }
     else if (isGenresMovies) {
         return <h6>{sessionStorage.getItem('genre')}</h6>; 
+    }
+    else if(isUsersAdmin)
+    {
+        return <h6>View users</h6>; 
+    }
+    else if(isMoviesAdminView)
+    {
+        return <h6>View movies</h6>; 
+    }
+    else if(isMoviesAdminAddEdit)
+    {
+        return <h6>Add & Edit movie</h6>; 
+    }
+    else if(isPeopleAdminView)
+    {
+        return <h6>View people</h6>; 
+    }
+    else if(isPeopleAdminAddEdit)
+    {
+        return <h6>Add & Edit person</h6>; 
+    }
+    else if(isMovieInfo)
+    {
+        return <h6>{sessionStorage.getItem('movieName')}</h6>; 
     }
 
 }

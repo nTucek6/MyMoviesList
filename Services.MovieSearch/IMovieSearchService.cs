@@ -11,6 +11,9 @@ namespace Services.MovieSearch
     {
 
         Task<List<Movies>> GetMoviesByGenre(int genre);
+        Task<Movies> GetMovieInfo(int movieId);
+
+
 
     }
 }

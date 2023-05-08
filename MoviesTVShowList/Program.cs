@@ -9,6 +9,7 @@ using Services.Profile;
 using Services.Discussions;
 using Services.MovieSearch;
 using Services.Frontpage;
+using System.Runtime.CompilerServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,11 @@ builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 
 //connection to database
 builder.Services.AddDbContext<MyMoviesListContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString")));
@@ -47,6 +53,13 @@ builder.Services.AddTransient<IFrontpageService, FrontpageService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+if(app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 
 app.UseHttpsRedirection();
 

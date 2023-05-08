@@ -20,6 +20,7 @@ import Discussion from './routes/1.all/Discussion';
 import GenreMovies from './routes/1.all/GenreMovies';
 import AddEditPerson from './routes/2.admin/AddEditPerson';
 import AddEditMovie from './routes/2.admin/AddEditMovie';
+import MovieInfo from './routes/1.all/MovieInfo';
 
 function App() {
    return (
@@ -32,6 +33,7 @@ function App() {
                <Route path="/discussions" element={<Discussions />} />
                <Route path="/discussions/discussion/:title" element={<Discussion />} />
                <Route path="/moviessearch/genre/:title" element={<GenreMovies />} />
+               <Route path="/movie/:title" element={<MovieInfo />} />
 
                <Route element={<LimitedRoutes />}>
                   <Route path="/login" element={<Login />} />

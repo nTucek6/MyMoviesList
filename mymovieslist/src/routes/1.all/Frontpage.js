@@ -1,5 +1,5 @@
 ﻿import { useState,useEffect,useRef } from "react";
-import Swiper from "./../../js/frontpage/swiper";
+import SwiperMovies from "./../../js/frontpage/swiper";
 import Discussions from "../../js/frontpage/Discussions";
 import { Link } from "react-router-dom";
 import LoadRecentMovies from "../../js/frontpage/LoadRecentMovies";
@@ -18,14 +18,13 @@ export default function Frontpage() {
     }, []);
 
     
-
     return (
         <>
         <div className="container">
             <div>
              <h6>Newly added</h6>
               <hr />
-                    <Swiper RecentMovies={RecentMovies} />
+                    <SwiperMovies RecentMovies={RecentMovies} />
              </div>
 
             <div className="mt-5">
