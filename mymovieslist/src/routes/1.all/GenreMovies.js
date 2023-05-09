@@ -3,6 +3,7 @@ import SearchBarMovies from "../../js/MovieSearch/SearchBarMovies";
 import { useLocation } from "react-router-dom";
 import GetGenreMovies from "../../js/MovieSearch/GetGenreMovies";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function GenreMovies() {
 
@@ -16,6 +17,8 @@ export default function GenreMovies() {
 
     const shouldLoadData = useRef(true);
 
+    const navigate = useNavigate();
+
     useEffect(()=>{
     if(shouldLoadData.current)
     {
@@ -25,6 +28,12 @@ export default function GenreMovies() {
     
     },[])
 
+
+    const toMovieInfo = (link, data) => {
+        sessionStorage.setItem("movieName",data.movieName);
+        navigate(link, { state: data.id });
+      }
+    
     return (
         <>
             <div className="container">
@@ -36,7 +45,7 @@ export default function GenreMovies() {
                     {
                     movies.map(movie =>
                         {
-                            return (<div className="col" key={movie.id}>{movie.movieName}</div>)
+                            return (<div className="col" key={movie.id} style={{cursor:"pointer"}} onClick={() => toMovieInfo('/movie/' + movie.movieName, movie)}>{movie.movieName}</div>)
                         })
                     }
 

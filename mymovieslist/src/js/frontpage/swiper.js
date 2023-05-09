@@ -47,7 +47,7 @@ export default function SwiperMovies({ RecentMovies }) {
       {(RecentMovies.length > 0 ?
         RecentMovies.map((movie) => {
           return (<SwiperSlide key={movie.id}>
-            <div style={{cursor:"pointer"}} onClick={() => toMovieInfo('movie/' + movie.movieName, movie)}>
+            <div style={{cursor:"pointer"}} onClick={() => toMovieInfo('/movie/' + movie.movieName, movie)}>
             <img className='swiperslide' style={imageStyle} src={"data:image/png;base64," + movie.movieImageData} />
             </div>
           
