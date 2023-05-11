@@ -4,7 +4,7 @@ import config from './../../config.json';
 export default async function GetWatchStatus({ setWatchStatus, setIsNotAdded, userId, movieId }) {
     await axios({
         method: "get",
-        url: config.SERVER_URL + "MovieSearch/GetWatchStatus",
+        url: config.SERVER_URL + "MovieInfo/GetWatchStatus",
         headers: { 'Content-Type': 'application/json' },
         params: {
             userId: userId,

@@ -23,6 +23,8 @@ export default function AddEditMovie() {
     const [Writers, setWriters] = useState([]);
     const [Actors, setActors] = useState([]);
 
+   // const [SendActors,setSendActors] = useState([]);
+
     const [GetGenres, setGetGenres] = useState([]);
     const [GetDirector, setGetDirector] = useState([]);
     const [GetWriters, setGetWriters] = useState([]);
@@ -112,6 +114,14 @@ export default function AddEditMovie() {
         e.preventDefault();
         setLoadingBar(true);
 
+        const actorList = Actors.map(v=>{
+            return( {
+                ActorId: v.value,
+                ActorCharacterName: "name"
+            })
+        });
+
+       
         const Movie = new FormData();
         Movie.append("Id", Id);
         Movie.append("MovieName", MovieName);
@@ -121,7 +131,8 @@ export default function AddEditMovie() {
         Movie.append("ReleaseDate", ReleaseDate);
         Movie.append("Director", Director.map(x=>x.value));
         Movie.append("Writers", Writers.map(x=>x.value));
-        Movie.append("Actors", Actors.map(x=>x.value));
+        //Movie.append("Actors", Actors.map(x=>x.value));
+        Movie.append("Actors", JSON.stringify(actorList));
         Movie.append("MovieImageData", selectedFile);
 
         await UpdateMovie({Movie}).then(function (response) 

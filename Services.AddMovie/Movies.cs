@@ -17,7 +17,7 @@ namespace Services.MoviesAdmin
 
         public List<PeopleEntity> Writers { get; set; }
 
-        public List<PeopleEntity> Actors { get; set; }
+        public List<Actor> Actors { get; set; }
 
         public DateTime ReleaseDate { get; set; }
 

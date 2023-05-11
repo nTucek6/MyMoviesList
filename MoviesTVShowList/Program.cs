@@ -10,6 +10,7 @@ using Services.Discussions;
 using Services.MovieSearch;
 using Services.Frontpage;
 using System.Runtime.CompilerServices;
+using Services.MovieInfo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +48,7 @@ builder.Services.AddTransient<IProfileService, ProfileService>();
 builder.Services.AddTransient<IDiscussionsService, DiscussionsService>();
 builder.Services.AddTransient<IMovieSearchService, MovieSearchService>();
 builder.Services.AddTransient<IFrontpageService, FrontpageService>();
+builder.Services.AddTransient<IMovieInfoService, MovieInfoService>();
 
 // ---------------------------------------------------------------------------------
 

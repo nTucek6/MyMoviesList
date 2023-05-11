@@ -4,15 +4,14 @@ using Entities.Enum;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using MyMoviesList.EnumExtension;
-using System;
 using System.Data;
 using System.Linq.Expressions;
+using System.Text.Json;
 
 namespace Services.MoviesAdmin
 {
     public class MoviesAdminService : IMoviesAdminService
     {
-
         private readonly MyMoviesListContext myMoviesListContext;
 
         public MoviesAdminService(MyMoviesListContext myMoviesListContext)
@@ -37,7 +36,6 @@ namespace Services.MoviesAdmin
             return people;
 
         }
-
 
         public async Task<List<Movies>> GetMovies(int PostPerPage, int Page, string? Search)
         {
@@ -66,7 +64,7 @@ namespace Services.MoviesAdmin
 
                 List<string> g = movie.Genres.Split(",").ToList();
 
-                List<PeopleEntity> actors = new List<PeopleEntity>();
+                List<Actor> actors = new List<Actor>();
 
                 List<PeopleEntity> director = new List<PeopleEntity>();
 
@@ -76,7 +74,17 @@ namespace Services.MoviesAdmin
 
                 foreach (var a in act)
                 {
-                    var q = await myMoviesListContext.People.Where(p => p.Id == a.PersonId).FirstOrDefaultAsync();
+                    var q = await myMoviesListContext.People.Where(p => p.Id == a.PersonId)
+                   .Select(s => new Actor
+                   {
+                       Id = s.Id,
+                       FirstName = s.FirstName,
+                       LastName = s.LastName,
+                       CharacterName = a.CharacterName,
+                       PersonImageData = s.PersonImageData
+
+                   })
+                   .FirstOrDefaultAsync();
                     actors.Add(q);
                 }
 
@@ -128,7 +136,10 @@ namespace Services.MoviesAdmin
 
         public async Task SaveMovie(SaveMovie movie)
         {
-            if(movie.Id > 0)
+
+            var acc = JsonSerializer.Deserialize<List<SaveActor>>(movie.Actors);
+
+            if (movie.Id > 0)
             {
                 var movieDb = await myMoviesListContext.Movies.Where(w => w.Id == movie.Id).FirstOrDefaultAsync();
 
@@ -169,15 +180,17 @@ namespace Services.MoviesAdmin
                 await myMoviesListContext.MoviesDirector.Where(c => c.MovieId == movie.Id).ExecuteDeleteAsync();
                 await myMoviesListContext.MoviesWriters.Where(c => c.MovieId == movie.Id).ExecuteDeleteAsync();
 
-
-                foreach (var a in movie.Actors.Split(',').Reverse().ToList<string>())
+                foreach (var a in JsonSerializer.Deserialize<List<SaveActor>>(movie.Actors))
                 {
                     await myMoviesListContext.MoviesActors.AddAsync(new MoviesActors
                     {
                         MovieId = movie.Id,
-                        PersonId = Convert.ToInt32(a)
+                        PersonId = Convert.ToInt32(a.ActorId),
+                        CharacterName = a.ActorCharacterName
                     });
                 }
+              
+
 
                 foreach (var a in movie.Director.Split(',').Reverse().ToList<string>())
                 {
@@ -238,15 +251,16 @@ namespace Services.MoviesAdmin
 
                 var m = await myMoviesListContext.Movies.Where(w => w.MovieName == movie.MovieName).Select(s => s.Id).FirstOrDefaultAsync();
 
-
-                foreach (var a in movie.Actors.Split(",").ToList())
+                foreach (var a in JsonSerializer.Deserialize<List<SaveActor>>(movie.Actors))
                 {
                     await myMoviesListContext.MoviesActors.AddAsync(new MoviesActors
                     {
-                        MovieId = m,
-                        PersonId = Convert.ToInt32(a)
+                        MovieId = movie.Id,
+                        PersonId = Convert.ToInt32(a.ActorId),
+                        CharacterName = a.ActorCharacterName
                     });
                 }
+              
 
                 foreach (var a in movie.Director.Split(",").ToList())
                 {
@@ -267,11 +281,8 @@ namespace Services.MoviesAdmin
                 }
 
                 await myMoviesListContext.SaveChangesAsync();
-            }
-
-            
+            }  
         }
-
 
         private byte[] ImageToByte(IFormFile image)
         {

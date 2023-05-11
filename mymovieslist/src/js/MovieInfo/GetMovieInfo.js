@@ -6,7 +6,7 @@ export default async function GetMovieInfo({setMovie,movieId})
     {
     await axios({
         method: "get",
-        url: config.SERVER_URL + "MovieSearch/GetMovieInfo",
+        url: config.SERVER_URL + "MovieInfo/GetMovieInfo",
         headers: { 'Content-Type': 'application/json' },
         params:{
             movieId:movieId

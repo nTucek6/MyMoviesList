@@ -5,7 +5,7 @@ export default async function UpdateMovieUserList({isSuccessful,userId,movieId,s
     {
     await axios({
         method: "get",
-        url: config.SERVER_URL + "MovieSearch/UpdateMovieUserList",
+        url: config.SERVER_URL + "MovieInfo/UpdateMovieUserList",
         headers: { 'Content-Type': 'application/json' },
         params:{
             userId:userId,

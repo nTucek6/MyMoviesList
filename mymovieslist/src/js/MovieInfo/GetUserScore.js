@@ -4,7 +4,7 @@ import config from './../../config.json';
 export default async function GetUserScore({ setScore, userId, movieId }) {
     await axios({
         method: "get",
-        url: config.SERVER_URL + "MovieSearch/GetUserScore",
+        url: config.SERVER_URL + "MovieInfo/GetUserScore",
         headers: { 'Content-Type': 'application/json' },
         params: {
             userId: userId,

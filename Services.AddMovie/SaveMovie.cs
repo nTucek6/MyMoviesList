@@ -17,6 +17,7 @@ namespace Services.MoviesAdmin
 
         public string Writers { get; set; }
 
+      //  public List<SaveActor> Actors { get; set; }
         public string Actors { get; set; }
 
         public DateTime ReleaseDate { get; set; }

@@ -17,7 +17,13 @@ export default function MovieInfo() {
 
     const shouldLoadData = useRef(true);
 
-    const userId = jwt_decode(getToken()).Id;
+    const token = getToken();
+
+    //const userId = jwt_decode(token).Id;
+
+    let userId = null;//jwt_decode(token).Id;
+
+   // const [userId,setUserId] = useState(null);
 
     const [movie, setMovie] = useState(null);
     const [statusList, setStatusList] = useState([]);
@@ -33,14 +39,17 @@ export default function MovieInfo() {
     };
 
 
-
     useEffect(() => {
         if (shouldLoadData.current) {
             shouldLoadData.current = false;
-            GetMovieInfo({ setMovie, movieId })
-            GetStatus({ setStatusList });
-            GetWatchStatus({ setWatchStatus, setIsNotAdded, userId, movieId });
-            GetUserScore({ setScore, userId, movieId });
+            GetMovieInfo({ setMovie, movieId });
+            if(token !== null)
+            {
+                userId = jwt_decode(token).Id;
+                GetStatus({ setStatusList });
+                GetWatchStatus({ setWatchStatus, setIsNotAdded, userId, movieId });
+                GetUserScore({ setScore, userId, movieId });
+            }
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -50,23 +59,18 @@ export default function MovieInfo() {
         return null;
 
 
-  /*  const CheckWatchStatus = () => {
-        if (watchStatus === null || watchStatus === "") {
-            return (<button className="btn btn-info" onClick={() => AddMovieToList({ userId, movieId })}>Add to List</button>)
+    const GetAddButton = () => 
+    {
+        if(token === null)
+        {
+            return (<button className="btn btn-info"  disabled>Add to List</button>);
         }
-        else {
-            return (<Select
-                name="watchstatus"
-                options={statusList}
-                defaultValue={watchStatus}
-                onChange={s => UpdateUserListStatus(s.value)}
-            />)
+        else
+        {
+            return (<button className="btn btn-info" onClick={() => AddMovieToList({ userId, movieId })}>Add to List</button>);
         }
-    } */
 
-    const GetAddButton = () => {
-
-        return (<button className="btn btn-info" onClick={() => AddMovieToList({ userId, movieId })}>Add to List</button>);
+      
     }
 
     const GetStatusSelect = () => {

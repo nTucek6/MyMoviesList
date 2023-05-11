@@ -5,7 +5,7 @@ export default async function GetMovieInfo({setStatusList})
     {
     await axios({
         method: "get",
-        url: config.SERVER_URL + "MovieSearch/GetStatus",
+        url: config.SERVER_URL + "MovieInfo/GetStatus",
         headers: { 'Content-Type': 'application/json' },
          })
         .then(function (response) {
