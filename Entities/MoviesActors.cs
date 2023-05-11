@@ -9,6 +9,8 @@ namespace Entities
 
         public int PersonId { get; set; }
 
+        public string CharacterName { get; set; }
+
 
     }
 }

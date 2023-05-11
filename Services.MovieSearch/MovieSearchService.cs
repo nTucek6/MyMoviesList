@@ -2,13 +2,9 @@
 using Entities.Enum;
 using Entities;
 using Microsoft.EntityFrameworkCore;
-using Services.MoviesAdmin;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MyMoviesList.EnumExtension;
+using Services.MoviesAdmin;
+using System.Linq.Expressions;
 
 namespace Services.MovieSearch
 {
@@ -35,7 +31,6 @@ namespace Services.MovieSearch
                     MovieImageData = s.MovieImageData
                 })
                 .ToListAsync();
-
             return movies;
         }
 
@@ -55,7 +50,7 @@ namespace Services.MovieSearch
 
             List<string> g = movieData.Genres.Split(",").ToList();
 
-            List<PeopleEntity> actors = new List<PeopleEntity>();
+            List<Actor> actors = new List<Actor>();
 
             List<PeopleEntity> director = new List<PeopleEntity>();
 
@@ -65,7 +60,17 @@ namespace Services.MovieSearch
 
             foreach (var a in act)
             {
-                var q = await myMoviesListContext.People.Where(p => p.Id == a.PersonId).FirstOrDefaultAsync();
+                var q = await myMoviesListContext.People.Where(p => p.Id == a.PersonId)
+                    .Select(s=> new Actor 
+                    {
+                        Id = s.Id,
+                        FirstName = s.FirstName,
+                        LastName = s.LastName,
+                        CharacterName = a.CharacterName,
+                        PersonImageData = s.PersonImageData
+
+                    })
+                    .FirstOrDefaultAsync();
                 actors.Add(q);
             }
 
@@ -87,10 +92,8 @@ namespace Services.MovieSearch
                 {
                     value = (GenresEnum)(Convert.ToInt32(d)),
                     label = ((GenresEnum)(Convert.ToInt32(d))).GetDescription()
-
                 });
             }
-
             movie = new Movies
             {
                 Id = movieData.Id,
@@ -105,12 +108,76 @@ namespace Services.MovieSearch
                 Genres = genres
             };
 
-
-
             return movie;
         }
 
+        public async Task<List<StatusSelect>> GetStatus()
+        {
+            var watchStatus = Enum.GetValues(typeof(StatusEnum)).Cast<StatusEnum>().ToList().Select(x => new StatusSelect { value = x, label = x.GetDescription() }).ToList();
+            return watchStatus;
+        }
 
+        public async Task<StatusSelect> GetWatchStatus(int userId,int movieId)
+        {
+            var userWatchStatus = await myMoviesListContext.UsersMovieList.Where(q=> q.UserId == userId && q.MovieId == movieId).Select(s=> s.StatusId).FirstOrDefaultAsync();
 
+            if(userWatchStatus != 0)
+            {
+                return Enum.GetValues(typeof(StatusEnum)).Cast<StatusEnum>().ToList().Where(q => q == userWatchStatus).Select(x => new StatusSelect { value = x, label = x.GetDescription() }).FirstOrDefault();
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task UpdateMovieUserList(int userId, int movieId, int? score, int? statusId)
+        {
+            var userList = await myMoviesListContext.UsersMovieList.Where(q => q.UserId == userId && q.MovieId == movieId).FirstOrDefaultAsync();
+
+            if(userList != null)
+            {
+                if(score > 0 )
+                {
+                    userList.Score = score;
+                }
+
+                if(statusId > 0)
+                {
+                    userList.StatusId = (StatusEnum)statusId;
+                }
+               
+            }
+            else
+            {
+                await myMoviesListContext.UsersMovieList.AddAsync(new UsersMovieListEntity
+                {
+                 UserId = userId,
+                 MovieId = movieId,
+                 StatusId = StatusEnum.Watching,
+                 Score = score,
+                 TimeAdded = DateTime.Now
+                });
+            }
+            await myMoviesListContext.SaveChangesAsync();
+        }
+
+        public async Task<int> GetUserScore(int userId, int movieId)
+        {
+            var userScore = await myMoviesListContext.UsersMovieList.Where(q => q.UserId == userId && q.MovieId == movieId).FirstOrDefaultAsync();
+
+            if (userScore != null)
+            {
+                if (userScore.Score != null || userScore.Score > 0)
+                {
+                    return (int)userScore.Score;
+                }
+                return 0;
+            }
+            else
+            {
+                return 0;
+            }
+        }
     }
 }

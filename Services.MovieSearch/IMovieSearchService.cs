@@ -1,4 +1,5 @@
-﻿using Services.MoviesAdmin;
+﻿using Entities.Enum;
+using Services.MoviesAdmin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,10 @@ namespace Services.MovieSearch
 
         Task<List<Movies>> GetMoviesByGenre(int genre);
         Task<Movies> GetMovieInfo(int movieId);
-
+        Task<List<StatusSelect>> GetStatus();
+        Task<StatusSelect> GetWatchStatus(int userId,int movieId);
+        Task UpdateMovieUserList(int userId, int movieId, int? score,int? statusId);
+        Task<int> GetUserScore(int userId, int movieId);
 
 
     }

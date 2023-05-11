@@ -4,6 +4,12 @@ import { useRef, useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar } from '@fortawesome/free-solid-svg-icons'
 import Select from 'react-select'
+import GetStatus from "../../js/MovieInfo/GetStatus";
+import jwt_decode from "jwt-decode";
+import getToken from "../../js/token/gettoken";
+import GetWatchStatus from '../../js/MovieInfo/GetWatchStatus';
+import UpdateMovieUserList from "../../js/MovieInfo/UpdateMovieUserList";
+import GetUserScore from "../../js/MovieInfo/GetUserScore";
 
 export default function MovieInfo() {
     const location = useLocation();
@@ -11,7 +17,14 @@ export default function MovieInfo() {
 
     const shouldLoadData = useRef(true);
 
+    const userId = jwt_decode(getToken()).Id;
+
     const [movie, setMovie] = useState(null);
+    const [statusList, setStatusList] = useState([]);
+    const [watchStatus, setWatchStatus] = useState(null);
+    const [score, setScore] = useState(0);
+
+    const [isNotAdded, setIsNotAdded] = useState(true);
 
     const imageStyle =
     {
@@ -20,11 +33,16 @@ export default function MovieInfo() {
     };
 
 
+
     useEffect(() => {
         if (shouldLoadData.current) {
             shouldLoadData.current = false;
             GetMovieInfo({ setMovie, movieId })
+            GetStatus({ setStatusList });
+            GetWatchStatus({ setWatchStatus, setIsNotAdded, userId, movieId });
+            GetUserScore({ setScore, userId, movieId });
         }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -32,13 +50,51 @@ export default function MovieInfo() {
         return null;
 
 
-    const GetWatchStatus = () => {
-        if (true) {
-            return (<button className="btn btn-info">Add to List</button>)
+  /*  const CheckWatchStatus = () => {
+        if (watchStatus === null || watchStatus === "") {
+            return (<button className="btn btn-info" onClick={() => AddMovieToList({ userId, movieId })}>Add to List</button>)
         }
         else {
-
+            return (<Select
+                name="watchstatus"
+                options={statusList}
+                defaultValue={watchStatus}
+                onChange={s => UpdateUserListStatus(s.value)}
+            />)
         }
+    } */
+
+    const GetAddButton = () => {
+
+        return (<button className="btn btn-info" onClick={() => AddMovieToList({ userId, movieId })}>Add to List</button>);
+    }
+
+    const GetStatusSelect = () => {
+
+        return (<Select
+            name="watchstatus"
+            options={statusList}
+            defaultValue={watchStatus}
+            onChange={s => UpdateUserListStatus(s.value)}
+        />)
+    }
+
+
+    const AddMovieToList = () => {
+
+        UpdateMovieUserList({ userId, movieId }).then(()=>{
+                setIsNotAdded(false);
+        });
+    }
+
+
+    const UpdateUserListStatus = (statusId) => {
+
+        UpdateMovieUserList({ userId, movieId, score, statusId })
+    }
+
+    const UpdateUserListScore = (score) => {
+        UpdateMovieUserList({ userId, movieId, score })
     }
 
     return (
@@ -49,23 +105,22 @@ export default function MovieInfo() {
                 </div>
 
                 <div className="col-9 ">
-
                     <div className="row border border-start-0">
                         <div className="col-1">
-                        <h6 className="text-center">Score</h6>
-                        <h4 className="text-center">N/A</h4>
-                       
+                            <h6 className="text-center">Score</h6>
+                            <h4 className="text-center">N/A</h4>
+
                         </div>
-                      
+
                     </div>
 
+                    <br />
                     <div className="row">
+
                         <div className="col-auto">
-                            <GetWatchStatus />
+                            {isNotAdded ? <GetAddButton /> : <GetStatusSelect />}
                         </div>
                         <div className="col-auto">
-
-
                             <Select
                                 name="score"
                                 placeholder="Select score"
@@ -78,9 +133,12 @@ export default function MovieInfo() {
                                         { value: 1, label: 1 }
                                     ]
                                 }
+                                defaultValue={score !== 0 ? { value: score, label: score } : null}
+                                isDisabled={isNotAdded}
+                                onChange={s => UpdateUserListScore(s.value)}
                             />
-                           {// <FontAwesomeIcon icon={faStar} /> 
-                           }
+                            {// <FontAwesomeIcon icon={faStar} /> 
+                            }
                         </div>
                     </div>
 
@@ -97,10 +155,8 @@ export default function MovieInfo() {
                     <div className="row">
                         <h6>Characters & Actors</h6>
                         <hr className="mt-0" />
-                       
-                    </div>
 
-                    
+                    </div>
 
                 </div>
             </div>
