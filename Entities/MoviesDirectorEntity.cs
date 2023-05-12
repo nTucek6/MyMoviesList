@@ -1,7 +1,8 @@
 ﻿
+
 namespace Entities
 {
-    public class MoviesWriters
+    public class MoviesDirectorEntity
     {
         public int Id { get; set; }
 

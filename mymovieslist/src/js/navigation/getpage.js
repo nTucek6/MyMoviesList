@@ -5,8 +5,7 @@ import { matchPath } from "react-router";
 
 export default function GetPage() {
     const location = useLocation();
-    const { username } = useParams();
-    const { title } = useParams();
+    const { title,name,username } = useParams();
 
     const isHome = !!matchPath(location.pathname, '/');
     const isMovieSearch = !!matchPath(location.pathname, '/moviessearch');
@@ -26,6 +25,7 @@ export default function GetPage() {
     const isPeopleAdminView = !!matchPath(location.pathname, '/personadmin/viewpeople');
     const isPeopleAdminAddEdit = !!matchPath(location.pathname, '/personadmin/addeditperson');
     const isMovieInfo = !!matchPath(decodeURI(location.pathname), '/movie/' + title); 
+    const isPersonInfo = !!matchPath(decodeURI(location.pathname), '/person/' + name); 
 
     if (isHome) {
         return <h6>Home page</h6>;
@@ -86,6 +86,10 @@ export default function GetPage() {
     else if(isMovieInfo)
     {
         return <h6>{sessionStorage.getItem('movieName')}</h6>; 
+    }
+    else if(isPersonInfo)
+    {
+        return <h6>{sessionStorage.getItem('person')}</h6>; 
     }
 
 }

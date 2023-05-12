@@ -16,8 +16,8 @@ namespace DatabaseContext
         public DbSet<MovieReviewsEntity> MovieReviews { get; set; }
         public DbSet<UsersEntity> Users { get; set; }
         public DbSet<UsersMovieListEntity> UsersMovieList { get; set; }
-        public DbSet<MoviesDirector> MoviesDirector { get; set; }
-        public DbSet<MoviesActors> MoviesActors { get; set; }
-        public DbSet<MoviesWriters> MoviesWriters { get; set; }
+        public DbSet<MoviesDirectorEntity> MoviesDirector { get; set; }
+        public DbSet<MoviesActorsEntity> MoviesActors { get; set; }
+        public DbSet<MoviesWritersEntity> MoviesWriters { get; set; }
     }
 }

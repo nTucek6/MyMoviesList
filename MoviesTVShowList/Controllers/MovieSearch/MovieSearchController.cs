@@ -24,6 +24,15 @@ namespace MyMoviesList.Controllers.MovieSearch
             return Ok(movies);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetMovieActors(int movieId, int PostPerPage, int Page)
+        { 
+            var actors = await movieSearchService.GetMovieActors(movieId,PostPerPage,Page);
+            return Ok(actors);
+        }
+
+
+
 
     }
 }

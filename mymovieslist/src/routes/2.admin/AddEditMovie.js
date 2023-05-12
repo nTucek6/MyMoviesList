@@ -10,7 +10,7 @@ import CRUDLoading from "../../js/modal/loading";
 
 export default function AddEditMovie() {
 
-    const navigate = useNavigate();
+   // const navigate = useNavigate();
     const [text, setText] = useState("Add movie");
 
     const [Id, setId] = useState(0);

@@ -182,7 +182,7 @@ namespace Services.MoviesAdmin
 
                 foreach (var a in JsonSerializer.Deserialize<List<SaveActor>>(movie.Actors))
                 {
-                    await myMoviesListContext.MoviesActors.AddAsync(new MoviesActors
+                    await myMoviesListContext.MoviesActors.AddAsync(new MoviesActorsEntity
                     {
                         MovieId = movie.Id,
                         PersonId = Convert.ToInt32(a.ActorId),
@@ -190,11 +190,9 @@ namespace Services.MoviesAdmin
                     });
                 }
               
-
-
                 foreach (var a in movie.Director.Split(',').Reverse().ToList<string>())
                 {
-                    await myMoviesListContext.MoviesDirector.AddAsync(new MoviesDirector
+                    await myMoviesListContext.MoviesDirector.AddAsync(new MoviesDirectorEntity
                     {
                         MovieId = movie.Id,
                         PersonId = Convert.ToInt32(a)
@@ -203,7 +201,7 @@ namespace Services.MoviesAdmin
 
                 foreach (var a in movie.Writers.Split(',').Reverse().ToList<string>())
                 {
-                    await myMoviesListContext.MoviesWriters.AddAsync(new MoviesWriters
+                    await myMoviesListContext.MoviesWriters.AddAsync(new MoviesWritersEntity
                     {
                         MovieId = movie.Id,
                         PersonId = Convert.ToInt32(a)
@@ -253,7 +251,7 @@ namespace Services.MoviesAdmin
 
                 foreach (var a in JsonSerializer.Deserialize<List<SaveActor>>(movie.Actors))
                 {
-                    await myMoviesListContext.MoviesActors.AddAsync(new MoviesActors
+                    await myMoviesListContext.MoviesActors.AddAsync(new MoviesActorsEntity
                     {
                         MovieId = movie.Id,
                         PersonId = Convert.ToInt32(a.ActorId),
@@ -264,7 +262,7 @@ namespace Services.MoviesAdmin
 
                 foreach (var a in movie.Director.Split(",").ToList())
                 {
-                    await myMoviesListContext.MoviesDirector.AddAsync(new MoviesDirector
+                    await myMoviesListContext.MoviesDirector.AddAsync(new MoviesDirectorEntity
                     {
                         MovieId = m,
                         PersonId = Convert.ToInt32(a)
@@ -273,7 +271,7 @@ namespace Services.MoviesAdmin
 
                 foreach (var a in movie.Writers.Split(",").ToList())
                 {
-                    await myMoviesListContext.MoviesWriters.AddAsync(new MoviesWriters
+                    await myMoviesListContext.MoviesWriters.AddAsync(new MoviesWritersEntity
                     {
                         MovieId = m,
                         PersonId = Convert.ToInt32(a)
