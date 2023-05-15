@@ -27,14 +27,10 @@ export default function GenreMovies() {
 
     }, [])
 
-
     const toMovieInfo = (link, data) => {
         sessionStorage.setItem("movieName", data.movieName);
         navigate(link, { state: data.id });
     }
-
-
-    //   return (<div className="col" key={movie.id} style={{ cursor: "pointer" }} onClick={() => toMovieInfo('/movie/' + movie.movieName, movie)}>{movie.movieName}</div>)
 
     return (
         <>
@@ -55,15 +51,11 @@ export default function GenreMovies() {
                                         </div>
                                 </div>
                                 </div>)
-
-
                             })
                         }
                     </div>
                 </div>
-
             </div>
-
         </>
     );
 }

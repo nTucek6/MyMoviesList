@@ -61,7 +61,7 @@ export default function MovieInfo() {
     }, []);
 
 
-    if (movie == null)
+    if (movie === null)
         return null;
 
     // console.log(movie);

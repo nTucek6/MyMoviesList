@@ -43,7 +43,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.MovieSearch", "Ser
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Frontpage", "Services.Frontpage\Services.Frontpage.csproj", "{467074C0-CB02-4744-8F79-F4F04EF05019}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.MovieInfo", "Services.MovieInfo\Services.MovieInfo.csproj", "{920BBD49-18AA-437A-9B0B-9F8AF28FFF53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.MovieInfo", "Services.MovieInfo\Services.MovieInfo.csproj", "{920BBD49-18AA-437A-9B0B-9F8AF28FFF53}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.PersonInfo", "Services.PersonInfo\Services.PersonInfo.csproj", "{09570F37-C61F-4B69-A9C4-7B76E9655F52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -113,6 +115,10 @@ Global
 		{920BBD49-18AA-437A-9B0B-9F8AF28FFF53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{920BBD49-18AA-437A-9B0B-9F8AF28FFF53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{920BBD49-18AA-437A-9B0B-9F8AF28FFF53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09570F37-C61F-4B69-A9C4-7B76E9655F52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09570F37-C61F-4B69-A9C4-7B76E9655F52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09570F37-C61F-4B69-A9C4-7B76E9655F52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09570F37-C61F-4B69-A9C4-7B76E9655F52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -133,6 +139,7 @@ Global
 		{99580713-2898-48D6-ABF6-89C559E820DC} = {12084A97-DA42-4F35-BE26-1897958E4C6A}
 		{467074C0-CB02-4744-8F79-F4F04EF05019} = {12084A97-DA42-4F35-BE26-1897958E4C6A}
 		{920BBD49-18AA-437A-9B0B-9F8AF28FFF53} = {12084A97-DA42-4F35-BE26-1897958E4C6A}
+		{09570F37-C61F-4B69-A9C4-7B76E9655F52} = {12084A97-DA42-4F35-BE26-1897958E4C6A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {685D50A6-4949-428B-AFCB-B687078BEECE}
