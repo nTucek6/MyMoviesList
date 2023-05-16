@@ -18,28 +18,57 @@ namespace MyMoviesList.Controllers.PersonInfo
         public async Task<IActionResult> GetPersonInfo(int personId)
         {
             var person = await personInfoService.GetPersonInfo(personId);
-            return Ok(person);
+
+            if(person != null)
+            {
+                return Ok(person);
+            }
+            else { 
+                return BadRequest("Error"); 
+            } 
         }
 
         [HttpGet]
         public async Task<IActionResult> GetPersonActorRoles(int personId)
         {
             var movies = await personInfoService.GetPersonActorRoles(personId);
-            return Ok(movies);
+
+            if(movies.Any())
+            {
+                return Ok(movies);
+            }
+            else    
+            {
+                return BadRequest("No movies!");
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> GetPersonDirectorRoles(int personId)
         {
             var movies = await personInfoService.GetPersonDirectorRoles(personId);
-            return Ok(movies);
+            if (movies.Any())
+            {
+                return Ok(movies);
+            }
+            else
+            {
+                return BadRequest("No movies!");
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> GetPersonWriterRoles(int personId)
         {
             var movies = await personInfoService.GetPersonWriterRoles(personId);
-            return Ok(movies);
+            if (movies.Any())
+            {
+                return Ok(movies);
+            }
+            else
+            {
+                return BadRequest("No movies!");
+            }
         }
 
 

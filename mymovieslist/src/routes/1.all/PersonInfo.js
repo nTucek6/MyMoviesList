@@ -5,6 +5,8 @@ import { format } from 'date-fns'
 
 import GetPersonInfo from "../../js/PersonInfo/GetPersonInfo";
 import GetPersonActorRoles from "../../js/PersonInfo/GetPersonActorRoles";
+import GetPersonDirectorRoles from "../../js/PersonInfo/GetPersonDirectorRoles";
+import GetPersonWriterRoles from "../../js/PersonInfo/GetPersonWriterRoles";
 
 
 export default function PersonInfo() {
@@ -15,12 +17,18 @@ export default function PersonInfo() {
 
     const [person, setPerson] = useState(null);
     const [personActorRoles, setPersonActorRoles] = useState([]);
+    const [personDirectorRoles, setPersonDirectorRoles] = useState([]);
+    const [personWriterRoles, setPersonWriterRoles] = useState([]);
+
+    const [page,setPage] = useState(1)
 
     useEffect(() => {
         if (shouldLoadData.current) {
             shouldLoadData.current = false;
             GetPersonInfo({ setPerson, personId });
-            GetPersonActorRoles({ setPersonActorRoles, personId });
+            GetPersonActorRoles({ setPersonActorRoles, personId,postperpage:10,page });
+            GetPersonDirectorRoles({ setPersonDirectorRoles, personId,postperpage:10,page });
+            GetPersonWriterRoles({ setPersonWriterRoles, personId,postperpage:10,page });
         }
     }, []);
 
@@ -90,16 +98,47 @@ export default function PersonInfo() {
                                 <h6>Director</h6>
                             </div>
                             <hr className="mt-0" />
-                            {//here goes content
+                            {
+                                personDirectorRoles.map((movie, index) => {
+                                    return (
+                                        <div className={index === 0 ? "row mt-0" : "row mt-1"} key={movie.id} style={{ cursor: "pointer" }} onClick={()=> toMovieInfo('/movie/' + movie.movieName, movie)} >
+                                            <div className="col-md-1"><img className="img-fluid img-thumbnail" src={"data:image/png;base64," + movie.movieImageData} alt="" /> </div>
+                                            <div className="col-md-11">
+                                                <div className="card-body">
+                                                    <div className="card-title">
+                                                        <h5>Movie name: {movie.movieName}</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr className=" mt-1" />
+                                        </div>
+                                    )
+                                })
                             }
+
                         </div>
 
                         <div className="row">
                             <div className="col-6">
-                                <h6>Actor</h6>
+                                <h6>Writer</h6>
                             </div>
                             <hr className="mt-0" />
-                            {//here goes content
+                            {
+                                personWriterRoles.map((movie, index) => {
+                                    return (
+                                        <div className={index === 0 ? "row mt-0" : "row mt-1"} key={movie.id} style={{ cursor: "pointer" }} onClick={()=> toMovieInfo('/movie/' + movie.movieName, movie)} >
+                                            <div className="col-md-1"><img className="img-fluid img-thumbnail" src={"data:image/png;base64," + movie.movieImageData} alt="" /> </div>
+                                            <div className="col-md-11">
+                                                <div className="card-body">
+                                                    <div className="card-title">
+                                                        <h5>Movie name: {movie.movieName}</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr className=" mt-1" />
+                                        </div>
+                                    )
+                                })
                             }
                         </div>
                     </div>
