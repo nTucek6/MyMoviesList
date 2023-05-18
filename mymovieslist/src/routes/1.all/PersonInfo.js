@@ -115,9 +115,7 @@ export default function PersonInfo() {
                                     )
                                 })
                             }
-
                         </div>
-
                         <div className="row">
                             <div className="col-6">
                                 <h6>Writer</h6>
@@ -143,11 +141,7 @@ export default function PersonInfo() {
                         </div>
                     </div>
                 </div>
-
             </div>
-
-
-
         </>
     );
 }

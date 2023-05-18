@@ -37,6 +37,21 @@ namespace Services.MoviesAdmin
 
         }
 
+        public async Task<List<PeopleSelect>> GetPeopleSelectSearch(string search)
+        {
+           var people = await myMoviesListContext.People
+           .Where(q=> q.FirstName.Contains(search) || q.LastName.Contains(search))
+           .Select(s =>
+           new PeopleSelect
+           {
+               value = s.Id,
+               label = s.FirstName + " " + s.LastName
+           }).ToListAsync();
+
+            return people;
+        }
+
+
         public async Task<List<Movies>> GetMovies(int PostPerPage, int Page, string? Search)
         {
             Expression<Func<MoviesEntity, bool>> predicate = x => true;
@@ -253,7 +268,7 @@ namespace Services.MoviesAdmin
                 {
                     await myMoviesListContext.MoviesActors.AddAsync(new MoviesActorsEntity
                     {
-                        MovieId = movie.Id,
+                        MovieId = m,
                         PersonId = Convert.ToInt32(a.ActorId),
                         CharacterName = a.ActorCharacterName
                     });

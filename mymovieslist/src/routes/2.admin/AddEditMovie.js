@@ -5,6 +5,7 @@ import GetGenresAPI from "../../js/MoviesAdmin/getGenres";
 import UpdateMovie from "../../js/MoviesAdmin/UpdateMovie";
 import previewImage from '../../img/preview.jpg';
 import GetPeopleSelect from "../../js/MoviesAdmin/GetPeopleSelect";
+import GetPeopleSelectSearch from "../../js/MoviesAdmin/GetPeopleSelectSearch";
 import { useLocation } from 'react-router-dom';
 import CRUDLoading from "../../js/modal/loading";
 
@@ -30,6 +31,8 @@ export default function AddEditMovie() {
     const [GetWriters, setGetWriters] = useState([]);
     const [GetActors, setGetActors] = useState([]);
 
+    // const [search, setSearch] = useState("");
+
     const [selectedFile, setSelectedFile] = useState();
     const [preview, setPreview] = useState();
 
@@ -43,8 +46,9 @@ export default function AddEditMovie() {
             shouldLoadData.current = false;
 
             GetGenresAPI({ setGetGenres });
-            GetPeopleSelect({ setGetDirector, setGetWriters, setGetActors }); 
+            //  GetPeopleSelect({ setGetDirector, setGetWriters, setGetActors }); 
         }
+
     }, []);
 
     useEffect(() => {
@@ -61,7 +65,7 @@ export default function AddEditMovie() {
     }, [selectedFile]);
 
 
-    useEffect(()=>{
+    useEffect(() => {
         if (movie != null) {
             setText("Update movie");
             setId(movie.id);
@@ -103,7 +107,7 @@ export default function AddEditMovie() {
             setActorCharacter(list);
         }
 
-    },[])
+    }, [])
 
 
 
@@ -189,6 +193,36 @@ export default function AddEditMovie() {
         return arr;
     }
 
+    const searchActors = search => {
+        if (search !== "") {
+
+            GetPeopleSelectSearch({ search }).then(response =>
+                setGetActors(response)
+            );
+        }
+    }
+
+    const searchDirector = search => {
+        if (search !== "") {
+
+            GetPeopleSelectSearch({ search }).then(response =>
+                setGetDirector(response),
+            );
+        }
+    }
+
+    const searchWriter = search => {
+        if (search !== "") {
+
+            GetPeopleSelectSearch({ search }).then(response =>
+                setGetWriters(response)
+            );
+        }
+    }
+
+
+
+
     return (
         <>
             <div className="container">
@@ -240,7 +274,8 @@ export default function AddEditMovie() {
                             value={Director}
                             name="director"
                             placeholder="Select director"
-                            onChange={d => setDirector(d.map(x => x))}
+                            onChange={d => setDirector(d)}
+                            onInputChange={s => searchDirector(s)}
                             options={GetDirector}
                         />
                     </div>
@@ -251,8 +286,10 @@ export default function AddEditMovie() {
                             value={Writers}
                             name="writers"
                             placeholder="Select writers"
-                            onChange={d => setWriters(d.map(x => x))}
+                            onChange={d => setWriters(d)}
+                            onInputChange={s => searchWriter(s)}
                             options={GetWriters}
+                            closeMenuOnSelect={false}
                         />
                     </div>
 
@@ -264,6 +301,8 @@ export default function AddEditMovie() {
                             placeholder="Select actors"
                             onChange={d => setActors(d)}
                             options={GetActors}
+                            onInputChange={s => searchActors(s)}
+                            closeMenuOnSelect={false}
                         />
                     </div>
 
