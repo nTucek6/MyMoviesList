@@ -10,6 +10,7 @@ namespace Services.MoviesAdmin
       Task<int> GetMoviesCount();
       Task SaveMovie(SaveMovie movie);
       Task<List<PeopleSelect>> GetPeopleSelect();
+      Task<List<PeopleSelect>> GetPeopleSelectSearch(string search);
 
 
     }

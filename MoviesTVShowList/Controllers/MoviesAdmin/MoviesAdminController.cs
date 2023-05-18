@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Services.MoviesAdmin;
-using Services.PersonAdmin;
 
 namespace MyMoviesList.Controllers.MoviesAdmin
 {
@@ -53,6 +52,14 @@ namespace MyMoviesList.Controllers.MoviesAdmin
         public async Task<IActionResult> GetPeopleSelect()
         {
             var people = await addMovieService.GetPeopleSelect();
+
+            return Ok(people);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetPeopleSelectSearch(string search)
+        {
+            var people = await addMovieService.GetPeopleSelectSearch(search);
 
             return Ok(people);
         }
