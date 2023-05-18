@@ -1,17 +1,17 @@
 import { Link } from "react-router-dom"
 import Select from 'react-select'
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import GetGenresAPI from "../../js/MoviesAdmin/getGenres";
 import UpdateMovie from "../../js/MoviesAdmin/UpdateMovie";
 import previewImage from '../../img/preview.jpg';
 import GetPeopleSelect from "../../js/MoviesAdmin/GetPeopleSelect";
-import { useNavigate,useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import CRUDLoading from "../../js/modal/loading";
 
 export default function AddEditMovie() {
 
-   // const navigate = useNavigate();
     const [text, setText] = useState("Add movie");
+    const shouldLoadData = useRef(true);
 
     const [Id, setId] = useState(0);
     const [MovieName, setMovieName] = useState("");
@@ -23,7 +23,7 @@ export default function AddEditMovie() {
     const [Writers, setWriters] = useState([]);
     const [Actors, setActors] = useState([]);
 
-   // const [SendActors,setSendActors] = useState([]);
+    const [ActorCharacter, setActorCharacter] = useState(null);
 
     const [GetGenres, setGetGenres] = useState([]);
     const [GetDirector, setGetDirector] = useState([]);
@@ -39,10 +39,13 @@ export default function AddEditMovie() {
     const movie = location.state;
 
     useEffect(() => {
-        GetGenresAPI({ setGetGenres });
-        GetPeopleSelect({setGetDirector,setGetWriters,setGetActors})
-    }, []);
+        if (shouldLoadData.current) {
+            shouldLoadData.current = false;
 
+            GetGenresAPI({ setGetGenres });
+            GetPeopleSelect({ setGetDirector, setGetWriters, setGetActors }); 
+        }
+    }, []);
 
     useEffect(() => {
         if (!selectedFile) {
@@ -55,12 +58,11 @@ export default function AddEditMovie() {
 
         // free memory when ever this component is unmounted
         return () => URL.revokeObjectURL(objectUrl)
-    }, [selectedFile])
+    }, [selectedFile]);
 
 
     useEffect(()=>{
-        if(movie != null)
-        {
+        if (movie != null) {
             setText("Update movie");
             setId(movie.id);
             setMovieName(movie.movieName);
@@ -70,38 +72,47 @@ export default function AddEditMovie() {
             setPreview("data:image/png;base64," + movie.movieImageData);
 
             setGenres(movie.genres);
-           
-            setDirector(movie.director.map(v=>{
-                return({
+
+            setDirector(movie.director.map(v => {
+                return ({
                     value: v.id,
                     label: v.firstName + " " + v.lastName
                 })
             }));
 
-            setWriters(movie.writers.map(v=>{
-                return({
+            setWriters(movie.writers.map(v => {
+                return ({
                     value: v.id,
                     label: v.firstName + " " + v.lastName
                 })
             }));
 
-            setActors(movie.actors.map(v=>{
-                return( {
+            setActors(movie.actors.map(v => {
+                return ({
                     value: v.id,
                     label: v.firstName + " " + v.lastName
                 })
             }));
-      
+
+            let list = {};
+            movie.actors.map(v => {
+                //  return {[v.id]: v.characterName};
+                Object.assign(list, { [v.id]: v.characterName });
+            });
+
+            setActorCharacter(list);
         }
-    },[]);
+
+    },[])
+
 
 
     const imageStyle = {
-        height:"400px",
-        width:"300px",
+        height: "400px",
+        width: "300px",
     }
 
-  
+
     const onSelectFile = e => {
         if (!e.target.files || e.target.files.length === 0) {
             setSelectedFile(undefined)
@@ -109,41 +120,54 @@ export default function AddEditMovie() {
         }
         setSelectedFile(e.target.files[0])
     }
-
     const handleSubmit = async e => {
         e.preventDefault();
         setLoadingBar(true);
 
-        const actorList = Actors.map(v=>{
-            return( {
-                ActorId: v.value,
-                ActorCharacterName: "name"
-            })
-        });
+        let list = convertObjectToArray();
 
-       
+        const actorList = Actors.map(actor => {
+            let data = null;
+            list.map(l => {
+                if (actor.value == l.at(0)) {
+                    data = {
+                        ActorId: actor.value,
+                        ActorCharacterName: l.at(1)
+                    };
+                }
+            })
+            if (data !== null) {
+                return data;
+            }
+
+        });
+        /*   const actorList = Actors.map(v => {
+               return ({
+                   ActorId: v.value,
+                   ActorCharacterName: "name"
+               })
+           });
+
+          */
         const Movie = new FormData();
         Movie.append("Id", Id);
         Movie.append("MovieName", MovieName);
         Movie.append("Duration", Duration);
         Movie.append("Synopsis", Synopsis);
-        Movie.append("Genres", Genres.map(x=>x.value));
+        Movie.append("Genres", Genres.map(x => x.value));
         Movie.append("ReleaseDate", ReleaseDate);
-        Movie.append("Director", Director.map(x=>x.value));
-        Movie.append("Writers", Writers.map(x=>x.value));
-        //Movie.append("Actors", Actors.map(x=>x.value));
+        Movie.append("Director", Director.map(x => x.value));
+        Movie.append("Writers", Writers.map(x => x.value));
         Movie.append("Actors", JSON.stringify(actorList));
         Movie.append("MovieImageData", selectedFile);
 
-        await UpdateMovie({Movie}).then(function (response) 
-        {
+        await UpdateMovie({ Movie }).then(function (response) {
             ClearData();
             setLoadingBar(false);
         });
     }
 
-    function ClearData()
-    {
+    function ClearData() {
         setId(0);
         setMovieName("");
         setDuration("");
@@ -156,106 +180,139 @@ export default function AddEditMovie() {
         setGenres([])
     }
 
+    const handleCharacterName = e => {
+        setActorCharacter({ ...ActorCharacter, [e.name]: e.value });
+    }
+
+    const convertObjectToArray = e => {
+        const arr = Object.entries(ActorCharacter);
+        return arr;
+    }
+
     return (
         <>
-        <div className="container">
-            <div>
-                <Link to='/moviesadmin/viewmovies' className="btn ">View movies</Link>
-                <Link to='/moviesadmin/addeditmovie' className="btn btn-primary">Add movie</Link>
-            </div>
-            <hr />
-
-            <form onSubmit={handleSubmit}>
-                <div className="form-group mb-2">
-                    <input type="text" placeholder="Movie title" className="form-control" 
-                    value={MovieName}
-                    onChange={d => setMovieName(d.target.value)} />
+            <div className="container">
+                <div>
+                    <Link to='/moviesadmin/viewmovies' className="btn ">View movies</Link>
+                    <Link to='/moviesadmin/addeditmovie' className="btn btn-primary">Add movie</Link>
                 </div>
-
-                <div className="form-group mb-2">
-                    <input type="text" className="form-control" placeholder="Duration" 
-                    value={Duration}
-                    onChange={d => setDuration(d.target.value)} />
-                </div>
-
-                <div className="form-group mb-2">
-                    <textarea className="form-control" placeholder="Synopsis" 
-                    value={Synopsis}
-                    onChange={d => setSynopsis(d.target.value)}></textarea>
-                </div>
-
-                <div className="form-group mb-2">
-                    <input type="date" className="form-control" placeholder="Release date" 
-                    value={ReleaseDate}
-                    onChange={d => setReleaseDate(d.target.value)} />
-                </div>
-
-                <div className="form-group mb-2" >
-                    <Select
-                        isMulti
-                        value={Genres}
-                        name="genres"
-                        placeholder="Select genres"
-                        onChange={d => setGenres(d.map(x => x))}
-                        options={GetGenres}
-                    />
-                </div>
-
-                <div className="form-group mb-2">
-                    <Select
-                        isMulti
-                        value={Director}
-                        name="director"
-                        placeholder="Select director"
-                        onChange={d => setDirector(d.map(x => x))}
-                        options={GetDirector}
-                    />
-                </div>
-
-                <div className="form-group mb-2">
-                    <Select
-                        isMulti
-                        value={Writers}
-                        name="writers"
-                        placeholder="Select writers"
-                        onChange={d => setWriters(d.map(x => x))} 
-                        options={GetWriters}
-                    />
-                </div>
-
-                <div className="form-group mb-2">
-                    <Select
-                        value={Actors}
-                        isMulti
-                        name="actors"
-                        placeholder="Select actors"
-                        onChange={d => setActors(d.map(x => x))}  
-                        options={GetActors}
-                    />
-                </div>
-
-                <div className="form-group mb-2">
-                    <input type="file" className="form-control" onChange={onSelectFile} />
-                </div>
-
-                
-                <div className='d-flex justify-content-center mb-2'>
-                  {(preview !== undefined) ?   <img src={preview} style={imageStyle} alt='preview' /> : <img src={previewImage} style={imageStyle} alt='preview' />}
-                </div>
-
                 <hr />
 
-                <div className="mt-2 d-flex flex-row-reverse">
-                    <button type='submit' className="btn btn-outline-danger mt-3 p-2">{text}</button>
-                </div>
-            </form>
+                <form onSubmit={handleSubmit}>
+                    <div className="form-group mb-2">
+                        <input type="text" placeholder="Movie title" className="form-control"
+                            value={MovieName}
+                            onChange={d => setMovieName(d.target.value)} />
+                    </div>
 
-            <CRUDLoading loadingBar={loadingBar} />
+                    <div className="form-group mb-2">
+                        <input type="text" className="form-control" placeholder="Duration"
+                            value={Duration}
+                            onChange={d => setDuration(d.target.value)} />
+                    </div>
+
+                    <div className="form-group mb-2">
+                        <textarea className="form-control" placeholder="Synopsis"
+                            value={Synopsis}
+                            onChange={d => setSynopsis(d.target.value)}></textarea>
+                    </div>
+
+                    <div className="form-group mb-2">
+                        <input type="date" className="form-control" placeholder="Release date"
+                            value={ReleaseDate}
+                            onChange={d => setReleaseDate(d.target.value)} />
+                    </div>
+
+                    <div className="form-group mb-2" >
+                        <Select
+                            isMulti
+                            value={Genres}
+                            name="genres"
+                            placeholder="Select genres"
+                            onChange={d => setGenres(d.map(x => x))}
+                            options={GetGenres}
+                        />
+                    </div>
+
+                    <div className="form-group mb-2">
+                        <Select
+                            isMulti
+                            value={Director}
+                            name="director"
+                            placeholder="Select director"
+                            onChange={d => setDirector(d.map(x => x))}
+                            options={GetDirector}
+                        />
+                    </div>
+
+                    <div className="form-group mb-2">
+                        <Select
+                            isMulti
+                            value={Writers}
+                            name="writers"
+                            placeholder="Select writers"
+                            onChange={d => setWriters(d.map(x => x))}
+                            options={GetWriters}
+                        />
+                    </div>
+
+                    <div className="form-group mb-2">
+                        <Select
+                            value={Actors}
+                            isMulti
+                            name="actors"
+                            placeholder="Select actors"
+                            onChange={d => setActors(d)}
+                            options={GetActors}
+                        />
+                    </div>
+
+                    <div className="form-group mb-2">
+                        {
+                            Actors.map(actor => {
+                                let characterName = null;
+                                if (movie !== null) {
+                                    movie.actors.map(a => {
+                                        if (a.id === actor.value) {
+                                            characterName = a.characterName;
+                                        }
+                                    })
+                                }
+                                return (
+                                    <div className="form-group row mb-2" key={actor.value}>
+                                        <label htmlFor="actorName" className="col-sm-2 col-form-label">{actor.label}</label>
+                                        <div className="col-sm-5">
+                                            <input type="text"
+                                                name={actor.value}
+                                                defaultValue={characterName === null ? "" : characterName}
+                                                className="form-control"
+                                                placeholder="Character name"
+                                                onChange={d => handleCharacterName(d.target)} />
+                                        </div>
+                                    </div>
+                                )
+                            })
+                        }
+                    </div>
+
+                    <div className="form-group mb-2">
+                        <input type="file" className="form-control" onChange={onSelectFile} />
+                    </div>
+
+
+                    <div className='d-flex justify-content-center mb-2'>
+                        {(preview !== undefined) ? <img src={preview} style={imageStyle} alt='preview' /> : <img src={previewImage} style={imageStyle} alt='preview' />}
+                    </div>
+
+                    <hr />
+
+                    <div className="mt-2 d-flex flex-row-reverse">
+                        <button type='submit' className="btn btn-outline-danger mt-3 p-2">{text}</button>
+                    </div>
+                </form>
+
+                <CRUDLoading loadingBar={loadingBar} />
             </div>
         </>
-
     )
-
-
-
 }
