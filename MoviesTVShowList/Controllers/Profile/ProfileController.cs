@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using Services.Profile;
 
 namespace MyMoviesList.Controllers.Profile
@@ -7,9 +8,9 @@ namespace MyMoviesList.Controllers.Profile
     [ApiController]
     public class ProfileController : Controller
     {
-      private readonly IProfileService profileService;
+        private readonly IProfileService profileService;
 
-      public ProfileController(IProfileService profileService)
+        public ProfileController(IProfileService profileService)
         {
             this.profileService = profileService;
         }
@@ -22,6 +23,40 @@ namespace MyMoviesList.Controllers.Profile
 
             return Ok(userBio);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetProfileStatus()
+        {
+            var status = await profileService.GetProfileStatus();
+
+            return Ok(status);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUserList(string username,int statusId)
+        {
+            var movies = await profileService.GetUserList(username, statusId);
+
+            return Ok(movies);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetTimeSpentWatching(string username)
+        {
+             var days = await profileService.GetTimeSpentWatching(username);
+
+            return Ok(days);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetStatusInfo(string username)
+        {
+            var status = await profileService.GetStatusInfo(username);
+
+            return Ok(status);
+        }
+
+        
 
 
     }

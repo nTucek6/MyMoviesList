@@ -95,7 +95,7 @@ namespace Services.MovieInfo
 
         public async Task<List<StatusSelect>> GetStatus()
         {
-            var watchStatus = Enum.GetValues(typeof(StatusEnum)).Cast<StatusEnum>().ToList().Select(x => new StatusSelect { value = x, label = x.GetDescription() }).ToList();
+            var watchStatus = Enum.GetValues(typeof(StatusEnum)).Cast<StatusEnum>().ToList().Where(q=>q != StatusEnum.All).Select(x => new StatusSelect { value = x, label = x.GetDescription() }).ToList();
             return watchStatus;
         }
 

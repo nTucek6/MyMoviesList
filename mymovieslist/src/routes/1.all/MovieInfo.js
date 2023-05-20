@@ -228,7 +228,7 @@ export default function MovieInfo() {
                             movieActors.map((actor, index) => {
                                 return (
                                     <div className={index === 0 ? "row mt-0" : "row mt-1"} key={actor.id} style={{ cursor: "pointer" }} onClick={() => toPersonInfo("/person/" + actor.firstName + " " + actor.lastName, actor)}>
-                                        <div className="col-md-1"><img className="img-fluid img-thumbnail" src={"data:image/png;base64," + actor.personImageData} alt="" /> </div>
+                                        <div className="col-md-1"><img className="img-fluid img-thumbnail"  src={"data:image/png;base64," + actor.personImageData} alt="" /> </div>
                                         <div className="col-md-11">
                                             <div className="card-body">
                                                 <div className="card-title">

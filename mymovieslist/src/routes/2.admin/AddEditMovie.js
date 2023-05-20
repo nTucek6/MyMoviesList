@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react';
 import GetGenresAPI from "../../js/MoviesAdmin/getGenres";
 import UpdateMovie from "../../js/MoviesAdmin/UpdateMovie";
 import previewImage from '../../img/preview.jpg';
-import GetPeopleSelect from "../../js/MoviesAdmin/GetPeopleSelect";
 import GetPeopleSelectSearch from "../../js/MoviesAdmin/GetPeopleSelectSearch";
 import { useLocation } from 'react-router-dom';
 import CRUDLoading from "../../js/modal/loading";
@@ -44,9 +43,7 @@ export default function AddEditMovie() {
     useEffect(() => {
         if (shouldLoadData.current) {
             shouldLoadData.current = false;
-
             GetGenresAPI({ setGetGenres });
-            //  GetPeopleSelect({ setGetDirector, setGetWriters, setGetActors }); 
         }
 
     }, []);
@@ -103,10 +100,8 @@ export default function AddEditMovie() {
                 //  return {[v.id]: v.characterName};
                 Object.assign(list, { [v.id]: v.characterName });
             });
-
             setActorCharacter(list);
         }
-
     }, [])
 
 
@@ -145,14 +140,7 @@ export default function AddEditMovie() {
             }
 
         });
-        /*   const actorList = Actors.map(v => {
-               return ({
-                   ActorId: v.value,
-                   ActorCharacterName: "name"
-               })
-           });
 
-          */
         const Movie = new FormData();
         Movie.append("Id", Id);
         Movie.append("MovieName", MovieName);
@@ -188,7 +176,7 @@ export default function AddEditMovie() {
         setActorCharacter({ ...ActorCharacter, [e.name]: e.value });
     }
 
-    const convertObjectToArray = e => {
+    const convertObjectToArray = () => {
         const arr = Object.entries(ActorCharacter);
         return arr;
     }
@@ -219,9 +207,6 @@ export default function AddEditMovie() {
             );
         }
     }
-
-
-
 
     return (
         <>
