@@ -36,6 +36,7 @@ function App() {
                <Route path="/moviessearch/genre/:title" element={<GenreMovies />} />
                <Route path="/movie/:title" element={<MovieInfo />} />
                <Route path="/person/:name" element={<PersonInfo />} />
+               <Route path="/movieslist/:username" element={<MoviesList />} />
 
                <Route element={<LimitedRoutes />}>
                   <Route path="/login" element={<Login />} />
@@ -43,7 +44,6 @@ function App() {
 
                <Route element={<PrivateRoutes />}>
                   <Route path="/accountsettings/:username" element={<AccountSettings />} />
-                  <Route path="/movieslist/:username" element={<MoviesList />} />
                   <Route path="/profile/:username" element={<Profile />} />
                </Route>
 

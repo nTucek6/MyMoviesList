@@ -1,5 +1,12 @@
 ﻿using DatabaseContext;
+using Entities.Enum;
 using Microsoft.EntityFrameworkCore;
+using Services.MovieInfo;
+using MyMoviesList.EnumExtension;
+using Entities;
+using System.Linq.Expressions;
+using Microsoft.VisualBasic;
+using System;
 
 namespace Services.Profile
 {
@@ -26,5 +33,142 @@ namespace Services.Profile
             }
 
         }
+
+        public async Task<List<StatusSelect>> GetProfileStatus()
+        {
+            var watchStatus = Enum.GetValues(typeof(StatusEnum)).Cast<StatusEnum>().ToList().Select(x => new StatusSelect { value = x, label = x.GetDescription() }).ToList();
+            return watchStatus;
+        }
+
+        public async Task<List<UserMovie>> GetUserList(string username, int statusId)
+        {
+            Expression<Func<UsersMovieListEntity, bool>> predicate = x => true;
+
+            if (statusId != 0)
+            {
+                predicate = x => x.StatusId == (StatusEnum)statusId;
+            }
+
+            var user = await myMoviesListContext.Users.Where(q=> q.Username == username).Select(s=> 
+            new UsersEntity 
+            { 
+                Id = s.Id
+
+            }).FirstOrDefaultAsync();
+
+            if(user != null)
+            {
+                var userMovieList = await myMoviesListContext.UsersMovieList
+                    .Where(predicate)
+                    .Where(q=>q.UserId == user.Id)
+                    .ToListAsync();
+
+            if(userMovieList.Count() > 0)
+                {
+                    List<UserMovie> userMovie = new List<UserMovie>();
+                    foreach(var m in userMovieList)
+                    {
+                        var movie = await myMoviesListContext.Movies.Where(q => q.Id == m.MovieId).Select(s => new UserMovie
+                        {
+                            Id = s.Id,
+                            MovieName = s.MovieName,
+                            MovieImageData = s.MovieImageData,
+                            Score = m.Score
+
+                        }).FirstOrDefaultAsync();
+
+                        userMovie.Add(movie);
+                    }
+                    return userMovie;
+                }
+                
+            }
+
+
+            return null;
+        }
+
+        public async Task<decimal> GetTimeSpentWatching(string username)
+        {
+            var user = await myMoviesListContext.Users.Where(q => q.Username == username).Select(s =>
+            new UsersEntity
+            {
+                Id = s.Id
+
+            }).FirstOrDefaultAsync();
+
+            if (user != null)
+            {
+                var userMovieList = await myMoviesListContext.UsersMovieList
+                    .Where(q=>q.StatusId == StatusEnum.Completed)
+                    .Where(q => q.UserId == user.Id)
+                    .ToListAsync();
+
+
+                if (userMovieList.Count() > 0)
+                {
+                    decimal minutes = 0;
+
+                    foreach (var m in userMovieList)
+                    {
+                         minutes += await myMoviesListContext.Movies.Where(q => q.Id == m.MovieId).Select(s=> s.Duration).FirstOrDefaultAsync();
+  
+                    }
+                   
+                return minutes / 1440;
+                }
+
+
+            }
+            return 0;
+        }
+
+
+        public async Task<List<StatusInfo>> GetStatusInfo(string username)
+        {
+            var watchStatus = Enum.GetValues(typeof(StatusEnum)).Cast<StatusEnum>().ToList().Where(q=>q != StatusEnum.All).Select(x => new StatusSelect { value = x, label = x.GetDescription() }).ToList();
+
+            var user = await myMoviesListContext.Users.Where(q => q.Username == username).Select(s =>new UsersEntity
+           {
+               Id = s.Id
+           }).FirstOrDefaultAsync();
+
+            if (user != null)
+            {
+                var userMovieList = await myMoviesListContext.UsersMovieList
+                   .Where(q => q.StatusId != StatusEnum.All)
+                   .Where(q => q.UserId == user.Id)
+                   .ToListAsync();
+
+                if (userMovieList.Count() > 0)
+                {
+                    List<StatusInfo> statusInfo = new List<StatusInfo>();
+                    foreach (var status in watchStatus)
+                    {
+                     int count = 0;
+                     foreach(var u in userMovieList)
+                      {
+                            if(u.StatusId == status.value)
+                            {
+                                count++;
+                            }
+
+                      }
+                        statusInfo.Add(new StatusInfo 
+                        {
+                            Id = status.value, 
+                            Status = status.label, 
+                            StatusCount = count });
+
+                    }
+                    return statusInfo;
+                }
+            }
+
+
+            return null;
+
+        }
+
     }
 }
