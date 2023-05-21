@@ -1,6 +1,7 @@
 ﻿using DatabaseContext;
 using Entities;
 using Entities.Enum;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -165,6 +166,30 @@ namespace Services.Authentication
             }
         }
 
+        public async Task ChangeProfileImage(UserUpdate user)
+        {
+            var userDb = await myMoviesListContext.Users.Where(u => u.Id == user.Id).SingleOrDefaultAsync();
+
+            if (userDb != null)
+            {
+
+                    if (user.UserImageData != null)
+                    {
+                        userDb.ProfileImageData = ImageToByte(user.UserImageData);
+                    }
+                    else
+                    {
+                        userDb.ProfileImageData = null;
+                    }
+
+                    myMoviesListContext.Users.Update(userDb);
+
+                    await myMoviesListContext.SaveChangesAsync();
+                
+            }
+        }
+
+
         public string GenerateToken(UsersEntity user)
         {
             // generate token that is valid for 15 days
@@ -203,6 +228,18 @@ namespace Services.Authentication
             }
 
             return valueHash;
+        }
+
+        private byte[] ImageToByte(IFormFile image)
+        {
+            byte[] s = null;
+            using (var ms = new MemoryStream())
+            {
+                image.CopyTo(ms);
+                s = ms.ToArray();
+
+            }
+            return s;
         }
 
 

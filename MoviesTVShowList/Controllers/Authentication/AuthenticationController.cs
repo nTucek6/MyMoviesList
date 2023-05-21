@@ -63,6 +63,14 @@ namespace MyMoviesList.Controllers.Login
             return Ok();
         }
 
+        [HttpPost("ChangeProfileImage")]
+        public async Task<IActionResult> ChangeProfileImage([FromForm]UserUpdate user)
+        {
+            await authenticationService.ChangeProfileImage(user);
+
+            return Ok();
+        }
+
     }
 
 }

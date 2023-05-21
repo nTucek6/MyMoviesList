@@ -10,6 +10,7 @@
       Task <string> ChangeEmail(UserUpdate user);
       Task <string> ChangeUsername(UserUpdate user);
       Task ChangeBio(UserUpdate user);
+      Task ChangeProfileImage(UserUpdate user);
 
     }
 }

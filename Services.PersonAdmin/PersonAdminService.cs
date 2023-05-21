@@ -12,7 +12,7 @@ namespace Services.PersonAdmin
 
         private readonly MyMoviesListContext myMoviesListContext;
 
-        public PersonAdminService( MyMoviesListContext myMoviesListContext)
+        public PersonAdminService(MyMoviesListContext myMoviesListContext)
         {
             this.myMoviesListContext = myMoviesListContext;
         }
@@ -49,8 +49,8 @@ namespace Services.PersonAdmin
 
         public async Task SavePerson(Person person)
         {
-           
-            if(person.Id > 0)
+
+            if (person.Id > 0)
             {
                 var personDb = await myMoviesListContext.People.Where(w => w.Id == person.Id).FirstOrDefaultAsync();
                 personDb.FirstName = person.FirstName;
@@ -58,7 +58,7 @@ namespace Services.PersonAdmin
                 personDb.BirthDate = person.BirthDate;
                 personDb.BirthPlace = person.BirthPlace;
 
-                if(person.PersonImage != null)
+                if (person.PersonImage != null)
                 {
                     personDb.PersonImageData = ImageToByte(person.PersonImage);
                 }
@@ -93,7 +93,6 @@ namespace Services.PersonAdmin
         }
 
 
-
         private byte[] ImageToByte(IFormFile image)
         {
             byte[] s = null;
@@ -103,9 +102,7 @@ namespace Services.PersonAdmin
                 s = ms.ToArray();
 
             }
-
             return s;
-
         }
 
 
