@@ -5,8 +5,7 @@ using Services.MovieInfo;
 using MyMoviesList.EnumExtension;
 using Entities;
 using System.Linq.Expressions;
-using Microsoft.VisualBasic;
-using System;
+
 
 namespace Services.Profile
 {
@@ -19,9 +18,9 @@ namespace Services.Profile
             this.myMoviesListContext = myMoviesListContext;
         }
 
-        public async Task<string> GetUserBio(int Id)
+        public async Task<string> GetUserBio(string username)
         {
-            var userBio = await myMoviesListContext.Users.Where(u => u.Id == Id).SingleOrDefaultAsync();
+            var userBio = await myMoviesListContext.Users.Where(u => u.Username == username).SingleOrDefaultAsync();
 
             if(userBio.UserBio != null)
             {
@@ -170,5 +169,62 @@ namespace Services.Profile
 
         }
 
+        public async Task<List<UserMovie>> GetLastUpdate(int PostPerPage, int Page,string username)
+        {
+            var user = await myMoviesListContext.Users.Where(q => q.Username == username).Select(s => new UsersEntity
+            {
+                Id = s.Id
+            }).FirstOrDefaultAsync();
+
+            if (user != null)
+            {
+                var userMovieList = await myMoviesListContext.UsersMovieList
+                   .Where(q => q.UserId == user.Id)
+                   .OrderByDescending(q => q.TimeAdded)
+                   .Skip((Page - 1) * PostPerPage)
+                   .Take(PostPerPage)
+                   .ToListAsync();
+
+                if (userMovieList.Count() > 0)
+                {
+                    List<UserMovie> userMovie = new List<UserMovie>();
+                    foreach (var m in userMovieList)
+                    {
+                        var movie = await myMoviesListContext.Movies.Where(q => q.Id == m.MovieId).Select(s => new UserMovie
+                        {
+                            Id = s.Id,
+                            MovieName = s.MovieName,
+                            MovieImageData = s.MovieImageData,
+                            Score = m.Score,
+                            TimeAdded = m.TimeAdded,
+
+                        }).FirstOrDefaultAsync();
+
+                        userMovie.Add(movie);
+                    }
+                    return userMovie;
+                }
+
+            }
+            return null;
+        }
+
+        public async Task<byte[]> GetProfileImage(string username)
+        {
+            var user = await myMoviesListContext.Users.Where(q => q.Username == username).Select(s => new UsersEntity
+            {
+                Id = s.Id,
+                ProfileImageData = s.ProfileImageData
+                
+            }).FirstOrDefaultAsync();
+
+            if(user != null)
+            {
+                return user.ProfileImageData;
+            }
+            return null;
+
+
+        }
     }
 }

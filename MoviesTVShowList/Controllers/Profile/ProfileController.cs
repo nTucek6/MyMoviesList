@@ -17,9 +17,9 @@ namespace MyMoviesList.Controllers.Profile
 
 
         [HttpGet]
-        public async Task<IActionResult> GetUserBio(int Id)
+        public async Task<IActionResult> GetUserBio(string username)
         {
-            var userBio = await profileService.GetUserBio(Id);
+            var userBio = await profileService.GetUserBio(username);
 
             return Ok(userBio);
         }
@@ -56,7 +56,24 @@ namespace MyMoviesList.Controllers.Profile
             return Ok(status);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetLastUpdate(int PostPerPage,int Page,string username)
+        {
+            var movies = await profileService.GetLastUpdate(PostPerPage,Page,username);
+
+            return Ok(movies);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetProfileImage(string username)
+        {
+            var movies = await profileService.GetProfileImage(username);
+
+            return Ok(movies);
+        }
+
         
+
 
 
     }

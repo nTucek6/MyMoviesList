@@ -3,7 +3,7 @@ import config from './../../config.json';
 import axios from "axios";
 import { useEffect } from "react";
 
-export default function GetUserBio({ Id }) {
+export default function GetUserBio({ username }) {
     const [Bio, setBio] = useState(null);
 
     useEffect(() => {
@@ -15,7 +15,9 @@ export default function GetUserBio({ Id }) {
             method: "get",
             url: config.SERVER_URL + "Profile/GetUserBio",
             headers: { 'Content-Type': 'application/json' },
-            params: { Id }
+            params: { 
+                username:username 
+            }
         })
             .then(function (response) {
                 if (response) {

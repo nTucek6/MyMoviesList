@@ -4,6 +4,7 @@ using DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatabaseContext.Migrations
 {
     [DbContext(typeof(MyMoviesListContext))]
-    partial class MyMoviesListContextModelSnapshot : ModelSnapshot
+    [Migration("20230521114750_UpdateUsers1")]
+    partial class UpdateUsers1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -253,9 +256,6 @@ namespace DatabaseContext.Migrations
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("ProfileImageData")
-                        .HasColumnType("varbinary(max)");
 
                     b.Property<int>("RoleId")
                         .HasColumnType("int");

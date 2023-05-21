@@ -9,7 +9,7 @@ namespace Entities
         public string PasswordHash {get;set;}
         public string Username {get;set;}
         public RolesEnum RoleId {get;set;}
-        public string? ProfileImageData {get;set;}
+        public byte[]? ProfileImageData {get;set;}
         public string? UserBio { get;set;}
         public DateTime Joined {get;set;}
 
