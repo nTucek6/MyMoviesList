@@ -152,7 +152,7 @@ namespace Services.MoviesAdmin
         public async Task SaveMovie(SaveMovie movie)
         {
 
-            var acc = JsonSerializer.Deserialize<List<SaveActor>>(movie.Actors);
+           // var acc = JsonSerializer.Deserialize<List<SaveActor>>(movie.Actors);
 
             if (movie.Id > 0)
             {

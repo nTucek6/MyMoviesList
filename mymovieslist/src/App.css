@@ -212,3 +212,15 @@ body,input,select
 
 
 /* end ............................... */
+
+
+/* Search bar css */
+
+.search-bar
+{
+  position: absolute;
+  z-index: 1000;
+
+}
+
+/* end ............................... */

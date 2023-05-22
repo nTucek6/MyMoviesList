@@ -1,4 +1,4 @@
-﻿import { Outlet,Link } from "react-router-dom";
+﻿import { Outlet, Link } from "react-router-dom";
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -10,16 +10,16 @@ import GetPage from '../js/navigation/getpage';
 import GetRoleNavigation from '../js/navigation/rolenavigation';
 import getToken from './../js/token/gettoken';
 import jwt_decode from "jwt-decode";
+import SearchBar from "../js/navigation/SearchBar";
 
-function SetProfileId(Id)
-{
+function SetProfileId(Id) {
     sessionStorage.setItem('ProfileId', Id); //  JSON.stringify(Id)
 }
 
 export default function Navigation() {
 
     function IsUserLogged() {
-    const token = getToken();
+        const token = getToken();
 
         function LogOut() {
             localStorage.clear();
@@ -54,7 +54,7 @@ export default function Navigation() {
 
                             <Nav className="me-auto">
                                 <NavDropdown title={Username} className="">
-                                    <NavDropdown.Item as={Link} to={"/profile/" + Username} className="" onClick={()=>SetProfileId(Id)} ><FontAwesomeIcon icon={faUser} /> Profile</NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to={"/profile/" + Username} className="" onClick={() => SetProfileId(Id)} ><FontAwesomeIcon icon={faUser} /> Profile</NavDropdown.Item>
                                     <NavDropdown.Item as={Link} to={"/movieslist/" + Username} className="" ><FontAwesomeIcon icon={faList} /> Movies List</NavDropdown.Item>
                                     <NavDropdown.Item as={Link} to={"/accountsettings/" + Username} className=""><FontAwesomeIcon icon={faGear} /> Account settings</NavDropdown.Item>
                                     <Dropdown.Divider />
@@ -85,29 +85,14 @@ export default function Navigation() {
                             <Nav className="me-auto">
 
                                 <NavDropdown title="Movies" className="dropdown-custom">
-                                <NavDropdown.Item as={Link} to="/moviessearch">Movie Search</NavDropdown.Item>
-                                  
+                                    <NavDropdown.Item as={Link} to="/moviessearch">Movie Search</NavDropdown.Item>
+
                                 </NavDropdown>
                                 <NavDropdown title="Community" className="dropdown-custom" >
                                     <NavDropdown.Item as={Link} to="/discussions">Discussions</NavDropdown.Item>
                                 </NavDropdown>
                             </Nav>
-
-                            <div className="form-group navigation-select">
-                                <select className="form-select " >
-                                    <option value="all" >All</option>
-                                    <option value="movies">Movies</option>
-                                    <option value="actors">Actors</option>
-                                    <option value="users">Users</option>
-                                </select>
-                            </div>
-                            <div className="form-group navigation-input">
-                                <input type="search" className="form-control" placeholder="Search.." />
-                            </div>
-                            <button type="button" className="btn btn-primary">
-                                <FontAwesomeIcon icon={faSearch} />
-                            </button>
-
+                            <SearchBar />
                         </Navbar.Collapse>
                     </div>
                 </Navbar>
