@@ -31,6 +31,12 @@ namespace MyMoviesList.Controllers.MovieSearch
             return Ok(actors);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> SearchBar(string Search,string? type)
+        {
+            var searchdata = await movieSearchService.SearchBar(Search,type);
+            return Ok(searchdata);
+        }
 
 
 
