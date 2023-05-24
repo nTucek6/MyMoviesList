@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import GetSearchData from './GetSearchData';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function SearchBar() {
@@ -9,8 +9,9 @@ export default function SearchBar() {
     const [SearchData, setSearchData] = useState([]);
     const [type,setType] = useState("all");
     const [isFocus,setIsFocus] = useState(false);
-    const [search,setSearch] = useState("")
-  
+
+    const boxRef = useRef();
+    
     const navigate = useNavigate();
 
     const handleChange = s => {
@@ -22,25 +23,23 @@ export default function SearchBar() {
         }
     }
 
-    useEffect(()=>{
-        if(isFocus === false)
-        {
-            setSearchData([]);
-        }
-        else
-        {
-            if(search.target.value !== "")
-            {
-                handleChange(search);
-            }
 
+    useEffect(() => {
+        window.onclick = (event) => {
+          if (event.target.contains(boxRef.current) && event.target !== boxRef.current) {  
+                setIsFocus(false);   
+            console.log(`You clicked Outside the box!`);
+          } else {     
+            console.log(`You clicked Inside the box!`);
+            setIsFocus(true);
+          }
         }
-
-    },[isFocus])
+    }, []);
 
 
     const handleInfo = (data) =>
     {
+        console.log(data);
         if(data.type === "movie")
         {
             sessionStorage.setItem("movieName",data.name);
@@ -54,6 +53,8 @@ export default function SearchBar() {
 
     }
 
+//onFocus={s=>{setIsFocus(true)}} onBlur={()=>setIsFocus(true)}
+
     return (
         <>
             <div className="form-group navigation-select">
@@ -64,15 +65,16 @@ export default function SearchBar() {
                 </select>
             </div>
             <div className="form-group navigation-input">
-                <input type="search" className="form-control" placeholder="Search.." onChange={handleChange} onFocus={s=>{setIsFocus(true);setSearch(s)}} onBlur={()=>setIsFocus(false)} />
-                <ul className='list-group search-bar'>
+                <input type="search" className="form-control" placeholder="Search.." onChange={handleChange}  />
+                <ul ref={boxRef} className={isFocus ? 'list-group search-bar' : "d-none"}>
                     {
                         SearchData.map((data,index) => {
                             return (<div className=''  key={index}>
                                  {
                                     // <img className='rounded d-inline' style={{width:"30px",height:"30px"}} src={"data:image/png;base64," + data.searchImageData} />
                                  }
-                                <button className='list-group-item list-group-item-action d-inline' onClick={()=>handleInfo(data)}>{data.name}</button>  
+                                   <button className='list-group-item list-group-item-action d-inline' onClick={()=>handleInfo(data)}>{data.name}</button>  
+                                
                             </div>
                             )
                         })
