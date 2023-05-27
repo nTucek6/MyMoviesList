@@ -49,16 +49,19 @@ export default function MovieInfo() {
     useEffect(() => {
         if (shouldLoadData.current) {
             shouldLoadData.current = false;
-            GetMovieInfo({ setMovie, movieId });
-            GetMovieActors({ setMovieActors, movieId, page, postperpage });
-            if (token !== null) {
-                GetStatus({ setStatusList });
-                GetWatchStatus({ setWatchStatus, setIsNotAdded, userId, movieId });
-                GetUserScore({ setScore, userId, movieId });
-            }
+           
         }
+
+        GetMovieInfo({ setMovie, movieId });
+        GetMovieActors({ setMovieActors, movieId, page, postperpage });
+        if (token !== null) {
+            GetStatus({ setStatusList });
+            GetWatchStatus({ setWatchStatus, setIsNotAdded, userId, movieId });
+            GetUserScore({ setScore, userId, movieId });
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [movieId]);
 
 
     if (movie === null)
@@ -83,6 +86,29 @@ export default function MovieInfo() {
             defaultValue={watchStatus}
             onChange={s => UpdateUserListStatus(s.value)}
         />)
+    }
+
+    const GetMovieScore = () =>
+    {
+        return(
+            <Select
+            name="score"
+            placeholder="Select score"
+            options={
+                [
+                    { value: 5, label: 5 },
+                    { value: 4, label: 4 },
+                    { value: 3, label: 3 },
+                    { value: 2, label: 2 },
+                    { value: 1, label: 1 }
+                ]
+            }
+            defaultValue={score !== 0 ? { value: score, label: score } : null}
+            isDisabled={isNotAdded}
+            onChange={s => UpdateUserListScore(s.value)}
+        />
+        )
+
     }
 
     const AddMovieToList = () => {
@@ -184,22 +210,7 @@ export default function MovieInfo() {
                             {isNotAdded ? <GetAddButton /> : <GetStatusSelect />}
                         </div>
                         <div className="col-auto">
-                            <Select
-                                name="score"
-                                placeholder="Select score"
-                                options={
-                                    [
-                                        { value: 5, label: 5 },
-                                        { value: 4, label: 4 },
-                                        { value: 3, label: 3 },
-                                        { value: 2, label: 2 },
-                                        { value: 1, label: 1 }
-                                    ]
-                                }
-                                defaultValue={score !== 0 ? { value: score, label: score } : null}
-                                isDisabled={isNotAdded}
-                                onChange={s => UpdateUserListScore(s.value)}
-                            />
+                            <GetMovieScore />
                             {// <FontAwesomeIcon icon={faStar} /> 
                             }
                         </div>

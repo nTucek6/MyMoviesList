@@ -281,7 +281,6 @@ export default function AccountSettings() {
                         isSubmited ? <button type="submit" className="btn btn-primary" disabled>Submit</button> : <button type="submit" className="btn btn-primary">Submit</button>
                     )}
                 </div>
-
             </div>
             <div className='d-flex justify-content-center mb-2'>
                         {(preview !== undefined) ? <img src={preview} style={imageStyle} alt='preview' /> : null}
