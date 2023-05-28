@@ -42,11 +42,19 @@ namespace MyMoviesList.Controllers.MovieInfo
             await movieInfoService.UpdateMovieUserList(userId, movieId, score, statusId);
             return Ok();
         }
+
         [HttpGet]
         public async Task<IActionResult> GetUserScore(int userId, int movieId)
         {
             var score = await movieInfoService.GetUserScore(userId, movieId);
             return Ok(score);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetRecentReviews(int movieId)
+        {
+            // var reviews = await movieInfoService.GetRecentReviews( movieId);
+            return Ok();
         }
 
 

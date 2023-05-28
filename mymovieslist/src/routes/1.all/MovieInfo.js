@@ -1,8 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import GetMovieInfo from "../../js/MovieInfo/GetMovieInfo";
 import { useRef, useEffect, useState } from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faStar } from '@fortawesome/free-solid-svg-icons'
 import Select from 'react-select'
 import { Link } from "react-router-dom";
 import GetStatus from "../../js/MovieInfo/GetStatus";
@@ -12,7 +10,6 @@ import GetWatchStatus from '../../js/MovieInfo/GetWatchStatus';
 import UpdateMovieUserList from "../../js/MovieInfo/UpdateMovieUserList";
 import GetUserScore from "../../js/MovieInfo/GetUserScore";
 import GetMovieActors from "../../js/MovieInfo/GetMovieActors";
-
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -33,6 +30,7 @@ export default function MovieInfo() {
     const [statusList, setStatusList] = useState([]);
     const [watchStatus, setWatchStatus] = useState(null);
     const [score, setScore] = useState(0);
+    const [RecentReviews,setRecentReviews] = useState(null);
 
     const postperpage = 4;
 
@@ -49,7 +47,7 @@ export default function MovieInfo() {
     useEffect(() => {
         if (shouldLoadData.current) {
             shouldLoadData.current = false;
-           
+
         }
 
         GetMovieInfo({ setMovie, movieId });
@@ -66,8 +64,6 @@ export default function MovieInfo() {
 
     if (movie === null)
         return null;
-
-    // console.log(movie);
 
     const GetAddButton = () => {
         if (token === null) {
@@ -88,25 +84,24 @@ export default function MovieInfo() {
         />)
     }
 
-    const GetMovieScore = () =>
-    {
-        return(
+    const GetMovieScore = () => {
+        return (
             <Select
-            name="score"
-            placeholder="Select score"
-            options={
-                [
-                    { value: 5, label: 5 },
-                    { value: 4, label: 4 },
-                    { value: 3, label: 3 },
-                    { value: 2, label: 2 },
-                    { value: 1, label: 1 }
-                ]
-            }
-            defaultValue={score !== 0 ? { value: score, label: score } : null}
-            isDisabled={isNotAdded}
-            onChange={s => UpdateUserListScore(s.value)}
-        />
+                name="score"
+                placeholder="Select score"
+                options={
+                    [
+                        { value: 5, label: 5 },
+                        { value: 4, label: 4 },
+                        { value: 3, label: 3 },
+                        { value: 2, label: 2 },
+                        { value: 1, label: 1 }
+                    ]
+                }
+                defaultValue={score !== 0 ? { value: score, label: score } : null}
+                isDisabled={isNotAdded}
+                onChange={s => UpdateUserListScore(s.value)}
+            />
         )
 
     }
@@ -116,7 +111,7 @@ export default function MovieInfo() {
         UpdateMovieUserList({ userId, movieId }).then(() => {
             GetWatchStatus({ setWatchStatus, setIsNotAdded, userId, movieId });
             toast("Successfuly addded to list!");
-           // setIsNotAdded(false);
+           
         });
     }
 
@@ -159,6 +154,22 @@ export default function MovieInfo() {
         })
         return data;
     }
+
+    const GetRecentComments = () =>{
+        if(RecentReviews !== null)
+        {
+            return(RecentReviews.map(review=>
+                (
+                    <div>
+                        <h6>User: {review.user}</h6>
+                        <p>{review.review}</p>
+                    </div>
+                )
+            ));
+        }
+
+    }
+
 
     const toPersonInfo = (link, data) => {
         sessionStorage.setItem("person", data.firstName + " " + data.lastName);
@@ -239,7 +250,7 @@ export default function MovieInfo() {
                             movieActors.map((actor, index) => {
                                 return (
                                     <div className={index === 0 ? "row mt-0" : "row mt-1"} key={actor.id} style={{ cursor: "pointer" }} onClick={() => toPersonInfo("/person/" + actor.firstName + " " + actor.lastName, actor)}>
-                                        <div className="col-md-1"><img className="img-fluid img-thumbnail"  src={"data:image/png;base64," + actor.personImageData} alt="" /> </div>
+                                        <div className="col-md-1"><img className="img-fluid img-thumbnail" src={"data:image/png;base64," + actor.personImageData} alt="" /> </div>
                                         <div className="col-md-11">
                                             <div className="card-body">
                                                 <div className="card-title">
@@ -254,8 +265,17 @@ export default function MovieInfo() {
                             })
                         }
                     </div>
+
+                    <div className="mt-5">
+                    <h6 >Reviews</h6>
+                    <hr />
+                    <GetRecentComments />
+                    </div>
+                 
                 </div>
             </div>
+
+
             <ToastContainer />
         </div>
     );
