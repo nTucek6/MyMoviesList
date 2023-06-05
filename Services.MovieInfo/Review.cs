@@ -8,9 +8,11 @@ namespace Services.MovieInfo
 {
     public class Review
     {
-       public int UserId { get; set; }
-       public string UserName { get; set; }
+        public int UserId { get; set; }
+        public string? UserName { get; set; }
         public string ReviewText { get; set; }
+        public int MovieId { get; set; }
+        public DateTime? TimeCreated { get; set; }
         
 
     }

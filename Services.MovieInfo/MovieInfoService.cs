@@ -162,8 +162,57 @@ namespace Services.MovieInfo
             }
         }
 
+        public async Task<List<Review>> GetRecentReviews(int movieId)
+        {
+            var reviews = await myMoviesListContext.MovieReviews
+                .Where(q => q.MovieId == movieId)
+                .OrderByDescending(o=>o.TimeCreated)
+                .Select(s => new Review { 
+                    MovieId = s.MovieId,
+                    UserId = s.UserId,
+                    ReviewText = s.Review,
+                    TimeCreated = s.TimeCreated
+                })
+                .Take(5)
+                .ToListAsync();
 
+            if(reviews.Count() > 0)
+            {
+                foreach(var r in reviews)
+                {
+                    r.UserName = await myMoviesListContext.Users.Where(q => q.Id == r.UserId).Select(s => s.Username).FirstOrDefaultAsync();
+                }
 
+                return reviews;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task UpdateReview (Review review)
+        {
+            var data = await myMoviesListContext.MovieReviews.Where(q => q.MovieId == review.MovieId && q.UserId == review.UserId).FirstOrDefaultAsync();
+            if(data != null)
+            {
+                data.Review = review.ReviewText;
+                data.TimeCreated = DateTime.Now;
+                myMoviesListContext.Update(data);
+            }
+            else
+            {
+                await myMoviesListContext.MovieReviews.AddAsync(new MovieReviewsEntity
+                {
+                    UserId = review.UserId,
+                    MovieId = review.MovieId,
+                    Review = review.ReviewText,
+                    TimeCreated = DateTime.Now
+                });
+            }
+            await myMoviesListContext.SaveChangesAsync();
+
+        }
 
 
     }

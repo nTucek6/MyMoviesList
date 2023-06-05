@@ -23,14 +23,21 @@ export default function PersonInfo() {
     const [page,setPage] = useState(1)
 
     useEffect(() => {
+        
+        setPersonActorRoles([]);
+        setPersonDirectorRoles([]);
+        setPersonWriterRoles([]);
+
+        GetPersonInfo({ setPerson, personId });
+        GetPersonActorRoles({ setPersonActorRoles, personId,postperpage:10,page });
+        GetPersonDirectorRoles({ setPersonDirectorRoles, personId,postperpage:10,page });
+        GetPersonWriterRoles({ setPersonWriterRoles, personId,postperpage:10,page });
+
         if (shouldLoadData.current) {
             shouldLoadData.current = false;
-            GetPersonInfo({ setPerson, personId });
-            GetPersonActorRoles({ setPersonActorRoles, personId,postperpage:10,page });
-            GetPersonDirectorRoles({ setPersonDirectorRoles, personId,postperpage:10,page });
-            GetPersonWriterRoles({ setPersonWriterRoles, personId,postperpage:10,page });
+            
         }
-    }, []);
+    }, [personId]);
 
     const imageStyle =
     {

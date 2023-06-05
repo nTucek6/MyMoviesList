@@ -53,7 +53,14 @@ namespace MyMoviesList.Controllers.MovieInfo
         [HttpGet]
         public async Task<IActionResult> GetRecentReviews(int movieId)
         {
-            // var reviews = await movieInfoService.GetRecentReviews( movieId);
+             var reviews = await movieInfoService.GetRecentReviews(movieId);
+            return Ok(reviews);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateReview(Review review)
+        {
+            await movieInfoService.UpdateReview(review);
             return Ok();
         }
 
