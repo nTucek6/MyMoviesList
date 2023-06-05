@@ -12,6 +12,23 @@ import GetUserScore from "../../js/MovieInfo/GetUserScore";
 import GetMovieActors from "../../js/MovieInfo/GetMovieActors";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ReviewModalData from "../../js/MovieInfo/ReviewModalData";
+import ShowModal from "../../js/modal/modal";
+import GetReview from "../../js/MovieInfo/GetReview";
+
+ const customStyles = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        width: "50%",
+        height: "70%",
+        overflowy: "auto",
+    } 
+}
 
 export default function MovieInfo() {
     const location = useLocation();
@@ -25,12 +42,14 @@ export default function MovieInfo() {
 
     let userId = token !== null ? jwt_decode(token).Id : 0;
 
+    const [modalIsOpen, setIsOpen] = useState(false);
+
     const [movie, setMovie] = useState(null);
     const [movieActors, setMovieActors] = useState([]);
     const [statusList, setStatusList] = useState([]);
     const [watchStatus, setWatchStatus] = useState(null);
     const [score, setScore] = useState(0);
-    const [RecentReviews,setRecentReviews] = useState(null);
+    const [RecentReviews, setRecentReviews] = useState(null);
 
     const postperpage = 4;
 
@@ -44,20 +63,27 @@ export default function MovieInfo() {
         height: '300px'
     };
 
+    function closeModal() {
+        setIsOpen(false);
+    }
+
+    function openModal() {
+        setIsOpen(true);
+    }
+
     useEffect(() => {
         if (shouldLoadData.current) {
             shouldLoadData.current = false;
 
         }
-
         GetMovieInfo({ setMovie, movieId });
         GetMovieActors({ setMovieActors, movieId, page, postperpage });
+        GetReview({setRecentReviews,movieId});
         if (token !== null) {
             GetStatus({ setStatusList });
             GetWatchStatus({ setWatchStatus, setIsNotAdded, userId, movieId });
             GetUserScore({ setScore, userId, movieId });
         }
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [movieId]);
 
@@ -71,6 +97,15 @@ export default function MovieInfo() {
         }
         else {
             return (<button className="btn btn-info" onClick={() => AddMovieToList({ userId, movieId })}>Add to List</button>);
+        }
+    }
+
+    const GetReviewButton = () => {
+        if (token === null) {
+            return (<button className="btn btn-outline-info" disabled>Leave a review</button>);
+        }
+        else {
+            return (<button className="btn btn-outline-info" onClick={openModal} >Leave a review</button>);
         }
     }
 
@@ -103,7 +138,6 @@ export default function MovieInfo() {
                 onChange={s => UpdateUserListScore(s.value)}
             />
         )
-
     }
 
     const AddMovieToList = () => {
@@ -111,10 +145,9 @@ export default function MovieInfo() {
         UpdateMovieUserList({ userId, movieId }).then(() => {
             GetWatchStatus({ setWatchStatus, setIsNotAdded, userId, movieId });
             toast("Successfuly addded to list!");
-           
+
         });
     }
-
 
     const UpdateUserListStatus = (statusId) => {
 
@@ -155,21 +188,19 @@ export default function MovieInfo() {
         return data;
     }
 
-    const GetRecentComments = () =>{
-        if(RecentReviews !== null)
-        {
-            return(RecentReviews.map(review=>
-                (
-                    <div>
-                        <h6>User: {review.user}</h6>
-                        <p>{review.review}</p>
-                    </div>
-                )
+    const GetRecentComments = () => {
+        if (RecentReviews !== null && RecentReviews !== "") {
+            return (RecentReviews.map((review,index) =>
+            (
+                <div key={index}>
+                    <h6>User: {review.userName}</h6>
+                    <p>{review.reviewText}</p>
+                    <hr />
+                </div>
+            )
             ));
         }
-
     }
-
 
     const toPersonInfo = (link, data) => {
         sessionStorage.setItem("person", data.firstName + " " + data.lastName);
@@ -222,8 +253,9 @@ export default function MovieInfo() {
                         </div>
                         <div className="col-auto">
                             <GetMovieScore />
-                            {// <FontAwesomeIcon icon={faStar} /> 
-                            }
+                        </div>
+                        <div className="col-auto">
+                        {!isNotAdded ? <GetReviewButton /> : null}
                         </div>
                     </div>
 
@@ -242,7 +274,7 @@ export default function MovieInfo() {
                             <h6>Characters & Actors</h6>
                         </div>
                         <div className="col-6">
-                            <Link to="" className="col-6"><p className="float-end">View more</p></Link>
+                            <Link className="col-6"><p className="float-end">View more</p></Link>
                         </div>
 
                         <hr className="mt-0" />
@@ -266,16 +298,22 @@ export default function MovieInfo() {
                         }
                     </div>
 
-                    <div className="mt-5">
-                    <h6 >Reviews</h6>
-                    <hr />
-                    <GetRecentComments />
+                    <div className="row mt-5">
+                        <div className="col-6">
+                            <h6>Reviews</h6>
+                        </div>
+                        <div className="col-6">
+                            <Link className="col-6"><p className="float-end">View more</p></Link>
+                        </div>
+
+                        <hr />
+                        <GetRecentComments />
                     </div>
-                 
+
                 </div>
             </div>
 
-
+            <ShowModal modalIsOpen={modalIsOpen} closeModal={closeModal} customStyles={customStyles} ModalData={() => ReviewModalData({ setIsOpen,userId,movieId})} text={"Write a review"} />
             <ToastContainer />
         </div>
     );

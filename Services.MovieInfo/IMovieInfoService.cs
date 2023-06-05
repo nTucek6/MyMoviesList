@@ -1,4 +1,5 @@
-﻿using Services.MoviesAdmin;
+﻿using Entities;
+using Services.MoviesAdmin;
 
 
 namespace Services.MovieInfo
@@ -10,5 +11,7 @@ namespace Services.MovieInfo
         Task<StatusSelect> GetWatchStatus(int userId, int movieId);
         Task UpdateMovieUserList(int userId, int movieId, int? score, int? statusId);
         Task<int> GetUserScore(int userId, int movieId);
+        Task<List<Review>> GetRecentReviews(int movieId);
+        Task UpdateReview(Review review);
     }
 }
