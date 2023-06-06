@@ -36,27 +36,54 @@ namespace Services.MovieSearch
 
         public async Task<List<Actor>> GetMovieActors(int movieId,int PostPerPage, int Page)
         {
-            var movieActors = await myMoviesListContext.MoviesActors
-                            .Where(q => q.MovieId == movieId)
-                            .Skip((Page - 1) * PostPerPage)
-                            .Take(PostPerPage).ToListAsync();
-
-            List<Actor> actors = new List<Actor>();
-
-            foreach (var m in movieActors) 
+            if(PostPerPage > 0)
             {
-                var a = await myMoviesListContext.People.Where(q=> q.Id == m.PersonId).Select(s=> new Actor 
-                { 
-                    Id = s.Id,
-                    FirstName = s.FirstName,
-                    LastName = s.LastName,
-                    CharacterName = m.CharacterName,
-                    PersonImageData = s.PersonImageData
-                }).FirstOrDefaultAsync();
+                var movieActors = await myMoviesListContext.MoviesActors
+                                            .Where(q => q.MovieId == movieId)
+                                            .Skip((Page - 1) * PostPerPage)
+                                            .Take(PostPerPage).ToListAsync();
 
-                actors.Add(a);
+                List<Actor> actors = new List<Actor>();
+
+                foreach (var m in movieActors)
+                {
+                    var a = await myMoviesListContext.People.Where(q => q.Id == m.PersonId).Select(s => new Actor
+                    {
+                        Id = s.Id,
+                        FirstName = s.FirstName,
+                        LastName = s.LastName,
+                        CharacterName = m.CharacterName,
+                        PersonImageData = s.PersonImageData
+                    }).FirstOrDefaultAsync();
+
+                    actors.Add(a);
+                }
+                return actors;
             }
-            return actors;
+            else
+            {
+                var movieActors = await myMoviesListContext.MoviesActors
+                            .Where(q => q.MovieId == movieId).ToListAsync();
+
+                List<Actor> actors = new List<Actor>();
+
+                foreach (var m in movieActors)
+                {
+                    var a = await myMoviesListContext.People.Where(q => q.Id == m.PersonId).Select(s => new Actor
+                    {
+                        Id = s.Id,
+                        FirstName = s.FirstName,
+                        LastName = s.LastName,
+                        CharacterName = m.CharacterName,
+                        PersonImageData = s.PersonImageData
+                    }).FirstOrDefaultAsync();
+
+                    actors.Add(a);
+                }
+                return actors;
+            }
+                
+            
         }
 
         public async Task<List<SearchData>> SearchBar(string Search,string? type)

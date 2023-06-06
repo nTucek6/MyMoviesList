@@ -49,7 +49,6 @@ export default function Profile() {
         navigate(link, { state: data.id });
       }
 
-
     return (
         <div className="container">
             <div className="row container m-0 p-0">
@@ -90,7 +89,7 @@ export default function Profile() {
                                         <div className={index=== 0 ? "row" : "row mt-2"} key={movie.id}>
                                          <img className="img-fluid img-thumbnail col-2" style={{width:"50px",height:"60px"}} src={"data:image/png;base64," + movie.movieImageData} alt="" />
                                          <h6 className="col" style={{cursor:"pointer"}} onClick={() => toMovieInfo('/movie/' + movie.movieName, movie)}>{movie.movieName}</h6>
-                                        <small className="col"> {format(new Date(movie.timeAdded), 'dd.MM.yyyy HH:mm:ss')}</small>
+                                         <small className="col"> {format(new Date(movie.timeAdded), 'dd.MM.yyyy HH:mm:ss')} <br /> {movie.status}</small>
                                         </div>
                                     )
                                 }) : null

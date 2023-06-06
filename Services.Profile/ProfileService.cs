@@ -197,6 +197,7 @@ namespace Services.Profile
                             MovieImageData = s.MovieImageData,
                             Score = m.Score,
                             TimeAdded = m.TimeAdded,
+                            Status = m.StatusId.GetDescription()
 
                         }).FirstOrDefaultAsync();
 

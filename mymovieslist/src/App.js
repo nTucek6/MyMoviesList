@@ -22,6 +22,7 @@ import AddEditPerson from './routes/2.admin/AddEditPerson';
 import AddEditMovie from './routes/2.admin/AddEditMovie';
 import MovieInfo from './routes/1.all/MovieInfo';
 import PersonInfo from './routes/1.all/PersonInfo';
+import AllActors from './routes/1.all/AllActors';
 
 function App() {
    return (
@@ -37,6 +38,7 @@ function App() {
                <Route path="/movie/:title" element={<MovieInfo />} />
                <Route path="/person/:name" element={<PersonInfo />} />
                <Route path="/movieslist/:username" element={<MoviesList />} />
+               <Route path="/movie/:title/characters&actors" element={<AllActors />} />
 
                <Route element={<LimitedRoutes />}>
                   <Route path="/login" element={<Login />} />
