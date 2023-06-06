@@ -191,7 +191,7 @@ namespace Services.MovieInfo
             }
         }
 
-        public async Task UpdateReview (Review review)
+        public async Task UpdateReview(Review review)
         {
             var data = await myMoviesListContext.MovieReviews.Where(q => q.MovieId == review.MovieId && q.UserId == review.UserId).FirstOrDefaultAsync();
             if(data != null)
@@ -211,7 +211,6 @@ namespace Services.MovieInfo
                 });
             }
             await myMoviesListContext.SaveChangesAsync();
-
         }
 
 

@@ -15,8 +15,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import ReviewModalData from "../../js/MovieInfo/ReviewModalData";
 import ShowModal from "../../js/modal/modal";
 import GetReview from "../../js/MovieInfo/GetReview";
+import { format } from 'date-fns'
 
- const customStyles = {
+const customStyles = {
     content: {
         top: '50%',
         left: '50%',
@@ -27,7 +28,7 @@ import GetReview from "../../js/MovieInfo/GetReview";
         width: "50%",
         height: "70%",
         overflowy: "auto",
-    } 
+    }
 }
 
 export default function MovieInfo() {
@@ -78,7 +79,7 @@ export default function MovieInfo() {
         }
         GetMovieInfo({ setMovie, movieId });
         GetMovieActors({ setMovieActors, movieId, page, postperpage });
-        GetReview({setRecentReviews,movieId});
+        GetReview({ setRecentReviews, movieId });
         if (token !== null) {
             GetStatus({ setStatusList });
             GetWatchStatus({ setWatchStatus, setIsNotAdded, userId, movieId });
@@ -190,10 +191,10 @@ export default function MovieInfo() {
 
     const GetRecentComments = () => {
         if (RecentReviews !== null && RecentReviews !== "") {
-            return (RecentReviews.map((review,index) =>
+            return (RecentReviews.map((review, index) =>
             (
                 <div key={index}>
-                    <h6>User: {review.userName}</h6>
+                    <h6>User: {review.userName}, Time created: {format(new Date(review.timeCreated), 'dd.MM.yyyy HH:mm:ss')}</h6>
                     <p>{review.reviewText}</p>
                     <hr />
                 </div>
@@ -209,6 +210,11 @@ export default function MovieInfo() {
 
     const toGenre = (link, data) => {
         sessionStorage.setItem('genre', data.label)
+        navigate(link, { state: data });
+    }
+
+    const toAllActors = (link, data) => {
+
         navigate(link, { state: data });
     }
 
@@ -255,7 +261,7 @@ export default function MovieInfo() {
                             <GetMovieScore />
                         </div>
                         <div className="col-auto">
-                        {!isNotAdded ? <GetReviewButton /> : null}
+                            {!isNotAdded ? <GetReviewButton /> : null}
                         </div>
                     </div>
 
@@ -274,7 +280,7 @@ export default function MovieInfo() {
                             <h6>Characters & Actors</h6>
                         </div>
                         <div className="col-6">
-                            <Link className="col-6"><p className="float-end">View more</p></Link>
+                            <div style={{ cursor: "pointer" }} onClick={() => toAllActors("/movie/" + movie.movieName + "/characters&actors", movieId)}><p className="float-end" >View more</p></div>
                         </div>
 
                         <hr className="mt-0" />
@@ -313,7 +319,7 @@ export default function MovieInfo() {
                 </div>
             </div>
 
-            <ShowModal modalIsOpen={modalIsOpen} closeModal={closeModal} customStyles={customStyles} ModalData={() => ReviewModalData({ setIsOpen,userId,movieId})} text={"Write a review"} />
+            <ShowModal modalIsOpen={modalIsOpen} closeModal={closeModal} customStyles={customStyles} ModalData={() => ReviewModalData({ setIsOpen, userId, movieId })} text={"Write a review"} />
             <ToastContainer />
         </div>
     );

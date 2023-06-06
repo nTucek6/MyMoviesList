@@ -14,5 +14,6 @@ namespace Services.Profile
         public byte[] MovieImageData { get; set; }
         public int? Score { get; set; }
         public DateTime? TimeAdded { get; set; }
+        public string? Status { get; set; }
     }
 }
