@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Entities;
+using Microsoft.AspNetCore.Mvc;
 using Services.Discussions;
 
 namespace MyMoviesList.Controllers.Discussions
@@ -29,6 +30,23 @@ namespace MyMoviesList.Controllers.Discussions
 
             return Ok();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddDiscussionComment(CommentP comment)
+        {
+            await discussionsService.AddDiscussionComment(comment);
+
+            return Ok();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetDiscussionsComments(int DiscussionId, int PostPerpage, int Page)
+        {
+           var comments = await discussionsService.GetDiscussionsComments(DiscussionId,PostPerpage,Page);
+
+            return Ok(comments);
+        }
+
 
 
     }
