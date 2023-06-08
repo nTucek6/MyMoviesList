@@ -1,7 +1,6 @@
 ﻿using DatabaseContext;
 using Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Data.Common;
 
 namespace Services.Discussions
 {

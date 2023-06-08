@@ -3,7 +3,7 @@ using DatabaseContext;
 using Entities;
 using Entities.Enum;
 using Microsoft.EntityFrameworkCore;
-using MyMoviesList.EnumExtension;
+using MyMoviesList.Extensions;
 using System.Data;
 using System.Linq.Expressions;
 

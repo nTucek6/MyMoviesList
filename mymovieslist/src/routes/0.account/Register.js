@@ -1,10 +1,10 @@
 import axios from "axios";
 import config from './../../config.json';
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope, faLock, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faEnvelope, faLock, faUser, faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 
 import { ThreeDots } from 'react-loader-spinner';
 
@@ -19,7 +19,9 @@ export default function Register() {
     const [ConfirmPassword, setConfirmPassword] = useState();
     const [Username, setUsername] = useState();
     const [FormErrors, setFormErrors] = useState({});
- 
+
+    const [RegisterError, setRegisterError] = useState("");
+
 
     const [isRegisterCompleted, setIsRegisterCompleted] = useState(false);
 
@@ -45,73 +47,74 @@ export default function Register() {
                     }
                 }
             })
-            .catch(function (response) {
-                console.log(response);
+            .catch(function (error) {
+
+                if (error.response.data.Message === "User exist!") {
+                    setRegisterError(error.response.data.Message)
+                }
+                else if (error.response.data.Message === "User cannot have same username!") {
+                    setRegisterError(error.response.data.Message)
+                }
+                else {
+                    setRegisterError("An error occurred!");
+                }
+
+                console.log(error.response.data);
                 setIsRegisterCompleted(false);
             });
     }
 
-    useEffect(()=>{
-     
-        if(Object.keys(FormErrors).length === 0 && isRegisterCompleted)
-        {
-                registerUser({
-                    Email,
-                    Password,
-                    Username
-                });
+    useEffect(() => {
+
+        if (Object.keys(FormErrors).length === 0 && isRegisterCompleted) {
+            registerUser({
+                Email,
+                Password,
+                Username
+            });
         }
-        else
-        {
+        else {
             setTimeout(() => {
                 setIsRegisterCompleted(false);
             }, 300);
-           
+
         }
-    },[FormErrors]);
+    }, [FormErrors]);
 
     const handleSubmit = async e => {
         e.preventDefault();
         setIsRegisterCompleted(true);
         setFormErrors(validate());
-     
+
     }
 
-   
-    const validate = () =>
-    {
-        const errors = {}
-        const regex= /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
-        if(!Email)
-        {
+    const validate = () => {
+        const errors = {}
+        const regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+        if (!Email) {
             errors.Email = "Email is required!";
         }
-        else if(!regex.test(Email))
-        {
+        else if (!regex.test(Email)) {
             errors.Email = "Email is invalid!";
         }
-        if(!Username)
-        {
+        if (!Username) {
             errors.Username = "Username is required!";
         }
 
-        if(!Password)
-        {
+        if (!Password) {
             errors.Password = "Password is required!";
         }
-        else if(Password.length < 6)
-        {
+        else if (Password.length < 6) {
             errors.Password = "Password must more than 6 characters!";
         }
-        else if(Password !== ConfirmPassword)
-        {
+        else if (Password !== ConfirmPassword) {
             errors.Password = "Passwords do not match!";
         }
 
         return errors;
     }
-
 
     return (
         <>
@@ -123,21 +126,32 @@ export default function Register() {
 
                 <hr className="mb-5" />
 
+                {
+                    RegisterError !== "" ?
+
+                        <div className="border mb-3 p-3">
+                            <FontAwesomeIcon icon={faCircleExclamation} style={{ color: "#ff0000", }} className="d-inline" />
+                            <p className="d-inline">{RegisterError}</p>
+                        </div>
+                        :
+                        null
+                }
+
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="email">Email:</label>
 
                         <div className="input-group"><span className="input-group-text"><FontAwesomeIcon icon={faEnvelope} /></span>
-                            <input type="text" id="email" autoComplete="off" className="form-control" onChange={d => setEmail(d.target.value)}  />
+                            <input type="text" id="email" autoComplete="off" className="form-control" onChange={d => setEmail(d.target.value)} />
                         </div>
                         <p className='text-danger'>{FormErrors.Email}</p>
-                       
+
                     </div>
 
                     <div className="form-group mt-2">
                         <label htmlFor="username">Username:</label>
                         <div className="input-group"><span className="input-group-text"><FontAwesomeIcon icon={faUser} /></span>
-                            <input type="text" id="username" className="form-control" onChange={d => setUsername(d.target.value)}  />
+                            <input type="text" id="username" className="form-control" onChange={d => setUsername(d.target.value)} />
                         </div>
                         <p className='text-danger'>{FormErrors.Username}</p>
                     </div>
@@ -145,7 +159,7 @@ export default function Register() {
                     <div className="form-group mt-2">
                         <label htmlFor="password">Password:</label>
                         <div className="input-group"><span className="input-group-text"><FontAwesomeIcon icon={faLock} /></span>
-                            <input type="password" id="password" autoComplete="new-password" className="form-control" onChange={d => setPassword(d.target.value)}  />
+                            <input type="password" id="password" autoComplete="new-password" className="form-control" onChange={d => setPassword(d.target.value)} />
                         </div>
                         <p className='text-danger'>{FormErrors.Password}</p>
                     </div>
@@ -154,7 +168,7 @@ export default function Register() {
                         <label htmlFor="passwordRepeat">Confirm password:</label>
 
                         <div className="input-group"><span className="input-group-text"><FontAwesomeIcon icon={faLock} /></span>
-                            <input type="password" id="confirmPassword" autoComplete="new-password" className="form-control" onChange={d => setConfirmPassword(d.target.value)}  />
+                            <input type="password" id="confirmPassword" autoComplete="new-password" className="form-control" onChange={d => setConfirmPassword(d.target.value)} />
                         </div>
                     </div>
 
@@ -171,11 +185,8 @@ export default function Register() {
                         />
                     ) : (
 
-                            <button className="btn btn-primary mt-2 ">Create Account</button>
+                        <button className="btn btn-primary mt-2 ">Create Account</button>
                     )}
-
-
-                    
 
                     <div className="mt-2">
                         <p className="text-center"><small>Already have an account?</small> <a href="/login">Login</a></p>

@@ -7,9 +7,11 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MyMoviesList.Configuration;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Web.Http;
 
 namespace Services.Authentication
 {
@@ -68,7 +70,7 @@ namespace Services.Authentication
             string passwordHash = GenerateHash(user.Password);
 
             if (userDb.PasswordHash != passwordHash)
-                throw new Exception("Invalid password");
+             throw new Exception("Invalid password");
 
             var token = GenerateToken(userDb);
 

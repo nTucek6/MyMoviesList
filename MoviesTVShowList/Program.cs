@@ -11,6 +11,7 @@ using Services.MovieSearch;
 using Services.Frontpage;
 using Services.MovieInfo;
 using Services.PersonInfo;
+using MyMoviesList.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,9 @@ builder.Services.Configure<JwtConfiguration>(builder.Configuration.GetSection("J
 
 // ---------------------------------------------------------------------------------
 
+builder.Services.AddLogging();
+builder.Services.AddTransient<Middleware>();
+
 //Services -------------------------------------------------------------------------
 builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
 builder.Services.AddTransient<IUsersAdminService, UsersAdminService>();
@@ -52,6 +56,7 @@ builder.Services.AddTransient<IMovieInfoService, MovieInfoService>();
 builder.Services.AddTransient<IPersonInfoService, PersonInfoService>();
 
 // ---------------------------------------------------------------------------------
+
 
 var app = builder.Build();
 
@@ -69,6 +74,8 @@ app.UseHttpsRedirection();
 app.UseCors("MyPolicy");
 
 app.UseAuthorization();
+
+app.UseMiddleware<Middleware>();
 
 app.MapControllers();
 

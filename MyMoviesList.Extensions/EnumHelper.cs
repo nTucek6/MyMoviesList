@@ -1,26 +1,10 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
-namespace MyMoviesList.EnumExtension
+namespace MyMoviesList.Extensions
 
 {
     public static class EnumHelper
     {
-        /*    public static string Description(this GenresEnum enumValue)
-            {
-                var genresEnum = enumValue.GetType()
-                    .GetField(enumValue.ToString());
-
-
-               var description = genresEnum.GetCustomAttributes(false)
-                    .SingleOrDefault(attr => attr.GetType() == typeof(DescriptionAttribute)) as DescriptionAttribute;
-
-                //  return genresEnum?.Description ?? "";
-
-                return String.IsNullOrEmpty(description?.Description) ? genresEnum.ToString() : description?.Description;
-
-            } */
-
         public static string GetDescription<T>(this T enumValue)
           where T : struct, IConvertible
         {
@@ -41,9 +25,6 @@ namespace MyMoviesList.EnumExtension
 
             return description;
         }
-
-
-
     }
 
 }

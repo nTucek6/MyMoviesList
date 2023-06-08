@@ -2,7 +2,7 @@
 using Entities.Enum;
 using Microsoft.EntityFrameworkCore;
 using Services.MovieInfo;
-using MyMoviesList.EnumExtension;
+using MyMoviesList.Extensions;
 using Entities;
 using System.Linq.Expressions;
 
