@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Profile", "Service
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Discussions", "Services.Discussions\Services.Discussions.csproj", "{5A9CA5A1-A755-4782-8448-6D44524000B1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyMoviesList.EnumExtension", "MyMoviesList.Extensions\MyMoviesList.EnumExtension.csproj", "{CCF09D61-BC3B-4CE6-8FAB-A2F94F79D5EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyMoviesList.Extensions", "MyMoviesList.Extensions\MyMoviesList.Extensions.csproj", "{CCF09D61-BC3B-4CE6-8FAB-A2F94F79D5EA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.MovieSearch", "Services.MovieSearch\Services.MovieSearch.csproj", "{99580713-2898-48D6-ABF6-89C559E820DC}"
 EndProject
@@ -45,7 +45,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Frontpage", "Servi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.MovieInfo", "Services.MovieInfo\Services.MovieInfo.csproj", "{920BBD49-18AA-437A-9B0B-9F8AF28FFF53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.PersonInfo", "Services.PersonInfo\Services.PersonInfo.csproj", "{09570F37-C61F-4B69-A9C4-7B76E9655F52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.PersonInfo", "Services.PersonInfo\Services.PersonInfo.csproj", "{09570F37-C61F-4B69-A9C4-7B76E9655F52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

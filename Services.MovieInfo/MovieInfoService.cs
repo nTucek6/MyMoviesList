@@ -2,7 +2,7 @@
 using Entities;
 using Entities.Enum;
 using Microsoft.EntityFrameworkCore;
-using MyMoviesList.EnumExtension;
+using MyMoviesList.Extensions;
 using Services.MoviesAdmin;
 
 namespace Services.MovieInfo

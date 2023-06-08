@@ -3,7 +3,7 @@ using Entities;
 using Entities.Enum;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using MyMoviesList.EnumExtension;
+using MyMoviesList.Extensions;
 using System.Data;
 using System.Linq.Expressions;
 using System.Text.Json;

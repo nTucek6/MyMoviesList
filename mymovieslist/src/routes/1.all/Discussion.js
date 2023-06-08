@@ -13,8 +13,7 @@ export default function Discussion() {
 
     const token = getToken();
     let userId = null;
-    if(token !== null)
-    {
+    if (token !== null) {
         userId = jwt_decode(token).Id;
     }
 
@@ -22,26 +21,18 @@ export default function Discussion() {
     const [comments, setComments] = useState([]);
     const [comment, setComment] = useState(null);
     const PostPerPage = 10;
-    const [Page,setPage] = useState(1);
+    const [Page, setPage] = useState(1);
 
-    useEffect(()=>{
-        GetDiscussionComments({setComments,discussionId,PostPerPage,Page});
-    },[]);
+    useEffect(() => {
+        GetDiscussionComments({ setComments, discussionId, PostPerPage, Page });
+    }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        WriteComment({comment,discussionId,userId});
+        WriteComment({ comment, discussionId, userId });
     }
 
-    const CommentForm = () =>{
-        return(
-            <form onSubmit={handleSubmit}>
-            <textarea rows={4} className="form-control mb-2" placeholder="Write a comment..." onChange={d=>setComment(d.target.value)}></textarea>
-            <button type="submit" className="btn btn-secondary float-end">Comment</button>
-        </form>
-        );
-    }
-
+ 
     return (
         <>
             <div className="container">
@@ -52,15 +43,15 @@ export default function Discussion() {
 
                 <h6 className="mt-5">Join the Discussion!</h6>
                 <hr />
-
                 <div>
-                  {
-                    token !== null ?
-                    <CommentForm /> :
-                    <p>Login to comment</p>
-                  }
-
-
+                    {
+                        token === null ?
+                            <p>Login to comment</p> :
+                            <form onSubmit={handleSubmit}>
+                                <textarea rows={4} className="form-control mb-2" placeholder="Write a comment..." value={comment} onChange={d => setComment(d.target.value)}></textarea>
+                                <button type="submit" className="btn btn-secondary float-end">Comment</button>
+                            </form>
+                    }
                     <br className="mb-4" />
 
                     <hr />
@@ -73,22 +64,20 @@ export default function Discussion() {
                             }
                         </div>
                     </div>
-                    
+
                     {
                         toggleComments ?
-                        comments.map(c =>{
-                            return(
-                                <div key={c.id}>
-                                    <h6>User: {c.username}</h6>
-                                    <p>Comment: {c.comment}</p>
-                                </div>
-                            )
-                        })
-                        :
-                        null
+                            comments.map(c => {
+                                return (
+                                    <div key={c.id}>
+                                        <h6>User: {c.username}</h6>
+                                        <p>Comment: {c.comment}</p>
+                                    </div>
+                                )
+                            })
+                            :
+                            null
                     }
-
-
                 </div>
             </div>
         </>
