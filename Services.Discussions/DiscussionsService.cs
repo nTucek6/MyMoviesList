@@ -31,6 +31,45 @@ namespace Services.Discussions
             return discussions;
         }
 
+       public async Task<Discussions> GetDiscussion(int DiscussionId)
+        {
+            var data = await myMoviesListContext.Discussions
+                .Where(q => q.Id == DiscussionId)
+               /* .Select(s=> new Discussions
+                {
+                    Id = s.Id,
+                    Title = s.Title,
+                    Discussion = s.Discussion,
+                    TimePosted = s.TimePosted
+
+                })*/
+                .FirstOrDefaultAsync();
+
+            if(data != null)
+            {
+                User u = await myMoviesListContext.Users
+                    .Where(q => q.Id == data.UserId)
+                    .Select(s => new User { Id = s.Id, Username = s.Username })
+                    .FirstOrDefaultAsync();
+
+                Discussions discussion = new Discussions
+                {
+                    Id = data.Id,
+                    Title = data.Title,
+                    Discussion = data.Discussion,
+                    User = u,
+                    TimePosted = data.TimePosted
+                };
+
+                return discussion;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+
         public async Task AddDiscussion(string DiscussionTitle, string Discussion, int UserId)
         {
             await myMoviesListContext.Discussions.AddAsync(new DiscussionsEntity
@@ -61,6 +100,7 @@ namespace Services.Discussions
         {
             var data = await myMoviesListContext.DiscussionsComments
                     .Where(q => q.DiscussionId == DiscussionId)
+                    .OrderByDescending(o=> o.TimePosted)
                     .Skip((Page - 1) * PostPerPage)
                     .Take(PostPerPage).ToListAsync();
 

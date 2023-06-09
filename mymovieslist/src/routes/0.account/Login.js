@@ -7,12 +7,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock, faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 import { ThreeDots } from 'react-loader-spinner';
 
-
-
 function setToken(userToken) {
     localStorage.setItem('token', JSON.stringify(userToken));
 }
-
 
 export default function Login() {
 

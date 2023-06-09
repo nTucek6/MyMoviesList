@@ -1,4 +1,4 @@
-﻿import { useState,useEffect,useRef } from "react";
+﻿import { useState, useEffect, useRef } from "react";
 import SwiperMovies from "./../../js/frontpage/swiper";
 import Discussions from "../../js/frontpage/Discussions";
 import { Link } from "react-router-dom";
@@ -12,32 +12,32 @@ export default function Frontpage() {
     useEffect(() => {
         if (shouldLoadData.current) {
             shouldLoadData.current = false;
-            LoadRecentMovies({setRecentMovies})
+            LoadRecentMovies({ setRecentMovies })
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    
+
     return (
         <>
-        <div className="container">
-            <div>
-             <h6>Newly added</h6>
-              <hr />
+            <div className="container">
+                <div>
+                    <h6>Newly added</h6>
+                    <hr />
                     <SwiperMovies RecentMovies={RecentMovies} />
-             </div>
+                </div>
 
-            <div className="mt-5">
-             <div className="row ">
-              <h6 className="col-6">Discussions</h6>
-              <Link to="/discussions" className="col-6"><p className="float-end">View more</p></Link>
-              <hr />
-              <Discussions />
-             </div>
-           
+                <div className="mt-5">
+                    <div className="row ">
+                        <h6 className="col-6">Discussions</h6>
+                        <Link to="/discussions" className="col-6"><p className="float-end">View more</p></Link>
+                        <hr />
+                        <Discussions />
+                    </div>
+
+                </div>
+
             </div>
-             
-        </div>
         </>
     );
 

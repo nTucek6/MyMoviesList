@@ -48,7 +48,7 @@ export default function GetDiscussions() {
                 {Discussions.map(discussion => {
                     return (
                         <div className="col mb-3" key={discussion.id}>
-                            <div style={{cursor:"pointer"}} onClick={() => toDiscussion('discussion/' + discussion.title, discussion)}>
+                            <div style={{cursor:"pointer"}} onClick={() => toDiscussion('discussion/' + discussion.id + '/' + discussion.title, discussion)}>
                                 <h5>{discussion.title}</h5>
                                 <h6>User: {discussion.user.username}, posted: {format(new Date(discussion.timePosted), 'dd.MM.yyyy HH:mm:ss')}</h6>
                             </div>

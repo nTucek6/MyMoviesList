@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import GetMovieInfo from "../../js/MovieInfo/GetMovieInfo";
 import { useRef, useEffect, useState } from "react";
 import Select from 'react-select'
@@ -32,8 +32,10 @@ const customStyles = {
 }
 
 export default function MovieInfo() {
-    const location = useLocation();
-    const movieId = location.state;
+
+    const { id } = useParams();
+
+    const movieId = id;
 
     const shouldLoadData = useRef(true);
 
@@ -161,15 +163,13 @@ export default function MovieInfo() {
         toast("Successfuly updated score!");
     }
 
-    //d-flex align-items-stretch
-
     function WritePerson({ array }) {
         let data = array.map((d, index) => {
             if (array.length == index + 1) {
-                return <p key={d.id} className="d-inline" style={{ cursor: "pointer" }} onClick={() => toPersonInfo("/person/" + d.firstName + " " + d.lastName, d)}>{d.firstName + " " + d.lastName}</p>;
+                return <p key={d.id} className="d-inline" style={{ cursor: "pointer" }} onClick={() => navigate("/person/" + d.id + "/" + d.firstName + " " + d.lastName, d)}>{d.firstName + " " + d.lastName}</p>;
             }
             else {
-                return <p key={d.id} className="d-inline" style={{ cursor: "pointer" }} onClick={() => toPersonInfo("/person/" + d.firstName + " " + d.lastName, d)}>{d.firstName + " " + d.lastName}, </p>;
+                return <p key={d.id} className="d-inline" style={{ cursor: "pointer" }} onClick={() => navigate("/person/" + d.id + "/" + d.firstName + " " + d.lastName, d)}>{d.firstName + " " + d.lastName}, </p>;
             }
         })
         return data;
@@ -178,11 +178,11 @@ export default function MovieInfo() {
     function WriteGenres({ array }) {
         let data = array.map((d, index) => {
             if (array.length == index + 1) {
-                return <p key={d.value} className="d-inline" style={{ cursor: "pointer" }} onClick={() => toGenre('/moviessearch/genre/' + d.label, d)}>{d.label}</p>;
+                return <p key={d.value} className="d-inline" style={{ cursor: "pointer" }} onClick={() => navigate('/moviessearch/genre/' + d.value + '/' + d.label)}>{d.label}</p>;
 
             }
             else {
-                return <p key={d.value} className="d-inline" style={{ cursor: "pointer" }} onClick={() => toGenre('/moviessearch/genre/' + d.label, d)}>{d.label}, </p>;
+                return <p key={d.value} className="d-inline" style={{ cursor: "pointer" }} onClick={() => navigate('/moviessearch/genre/' + d.value + '/' + d.label)}>{d.label}, </p>;
             }
 
         })
@@ -201,21 +201,6 @@ export default function MovieInfo() {
             )
             ));
         }
-    }
-
-    const toPersonInfo = (link, data) => {
-        sessionStorage.setItem("person", data.firstName + " " + data.lastName);
-        navigate(link, { state: data.id });
-    }
-
-    const toGenre = (link, data) => {
-        sessionStorage.setItem('genre', data.label)
-        navigate(link, { state: data });
-    }
-
-    const toAllActors = (link, data) => {
-
-        navigate(link, { state: data });
     }
 
     return (
@@ -280,14 +265,14 @@ export default function MovieInfo() {
                             <h6>Characters & Actors</h6>
                         </div>
                         <div className="col-6">
-                            <div style={{ cursor: "pointer" }} onClick={() => toAllActors("/movie/" + movie.movieName + "/characters&actors", movieId)}><p className="float-end" >View more</p></div>
+                            <div style={{ cursor: "pointer" }} onClick={() => navigate("/movie/" + movie.id + "/" + movie.movieName + "/characters&actors")}><p className="float-end" >View more</p></div>
                         </div>
 
                         <hr className="mt-0" />
                         {
                             movieActors.map((actor, index) => {
                                 return (
-                                    <div className={index === 0 ? "row mt-0" : "row mt-1"} key={actor.id} style={{ cursor: "pointer" }} onClick={() => toPersonInfo("/person/" + actor.firstName + " " + actor.lastName, actor)}>
+                                    <div className={index === 0 ? "row mt-0" : "row mt-1"} key={actor.id} style={{ cursor: "pointer" }} onClick={() => navigate("/person/" + actor.id + "/" + actor.firstName + " " + actor.lastName)}>
                                         <div className="col-md-1"><img className="img-fluid img-thumbnail" src={"data:image/png;base64," + actor.personImageData} alt="" /> </div>
                                         <div className="col-md-11">
                                             <div className="card-body">
@@ -324,5 +309,3 @@ export default function MovieInfo() {
         </div>
     );
 }
-
-// style={{ width: '70px', height: '70px' }} 

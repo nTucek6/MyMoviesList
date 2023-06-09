@@ -7,11 +7,9 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MyMoviesList.Configuration;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Web.Http;
 
 namespace Services.Authentication
 {
@@ -58,7 +56,6 @@ namespace Services.Authentication
             return token;
 
         }
-
 
         public async Task<string> Login(User user)
         {

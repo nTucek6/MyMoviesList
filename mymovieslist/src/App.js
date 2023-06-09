@@ -33,12 +33,12 @@ function App() {
                <Route path="/" element={<FrontPage />} />
                <Route path="/moviessearch" element={<MovieSearch />} />
                <Route path="/discussions" element={<Discussions />} />
-               <Route path="/discussions/discussion/:title" element={<Discussion />} />
-               <Route path="/moviessearch/genre/:title" element={<GenreMovies />} />
-               <Route path="/movie/:title" element={<MovieInfo />} />
-               <Route path="/person/:name" element={<PersonInfo />} />
+               <Route path="/discussions/discussion/:id/:title" element={<Discussion />} />
+               <Route path="/moviessearch/genre/:id/:title" element={<GenreMovies />} />
+               <Route path="/movie/:id/:title" element={<MovieInfo />} />
+               <Route path="/person/:id/:name" element={<PersonInfo />} />
                <Route path="/movieslist/:username" element={<MoviesList />} />
-               <Route path="/movie/:title/characters&actors" element={<AllActors />} />
+               <Route path="/movie/:id/:title/characters&actors" element={<AllActors />} />
 
                <Route element={<LimitedRoutes />}>
                   <Route path="/login" element={<Login />} />

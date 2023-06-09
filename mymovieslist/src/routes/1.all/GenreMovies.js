@@ -1,14 +1,17 @@
 import { useEffect, useRef } from "react";
 import SearchBarMovies from "../../js/MovieSearch/SearchBarMovies";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import GetGenreMovies from "../../js/MovieSearch/GetGenreMovies";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function GenreMovies() {
 
-    const location = useLocation();
-    const genre = location.state;
+    //const location = useLocation();
+    //const genre = location.state;
+
+    const { id } = useParams();
+    const genre = id;
 
     const [movies, setMovies] = useState([]);
 
@@ -27,9 +30,8 @@ export default function GenreMovies() {
 
     }, [])
 
-    const toMovieInfo = (link, data) => {
-        sessionStorage.setItem("movieName", data.movieName);
-        navigate(link, { state: data.id });
+    const toMovieInfo = (link) => {
+        navigate(link);
     }
 
     return (
@@ -41,16 +43,16 @@ export default function GenreMovies() {
                     <hr />
                     <div className="row row-cols-3 mt-5 ">
                         {
-                            movies.map((movie,index) => {
+                            movies.map((movie, index) => {
                                 return (
-                                <div className={index == 0 ? "col d-flex justify-content-center" : "col d-flex justify-content-center mt-2"} key={movie.id} style={{ cursor: "pointer" }} onClick={() => toMovieInfo('/movie/' + movie.movieName, movie)}>
-                                <div className="card" style={{width: "12rem"}}>
-                                    <img src={"data:image/png;base64," + movie.movieImageData} className="card-img-top" alt="..." />
-                                        <div className="card-body">
-                                            <p className="card-text">{movie.movieName}</p>
+                                    <div className={index == 0 ? "col d-flex justify-content-center" : "col d-flex justify-content-center mt-2"} key={movie.id} style={{ cursor: "pointer" }} onClick={() => toMovieInfo('/movie/' + movie.id + '/' + movie.movieName)}>
+                                        <div className="card" style={{ width: "12rem" }}>
+                                            <img src={"data:image/png;base64," + movie.movieImageData} className="card-img-top" alt="..." />
+                                            <div className="card-body">
+                                                <p className="card-text">{movie.movieName}</p>
+                                            </div>
                                         </div>
-                                </div>
-                                </div>)
+                                    </div>)
                             })
                         }
                     </div>

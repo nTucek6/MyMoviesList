@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { format } from 'date-fns'
 
 import GetPersonInfo from "../../js/PersonInfo/GetPersonInfo";
@@ -8,10 +8,10 @@ import GetPersonActorRoles from "../../js/PersonInfo/GetPersonActorRoles";
 import GetPersonDirectorRoles from "../../js/PersonInfo/GetPersonDirectorRoles";
 import GetPersonWriterRoles from "../../js/PersonInfo/GetPersonWriterRoles";
 
-
 export default function PersonInfo() {
-    const location = useLocation();
-    const personId = location.state;
+    const { id } = useParams();
+    const personId = id;
+
     const shouldLoadData = useRef(true);
     const navigate = useNavigate();
 
@@ -20,22 +20,22 @@ export default function PersonInfo() {
     const [personDirectorRoles, setPersonDirectorRoles] = useState([]);
     const [personWriterRoles, setPersonWriterRoles] = useState([]);
 
-    const [page,setPage] = useState(1)
+    const [page, setPage] = useState(1)
 
     useEffect(() => {
-        
+
         setPersonActorRoles([]);
         setPersonDirectorRoles([]);
         setPersonWriterRoles([]);
 
         GetPersonInfo({ setPerson, personId });
-        GetPersonActorRoles({ setPersonActorRoles, personId,postperpage:10,page });
-        GetPersonDirectorRoles({ setPersonDirectorRoles, personId,postperpage:10,page });
-        GetPersonWriterRoles({ setPersonWriterRoles, personId,postperpage:10,page });
+        GetPersonActorRoles({ setPersonActorRoles, personId, postperpage: 10, page });
+        GetPersonDirectorRoles({ setPersonDirectorRoles, personId, postperpage: 10, page });
+        GetPersonWriterRoles({ setPersonWriterRoles, personId, postperpage: 10, page });
 
         if (shouldLoadData.current) {
             shouldLoadData.current = false;
-            
+
         }
     }, [personId]);
 
@@ -46,12 +46,6 @@ export default function PersonInfo() {
     };
 
     if (person === null) return null;
-
-
-    const toMovieInfo = (link, data) => {
-        sessionStorage.setItem("movieName",data.movieName);
-        navigate(link, { state: data.id });
-      }
 
     return (
         <>
@@ -83,7 +77,7 @@ export default function PersonInfo() {
                             {
                                 personActorRoles.map((movie, index) => {
                                     return (
-                                        <div className={index === 0 ? "row mt-0" : "row mt-1"} key={movie.id} style={{ cursor: "pointer" }} onClick={()=> toMovieInfo('/movie/' + movie.movieName, movie)} >
+                                        <div className={index === 0 ? "row mt-0" : "row mt-1"} key={movie.id} style={{ cursor: "pointer" }} onClick={() => navigate('/movie/' + movie.id + "/" + movie.movieName)} >
                                             <div className="col-md-1"><img className="img-fluid img-thumbnail" src={"data:image/png;base64," + movie.movieImageData} alt="" /> </div>
                                             <div className="col-md-11">
                                                 <div className="card-body">
@@ -108,7 +102,7 @@ export default function PersonInfo() {
                             {
                                 personDirectorRoles.map((movie, index) => {
                                     return (
-                                        <div className={index === 0 ? "row mt-0" : "row mt-1"} key={movie.id} style={{ cursor: "pointer" }} onClick={()=> toMovieInfo('/movie/' + movie.movieName, movie)} >
+                                        <div className={index === 0 ? "row mt-0" : "row mt-1"} key={movie.id} style={{ cursor: "pointer" }} onClick={() => navigate('/movie/' + movie.id + "/" + movie.movieName)} >
                                             <div className="col-md-1"><img className="img-fluid img-thumbnail" src={"data:image/png;base64," + movie.movieImageData} alt="" /> </div>
                                             <div className="col-md-11">
                                                 <div className="card-body">
@@ -131,7 +125,7 @@ export default function PersonInfo() {
                             {
                                 personWriterRoles.map((movie, index) => {
                                     return (
-                                        <div className={index === 0 ? "row mt-0" : "row mt-1"} key={movie.id} style={{ cursor: "pointer" }} onClick={()=> toMovieInfo('/movie/' + movie.movieName, movie)} >
+                                        <div className={index === 0 ? "row mt-0" : "row mt-1"} key={movie.id} style={{ cursor: "pointer" }} onClick={() => navigate('/movie/' + movie.id + "/" + movie.movieName)} >
                                             <div className="col-md-1"><img className="img-fluid img-thumbnail" src={"data:image/png;base64," + movie.movieImageData} alt="" /> </div>
                                             <div className="col-md-11">
                                                 <div className="card-body">

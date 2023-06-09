@@ -49,7 +49,7 @@ export default function Discussions() {
                 {Discussions.map(discussion => {
                     return (
                         <div className="mb-2" key={discussion.id}>
-                            <div style={{cursor:"pointer"}} onClick={() => toDiscussion('discussions/discussion/' + discussion.title, discussion)}>
+                            <div style={{cursor:"pointer"}} onClick={() => toDiscussion('discussions/discussion/'+discussion.id+"/" + discussion.title, discussion)}>
                                 <h5>{discussion.title}</h5>
                                 <h6>User: {discussion.user.username}, posted: {format(new Date(discussion.timePosted), 'dd.MM.yyyy HH:mm:ss')} </h6>
                             </div>

@@ -8,7 +8,7 @@ export default async function GetGenreMovies({movies,setMovies,postPerPage,page,
         url: config.SERVER_URL + "MovieSearch/GetMoviesByGenre",
         headers: {'Content-Type': 'application/json' },
         params: {
-            genre:genre.value
+            genre:genre
         }    
     })
         .then(function (response) {
