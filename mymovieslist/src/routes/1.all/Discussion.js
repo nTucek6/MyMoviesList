@@ -1,16 +1,24 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { format } from 'date-fns'
 import { useEffect, useState } from "react";
 import GetDiscussionComments from "../../js/Discussions/GetDiscussionsComments";
 import WriteComment from "../../js/Discussions/WriteComment";
 import jwt_decode from "jwt-decode";
 import getToken from "../../js/token/gettoken";
+import GetDiscussion from "../../js/Discussions/GetDiscussion";
 
 export default function Discussion() {
-    const location = useLocation();
-    const data = location.state;
-    const discussionId = data.id;
+  //  const location = useLocation();
+   // const data = location.state;
+ //   const discussionId = data.id;
 
+    const [Discusion, setDiscusion] = useState(null);
+
+    const {id} = useParams();
+    const discussionId = id;
+    console.log(id);
+
+   // const discussionId = id;
     const token = getToken();
     let userId = null;
     if (token !== null) {
@@ -23,7 +31,9 @@ export default function Discussion() {
     const PostPerPage = 10;
     const [Page, setPage] = useState(1);
 
+
     useEffect(() => {
+        GetDiscussion({setDiscusion,discussionId});
         GetDiscussionComments({ setComments, discussionId, PostPerPage, Page });
     }, []);
 
@@ -32,14 +42,17 @@ export default function Discussion() {
         WriteComment({ comment, discussionId, userId });
     }
 
- 
+    if(Discusion === null)return;
+
+    sessionStorage.setItem("user",Discusion.user.username);
+
     return (
         <>
             <div className="container">
-                <h6>Time created: {format(new Date(data.timePosted), 'dd.MM.yyyy HH:mm:ss')}</h6>
+                <h6>Time created: {format(new Date(Discusion.timePosted), 'dd.MM.yyyy HH:mm:ss')}</h6>
                 <hr />
-                <h5 className="mb-3">Discussion title: {data.title}</h5>
-                <p>{data.discussion}</p>
+                <h5 className="mb-3">Discussion title: {Discusion.title}</h5>
+                <p>{Discusion.discussion}</p>
 
                 <h6 className="mt-5">Join the Discussion!</h6>
                 <hr />
@@ -48,7 +61,7 @@ export default function Discussion() {
                         token === null ?
                             <p>Login to comment</p> :
                             <form onSubmit={handleSubmit}>
-                                <textarea rows={4} className="form-control mb-2" placeholder="Write a comment..." value={comment} onChange={d => setComment(d.target.value)}></textarea>
+                                <textarea rows={4} className="form-control mb-2" placeholder="Write a comment..." onChange={d => setComment(d.target.value)}></textarea>
                                 <button type="submit" className="btn btn-secondary float-end">Comment</button>
                             </form>
                     }

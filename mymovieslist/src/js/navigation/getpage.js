@@ -1,11 +1,9 @@
 import { useLocation,useParams } from "react-router-dom";
 import { matchPath } from "react-router";
-//import jwt_decode from "jwt-decode";
-//import getToken from "./../token/gettoken";
 
 export default function GetPage() {
     const location = useLocation();
-    const { title,name,username } = useParams();
+    const { title,name,username,id } = useParams();
 
     const isHome = !!matchPath(location.pathname, '/');
     const isMovieSearch = !!matchPath(location.pathname, '/moviessearch');
@@ -17,15 +15,16 @@ export default function GetPage() {
     const isAddMovie = !!matchPath(location.pathname, '/addmovie');
     const isAddPerson = !!matchPath(location.pathname, '/addperson');
     const isUsers = !!matchPath(location.pathname, '/users');
-    const isDiscussion = !!matchPath(decodeURI(location.pathname), '/discussions/discussion/' + title);
-    const isGenresMovies = !!matchPath(decodeURI(location.pathname), '/moviessearch/genre/' + title);
+    const isDiscussion = !!matchPath(decodeURI(location.pathname), '/discussions/discussion/' + id + "/" + title);
+    const isGenresMovies = !!matchPath(decodeURI(location.pathname), '/moviessearch/genre/'+id+'/' + title);
     const isUsersAdmin = !!matchPath(location.pathname, '/usersadmin');
     const isMoviesAdminView = !!matchPath(location.pathname, '/moviesadmin/viewmovies');
     const isMoviesAdminAddEdit = !!matchPath(location.pathname, '/moviesadmin/addeditmovie');
     const isPeopleAdminView = !!matchPath(location.pathname, '/personadmin/viewpeople');
     const isPeopleAdminAddEdit = !!matchPath(location.pathname, '/personadmin/addeditperson');
-    const isMovieInfo = !!matchPath(decodeURI(location.pathname), '/movie/' + title); 
-    const isPersonInfo = !!matchPath(decodeURI(location.pathname), '/person/' + name); 
+    const isMovieInfo = !!matchPath(decodeURI(location.pathname), '/movie/'+id+'/' + title); 
+    const isPersonInfo = !!matchPath(decodeURI(location.pathname), '/person/'+id+'/' + name);
+    const isAllActors = !!matchPath(decodeURI(location.pathname), '/movie/'+id+'/' + title + "/characters&actors");
 
     if (isHome) {
         return <h6>Home page</h6>;
@@ -61,7 +60,7 @@ export default function GetPage() {
         return <h6>{sessionStorage.getItem('user')}'s discussion</h6>; 
     }
     else if (isGenresMovies) {
-        return <h6>{sessionStorage.getItem('genre')}</h6>; 
+       return <h6>{title}</h6>
     }
     else if(isUsersAdmin)
     {
@@ -85,11 +84,15 @@ export default function GetPage() {
     }
     else if(isMovieInfo)
     {
-        return <h6>{sessionStorage.getItem('movieName')}</h6>; 
+      return <h6>{title}</h6>
     }
     else if(isPersonInfo)
     {
-        return <h6>{sessionStorage.getItem('person')}</h6>; 
+        return <h6>{name}</h6>
+    }
+    else if(isAllActors)
+    {
+        return <h6>{title}</h6> 
     }
 
 }

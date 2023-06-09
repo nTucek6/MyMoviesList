@@ -31,16 +31,15 @@ export default function GetGenres() {
 
 
     if (genres.length > 0) {
-        const toGenre = (link, data) => {
-            sessionStorage.setItem('genre', data.label)
-            navigate(link, { state: data });
+        const toGenre = (link) => {
+            navigate(link);
         }
         return (
             <>
                 {genres.map(genre => {
                     return (
                         <div className="col mb-3" key={genre.value}>
-                            <div style={{ cursor: "pointer" }} onClick={() => toGenre('genre/' + genre.label, genre)}>
+                            <div style={{ cursor: "pointer" }} onClick={() => toGenre('genre/'+genre.value+'/' + genre.label)}>
                                 <h5>{genre.label}</h5>
                             </div>
                         </div>

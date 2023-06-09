@@ -18,7 +18,7 @@ export default async function GetDiscussionComments({setComments,discussionId,Po
             {
                 setComments(response.data);
             }
-          console.log(response);
+         // console.log(response);
         })
         .catch(function (response) {
             console.log(response);

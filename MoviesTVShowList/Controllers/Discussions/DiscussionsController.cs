@@ -24,6 +24,15 @@ namespace MyMoviesList.Controllers.Discussions
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetDiscussion(int DiscussionId)
+        {
+            var discussion = await discussionsService.GetDiscussion(DiscussionId);
+
+            return Ok(discussion);
+        }
+
+
+        [HttpGet]
         public async Task<IActionResult> AddDiscussion(string DiscussionTitle, string Discussion, int UserId)
         {
             await discussionsService.AddDiscussion(DiscussionTitle,Discussion,UserId);

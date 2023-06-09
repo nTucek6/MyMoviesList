@@ -38,17 +38,13 @@ export default function SearchBar() {
         // console.log(data);
         if (data.type === "movie") {
             sessionStorage.setItem("movieName", data.name);
-            navigate('/movie/' + data.name, { state: data.id });
+            navigate('/movie/'+data.id+'/' + data.name, { state: data.id });
         }
         else if (data.type === "person") {
             sessionStorage.setItem("person", data.name);
-            navigate("/person/" + data.name, { state: data.id });
+            navigate("/person/"+data.id+'/' + data.name, { state: data.id });
         }
     }
-
-
-    //onFocus={()=>{setIsFocus(true)}} onBlur={setIsFocus(false)}
-    //className={isFocus ? 'list-group search-bar' : "d-none"}
 
     return (
         <>

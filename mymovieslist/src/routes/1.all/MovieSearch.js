@@ -1,4 +1,3 @@
-
 import GetGenres from '../../js/MovieSearch/GetGenres';
 import SearchBarMovies from '../../js/MovieSearch/SearchBarMovies';
 
