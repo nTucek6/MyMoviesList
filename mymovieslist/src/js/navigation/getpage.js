@@ -3,7 +3,7 @@ import { matchPath } from "react-router";
 
 export default function GetPage() {
     const location = useLocation();
-    const { title,name,username,id } = useParams();
+    const { title,name,username,id,search,type } = useParams();
 
     const isHome = !!matchPath(location.pathname, '/');
     const isMovieSearch = !!matchPath(location.pathname, '/moviessearch');
@@ -25,6 +25,7 @@ export default function GetPage() {
     const isMovieInfo = !!matchPath(decodeURI(location.pathname), '/movie/'+id+'/' + title); 
     const isPersonInfo = !!matchPath(decodeURI(location.pathname), '/person/'+id+'/' + name);
     const isAllActors = !!matchPath(decodeURI(location.pathname), '/movie/'+id+'/' + title + "/characters&actors");
+    const isSearchResult = !!matchPath(decodeURI(location.pathname), '/searchresult/'+type+'/' + search);
 
     if (isHome) {
         return <h6>Home page</h6>;
@@ -93,6 +94,10 @@ export default function GetPage() {
     else if(isAllActors)
     {
         return <h6>{title}</h6> 
+    }
+    else if(isSearchResult)
+    {
+        return <h6>Search {type}</h6> 
     }
 
 }
