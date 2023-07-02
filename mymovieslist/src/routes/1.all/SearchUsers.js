@@ -1,41 +1,27 @@
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
-import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import GetSearchData from '../../js/navigation/GetSearchData';
+import GetSearchUsers from "../../js/SearchUsers/GetSearchUsers";
+import DefaultAvatar from "../../img/DefaultAvatar.jpg";
 
-export default function SearchResult() {
-
-    const { type, search } = useParams();
+export default function SearchUsers()
+{
+   
     const [SearchData, setSearchData] = useState([]);
     const [Search,setSearch]= useState("");
     const navigate = useNavigate();
    
-    useEffect(()=>{
-        if (search !== undefined) {
-
-            GetSearchData({ setSearchData, search, type })
-        } 
-    },[type,search])
-
-
     const handleSubmit = () => {
         const search = Search;
         setSearchData([]);
         if (Search !== "") {
 
-            GetSearchData({ setSearchData, search, type })
+            GetSearchUsers({ setSearchData, search })
         }
     }
 
-    const navigateToInfo = (data) => {
-        if (data.type === "movie") {
-            navigate('/movie/' + data.id + '/' + data.name);
-        }
-        else if (data.type === "person") {
-            navigate("/person/" + data.id + '/' + data.name);
-        }
-    }
+    //DefaultAvatar 
 
     return (
         <>
@@ -43,7 +29,7 @@ export default function SearchResult() {
                 <div className="mb-5">
                     <div className="input-group d-flex justify-content-center">
                         <div className="form-outline w-50">
-                            <input type="search" id="form1" className="form-control" placeholder="Search..." defaultValue={search} onChange={e=>setSearch(e.target.value)}  />
+                            <input type="search" id="form1" className="form-control" placeholder="Search users..." onChange={e=>setSearch(e.target.value)}  />
                         </div>
                         <button type="button" className="btn btn-primary" onClick={handleSubmit}>
                             <FontAwesomeIcon icon={faSearch} />
@@ -58,8 +44,8 @@ export default function SearchResult() {
                                 SearchData.map((data, index) => {
                                     return (     
                                     <div className={index=== 0 ? "row" : "row mt-2"} key={index}>
-                                    <img className="img-fluid img-thumbnail col-2" style={{width:"70px",height:"90px"}} src={"data:image/png;base64," + data.searchImageData } alt="" />
-                                    <h6 className="col" style={{cursor:"pointer"}} onClick={() => navigateToInfo(data)}>{data.name}</h6>
+                                    <img className="img-fluid img-thumbnail col-2" style={{width:"70px",height:"90px"}} src={data.profileImageData == null ? DefaultAvatar : "data:image/png;base64," + data.profileImageData } alt="" />
+                                    <h6 className="col" style={{cursor:"pointer"}} onClick={() => navigate("/profile/"+data.username)}>{data.username}</h6>
                                    </div>
                                     )
                                 })
@@ -71,6 +57,6 @@ export default function SearchResult() {
             </div>
         </>
     );
-}
 
-//onClick={() => navigateToInfo(data)}
+  
+}

@@ -227,5 +227,28 @@ namespace Services.Profile
 
 
         }
+
+        public async Task<List<UsersEntity>> SearchUsers(string Search)
+        {
+            var users = await myMoviesListContext.Users
+                .Where(q => q.Username.Contains(Search))
+                .Select(s => new UsersEntity 
+                { 
+                    Id = s.Id,
+                    Username = s.Username,
+                    ProfileImageData = s.ProfileImageData
+                })
+                .ToListAsync();
+
+            if(users.Count > 0)
+            {
+                return users;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
     }
 }

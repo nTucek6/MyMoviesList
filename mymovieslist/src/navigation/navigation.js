@@ -90,6 +90,7 @@ export default function Navigation() {
                                 </NavDropdown>
                                 <NavDropdown title="Community" className="dropdown-custom" >
                                     <NavDropdown.Item as={Link} to="/discussions">Discussions</NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/searchusers">Search users</NavDropdown.Item>
                                 </NavDropdown>
                             </Nav>
                             <SearchBar />
