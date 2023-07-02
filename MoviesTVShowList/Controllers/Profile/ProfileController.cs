@@ -72,7 +72,15 @@ namespace MyMoviesList.Controllers.Profile
             return Ok(movies);
         }
 
-        
+
+        [HttpGet]
+        public async Task<IActionResult> SearchUsers(string Search)
+        {
+            var users = await profileService.SearchUsers(Search);
+
+            return Ok(users);
+        }
+
 
 
 

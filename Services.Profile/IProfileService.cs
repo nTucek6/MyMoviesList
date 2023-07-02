@@ -13,6 +13,7 @@ namespace Services.Profile
         Task<List<StatusInfo>> GetStatusInfo(string username);
         Task<List<UserMovie>> GetLastUpdate(int PostPerPage, int Page,string username);
         Task<byte[]> GetProfileImage(string username);
+        Task<List<UsersEntity>> SearchUsers(string Search);
 
     }
 }
