@@ -18,7 +18,7 @@ namespace Services.MovieSearch
             this.myMoviesListContext = myMoviesListContext;
         }
 
-        public async Task<List<Movies>> GetMoviesByGenre(int genre)
+        public async Task<List<Movies>> GetMoviesByGenre(int genre,int PostPerPage,int Page)
         {
 
             var movies = await myMoviesListContext.Movies
@@ -30,9 +30,19 @@ namespace Services.MovieSearch
                     MovieName = s.MovieName,
                     MovieImageData = s.MovieImageData
                 })
+                .Skip((Page - 1) * PostPerPage)
+                .Take(PostPerPage)
                 .ToListAsync();
             return movies;
         }
+
+        public async Task<int> GetMoviesByGenreCount(int genre)
+        {
+            var count = await myMoviesListContext.Movies.Where(q => q.Genres.Contains(genre.ToString())).CountAsync();
+       
+            return count;
+        }
+
 
         public async Task<List<Actor>> GetMovieActors(int movieId,int PostPerPage, int Page)
         {

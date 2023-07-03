@@ -22,6 +22,13 @@ namespace MyMoviesList.Controllers.Discussions
 
             return Ok(discussions);
         }
+        [HttpGet]
+        public async Task<IActionResult> GetDiscussionCount()
+        {
+            var count = await discussionsService.GetDiscussionsCount();
+
+            return Ok(count);
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetDiscussion(int DiscussionId)
@@ -30,6 +37,8 @@ namespace MyMoviesList.Controllers.Discussions
 
             return Ok(discussion);
         }
+
+      
 
 
         [HttpGet]

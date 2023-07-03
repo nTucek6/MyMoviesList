@@ -1,19 +1,15 @@
 import axios from "axios";
 import config from './../../config.json';
 
-export default async function GetDiscussions({setDiscussions,page,PostPerPage}) {
+export default async function GetDiscussionsCount({setDiscussionsCount}) {
    
            await axios({
                 method: "get",
-                url: config.SERVER_URL + "Discussions/GetDiscussions",
+                url: config.SERVER_URL + "Discussions/GetDiscussionCount",
                 headers: { 'Content-Type': 'application/json' },
-                params:{
-                    PostPerPage:PostPerPage,
-                    Page:page
-                }
             })
                 .then(function (response) {
-                    setDiscussions(response.data);
+                    setDiscussionsCount(response.data);
     
                 })
                 .catch(function (response) {

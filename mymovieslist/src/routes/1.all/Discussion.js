@@ -8,17 +8,12 @@ import getToken from "../../js/token/gettoken";
 import GetDiscussion from "../../js/Discussions/GetDiscussion";
 
 export default function Discussion() {
-  //  const location = useLocation();
-   // const data = location.state;
- //   const discussionId = data.id;
 
     const [Discusion, setDiscusion] = useState(null);
 
     const {id} = useParams();
     const discussionId = id;
-    console.log(id);
-
-   // const discussionId = id;
+   
     const token = getToken();
     let userId = null;
     if (token !== null) {
