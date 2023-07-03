@@ -18,10 +18,17 @@ namespace MyMoviesList.Controllers.MovieSearch
 
 
         [HttpGet]
-        public async Task<IActionResult> GetMoviesByGenre(int genre)
+        public async Task<IActionResult> GetMoviesByGenre(int genre, int PostPerPage, int Page)
         {
-            var movies = await movieSearchService.GetMoviesByGenre(genre);
+            var movies = await movieSearchService.GetMoviesByGenre(genre,PostPerPage,Page);
             return Ok(movies);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetMoviesByGenreCount(int genre)
+        {
+            var count = await movieSearchService.GetMoviesByGenreCount(genre);
+            return Ok(count);
         }
 
         [HttpGet]

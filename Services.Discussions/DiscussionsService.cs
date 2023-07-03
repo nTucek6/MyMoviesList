@@ -27,11 +27,17 @@ namespace Services.Discussions
                 .Take(PostPerPage)
                 .ToListAsync();
                 
-
             return discussions;
         }
+        public async Task<int> GetDiscussionsCount()
+        {
+            var count = await myMoviesListContext.Discussions.CountAsync();
 
-       public async Task<Discussions> GetDiscussion(int DiscussionId)
+            return count;
+        }
+
+
+        public async Task<Discussions> GetDiscussion(int DiscussionId)
         {
             var data = await myMoviesListContext.Discussions
                 .Where(q => q.Id == DiscussionId)

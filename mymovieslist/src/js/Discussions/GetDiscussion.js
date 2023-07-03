@@ -13,7 +13,6 @@ export default async function GetDiscussion({setDiscusion,discussionId})
     })
         .then(function (response) {
           setDiscusion(response.data);
-          console.log(response);
         })
         .catch(function (response) {
             console.log(response);
