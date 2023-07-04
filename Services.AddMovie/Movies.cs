@@ -11,6 +11,8 @@ namespace Services.MoviesAdmin
 
         public string? Synopsis { get; set; }
 
+        public decimal? Rating { get; set; }
+
         public List<GenresSelect> Genres { get; set; }
 
         public List<PeopleEntity> Director { get; set; }

@@ -297,6 +297,50 @@ namespace Services.MoviesAdmin
             }  
         }
 
+
+        public async Task UpdateMoviesScore()
+        {
+            var movies = await myMoviesListContext.Movies.ToListAsync();
+
+            foreach (var m in movies)
+            {
+                var ratings = await myMoviesListContext.UsersMovieList
+                                .Where(q => q.MovieId == m.Id)
+                                .Select(s => s.Score)
+                                .ToListAsync();
+
+              if(ratings.Count() > 0)
+                {
+                    int[] ri = new int[5];
+
+                    Array.Fill(ri, 0);
+
+                    foreach (var score in ratings)
+                    {
+                        if (score != null)
+                        {
+                            for (int i = 1; i <= 5; i++)
+                            {
+                                if (i == score)
+                                {
+                                    ri[i - 1] += 1;
+                                }
+                            }
+                        }
+                    }
+
+                    if(ri[4] + ri[3] + ri[2] + ri[1] + ri[0] > 0)
+                    {
+                        decimal rating = (5 * ri[4] + 4 * ri[3] + 3 * ri[2] + 2 * ri[1] + 1 * ri[0]) / (ri[4] + ri[3] + ri[2] + ri[1] + ri[0]);
+                        m.Rating = rating;
+                    }
+                }
+            }
+            await myMoviesListContext.SaveChangesAsync();
+
+        }
+
+
         private byte[] ImageToByte(IFormFile image)
         {
             byte[] s = null;

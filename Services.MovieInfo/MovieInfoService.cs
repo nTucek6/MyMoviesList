@@ -87,7 +87,8 @@ namespace Services.MovieInfo
                 Duration = movieData.Duration,
                 MovieImageData = movieData.MovieImageData,
                 Synopsis = movieData.Synopsis,
-                Genres = genres
+                Genres = genres,
+                Rating = movieData.Rating
             };
 
             return movie;
@@ -173,7 +174,7 @@ namespace Services.MovieInfo
                     ReviewText = s.Review,
                     TimeCreated = s.TimeCreated
                 })
-                .Take(5)
+               // .Take(5)
                 .ToListAsync();
 
             if(reviews.Count() > 0)

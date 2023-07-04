@@ -232,8 +232,9 @@ export default function MovieInfo() {
                 <div className="col-md-9 ">
                     <div className="row border border-start-0">
                         <div className="col-1">
-                            <h6 className="text-center">Score</h6>
-                            <h4 className="text-center">N/A</h4>
+                            <h6 className="text-center mt-2">Score</h6>
+                            {movie.rating === null ?  <h4 className="text-center">N/A</h4> : <h4 className="text-center">{movie.rating}</h4> }
+                           
 
                         </div>
                     </div>
@@ -294,7 +295,9 @@ export default function MovieInfo() {
                             <h6>Reviews</h6>
                         </div>
                         <div className="col-6">
-                            <Link className="col-6"><p className="float-end">View more</p></Link>
+                           { 
+                           //<Link className="col-6"><p className="float-end">View more</p></Link> 
+                           }
                         </div>
 
                         <hr />

@@ -84,7 +84,16 @@ export default function UsersAdmin() {
     return (
         <>
             <div className="container">
-                <input type="search" className="form-control w-25 mb-2 d-flex justify-content-center" placeholder="Search..." onChange={s => Search(s.target.value)} />
+            <div className="row" >
+                    <div className="form-group col-xs-3 col-md-3">
+                    </div>
+                    <div className="col-sm-1"></div>
+                    <div className="form-group col-xs-3 col-md-4">
+                    <input type="search" className="form-control mb-2" placeholder="Search..." onChange={s => Search(s.target.value)} />
+                    </div>
+
+                </div>
+
                 <div className="table-responsive">
                     <table className="table table-bordered table-hover table-condensed table-striped">
                         <thead>

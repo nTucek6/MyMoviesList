@@ -64,6 +64,13 @@ namespace MyMoviesList.Controllers.MoviesAdmin
             return Ok(people);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> UpdateMoviesScore()
+        {
+            await addMovieService.UpdateMoviesScore();
+            return Ok();
+        }
+
 
 
     }
