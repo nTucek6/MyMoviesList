@@ -102,29 +102,29 @@ export default function AddEditPerson() {
                 <div className="form-group mb-2">
                     <input type="text" placeholder="FirstName" className="form-control"
                         value={FirstName}
-                        onChange={d => setFirstName(d.target.value)} />
+                        onChange={d => setFirstName(d.target.value)} required />
                 </div>
 
                 <div className="form-group mb-2">
                     <input type="text" className="form-control" placeholder="LastName"
                         value={LastName}
-                        onChange={d => setLastName(d.target.value)} />
+                        onChange={d => setLastName(d.target.value)} required />
                 </div>
 
                 <div className="form-group mb-2">
                     <input type="date" className="form-control" placeholder="Birth date"
                         value={BirthDate}
-                        onChange={d => setBirthDate(d.target.value)} />
+                        onChange={d => setBirthDate(d.target.value)} required />
                 </div>
 
                 <div className="form-group mb-2">
                     <input type="text" className="form-control" placeholder="Birth place"
                         value={BirthPlace}
-                        onChange={d => setBirthPlace(d.target.value)} />
+                        onChange={d => setBirthPlace(d.target.value)} required />
                 </div>
 
                 <div className="form-group mb-2">
-                    <input type="file" className="form-control" onChange={onSelectFile} />
+                    <input type="file" className="form-control" accept=".jpg,.png,.jpeg" onChange={onSelectFile} required />
                 </div>
 
                 <div className='d-flex justify-content-center'>

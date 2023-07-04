@@ -9,6 +9,7 @@ export default function ReviewModalData({setIsOpen,userId,movieId})
         e.preventDefault();
        UpdateReview({userId,movieId,Review}).then(response=>{
         setIsOpen(false);
+        window.location.reload();
        });
     }
 

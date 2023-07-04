@@ -19,16 +19,18 @@ export default function MoviesList() {
 
     const { username } = useParams();
 
-    const shouldLoadData = useRef(true);
+   // const shouldLoadData = useRef(true);
 
     useEffect(() => {
-        if (shouldLoadData.current) {
+      /*  if (shouldLoadData.current) {
             shouldLoadData.current = false;
-            GetMoviesStatus({ setStatusList });
-            const statusId = location.state === null ? 0 : location.state;
-            GetUserList({ setUserList, username, statusId });
-        }
-    }, []);
+           
+        } */
+        GetMoviesStatus({ setStatusList });
+        const statusId = location.state === null ? 0 : location.state;
+        GetUserList({ setUserList, username, statusId });
+
+    }, [username]);
 
     const ChangeStatus = (statusId,status) => {  
         if(GetStatusId !== statusId)

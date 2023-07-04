@@ -34,7 +34,15 @@ export default function Discussion() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        WriteComment({ comment, discussionId, userId });
+
+        if(comment.trim() !== "")
+        {
+            WriteComment({ comment, discussionId, userId }).
+            then(function (response) {
+                window.location.reload();
+            });
+        }
+        
     }
 
     if(Discusion === null)return;
@@ -56,7 +64,7 @@ export default function Discussion() {
                         token === null ?
                             <p>Login to comment</p> :
                             <form onSubmit={handleSubmit}>
-                                <textarea rows={4} className="form-control mb-2" placeholder="Write a comment..." onChange={d => setComment(d.target.value)}></textarea>
+                                <textarea rows={4} className="form-control mb-2" placeholder="Write a comment..." onChange={d => setComment(d.target.value)} required></textarea>
                                 <button type="submit" className="btn btn-secondary float-end">Comment</button>
                             </form>
                     }

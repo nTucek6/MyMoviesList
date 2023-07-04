@@ -15,13 +15,11 @@ export default function SearchUsers()
     const handleSubmit = () => {
         const search = Search;
         setSearchData([]);
-        if (Search !== "") {
+        if (Search.trim() !== "") {
 
             GetSearchUsers({ setSearchData, search })
         }
     }
-
-    //DefaultAvatar 
 
     return (
         <>
@@ -41,7 +39,7 @@ export default function SearchUsers()
                     <h6 className="col-6">Search result</h6>
                     <hr />
                     {
-                                SearchData.map((data, index) => {
+                        SearchData.length > 0 ? SearchData.map((data, index) => {
                                     return (     
                                     <div className={index=== 0 ? "row" : "row mt-2"} key={index}>
                                     <img className="img-fluid img-thumbnail col-2" style={{width:"70px",height:"90px"}} src={data.profileImageData == null ? DefaultAvatar : "data:image/png;base64," + data.profileImageData } alt="" />
@@ -49,6 +47,10 @@ export default function SearchUsers()
                                    </div>
                                     )
                                 })
+
+                                :
+                                <h6>No result!</h6>
+
                             }
                 </div>
 
