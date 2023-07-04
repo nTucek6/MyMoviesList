@@ -20,7 +20,7 @@ export default function Discussions() {
     const [DiscussionCount, setDiscussionsCount] = useState(0);
     const [HasMoreData, setHasMoreData] = useState(false);
     const navigate = useNavigate();
-    const PostPerPage = 13;
+    const PostPerPage = 15;
     const [page, setPage] = useState(1);
 
     const shouldLoadData = useRef(true);

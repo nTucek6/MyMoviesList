@@ -26,7 +26,38 @@ import AllActors from './routes/1.all/AllActors';
 import SearchResult from './routes/1.all/SearchResult';
 import SearchUsers from './routes/1.all/SearchUsers';
 
+import { useEffect } from 'react';
+import CalculateMovieRating from './js/MoviesAdmin/CalculateMovieRating';
+
 function App() {
+
+   useEffect(() => {
+      // Calculate the milliseconds until the next execution
+      const now = new Date();
+      const targetDate = new Date(now);
+      targetDate.setHours(12, 0, 0, 0); // Set the target time (in this example, 12:00 PM)
+      let timeUntilNextExecution = targetDate - now;
+      if (timeUntilNextExecution < 0) {
+        // If the target time has already passed, add 24 hours to the countdown
+        timeUntilNextExecution += 24 * 60 * 60 * 1000;
+      }
+  
+      // Execute the code at the target time and then every 24 hours
+      const interval = setInterval(() => {
+        // Your code to be executed here
+        CalculateMovieRating();
+  
+        // Recalculate the milliseconds until the next execution
+        timeUntilNextExecution = 24 * 60 * 60 * 1000;
+  
+        // Update the target time for the next execution
+        targetDate.setTime(targetDate.getTime() + timeUntilNextExecution);
+      }, timeUntilNextExecution);
+  
+      // Clean up the interval when the component unmounts
+      return () => clearInterval(interval);
+    }, []);
+
    return (
       <BrowserRouter>
          <Routes>

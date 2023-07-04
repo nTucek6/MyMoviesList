@@ -20,7 +20,7 @@ export default function PersonInfo() {
     const [personDirectorRoles, setPersonDirectorRoles] = useState([]);
     const [personWriterRoles, setPersonWriterRoles] = useState([]);
 
-    const [page, setPage] = useState(1)
+    const [page, setPage] = useState(1);
 
     useEffect(() => {
 
