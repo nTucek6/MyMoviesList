@@ -2,7 +2,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import GetMovieInfo from "../../js/MovieInfo/GetMovieInfo";
 import { useRef, useEffect, useState } from "react";
 import Select from 'react-select'
-import { Link } from "react-router-dom";
 import GetStatus from "../../js/MovieInfo/GetStatus";
 import jwt_decode from "jwt-decode";
 import getToken from "../../js/token/gettoken";

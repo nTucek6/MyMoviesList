@@ -55,7 +55,7 @@ export default function SearchResult() {
                     <h6 className="col-6">Search result</h6>
                     <hr />
                     {
-                                SearchData.map((data, index) => {
+                        SearchData.length > 0 ? SearchData.map((data, index) => {
                                     return (     
                                     <div className={index=== 0 ? "row" : "row mt-2"} key={index}>
                                     <img className="img-fluid img-thumbnail col-2" style={{width:"70px",height:"90px"}} src={"data:image/png;base64," + data.searchImageData } alt="" />
@@ -63,6 +63,8 @@ export default function SearchResult() {
                                    </div>
                                     )
                                 })
+                                :
+                                <h6>No result!</h6>
                             }
                 </div>
 

@@ -26,6 +26,7 @@ export default function GetPage() {
     const isPersonInfo = !!matchPath(decodeURI(location.pathname), '/person/'+id+'/' + name);
     const isAllActors = !!matchPath(decodeURI(location.pathname), '/movie/'+id+'/' + title + "/characters&actors");
     const isSearchResult = !!matchPath(decodeURI(location.pathname), '/searchresult/'+type+'/' + search);
+    const isSearchUsers = !!matchPath(decodeURI(location.pathname), '/searchusers');
 
     if (isHome) {
         return <h6>Home page</h6>;
@@ -98,6 +99,10 @@ export default function GetPage() {
     else if(isSearchResult)
     {
         return <h6>Search {type}</h6> 
+    }
+    else if(isSearchUsers)
+    {
+        return <h6>Search users</h6> 
     }
 
 }

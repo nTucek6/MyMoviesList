@@ -17,6 +17,15 @@ export default function AccountSettings() {
     const [Username, setUsername] = useState(null);
     const [Bio, setBio] = useState(null);
 
+    const[PasswordError,setPasswordError] = useState("");
+    const[EmailError,setEmailError] = useState("");
+    const[UsernameError,setUsernameError] = useState("");
+    //const[Bio,setPasswordError] = useState("");
+
+
+
+
+
     const [selectedFile, setSelectedFile] = useState();
     const [preview, setPreview] = useState();
 
@@ -76,6 +85,7 @@ export default function AccountSettings() {
                 });
             }
             else {
+                setPasswordError("Passwords does not match!");
                 console.log("Passwords does not match!");
             }
             setIsPasswordCompleted(false);
@@ -92,6 +102,7 @@ export default function AccountSettings() {
                 });
             }
             else {
+                setEmailError("Invalid email!");
                 console.log("Invalid email!");
             }
             setIsEmailCompleted(false);
@@ -99,12 +110,20 @@ export default function AccountSettings() {
         }
         else if (type === "username") {
             setIsUsernameCompleted(true);
-            await ChangeUsername({
-                Id,
-                Username
-            }).then(function (response) {
-                navigate(0);
-            });
+            if(Username.trim() !== "")
+            {
+                await ChangeUsername({
+                    Id,
+                    Username
+                }).then(function (response) {
+                    navigate(0);
+                });
+            }
+            else
+            {
+                setUsernameError("Enter username!");
+            }
+          
             setIsUsernameCompleted(false);
         }
         else if (type === "bio") {
@@ -141,8 +160,8 @@ export default function AccountSettings() {
                     <h5>Change password</h5>
                 </div>
                 <div className="col-4">
-                    <input type="password" className="form-control mb-2" autoComplete="new-password" onChange={e => setPassword(e.target.value)} />
-                    <input type="password" className="form-control" autoComplete="new-password" onChange={e => setPasswordConfirm(e.target.value)} />
+                    <input type="password" className="form-control mb-2" autoComplete="new-password" onChange={e => setPassword(e.target.value)} required />
+                    <input type="password" className="form-control" autoComplete="new-password" onChange={e => setPasswordConfirm(e.target.value)} required />
                 </div>
                 <div className="col-4">
                     {isPasswordCompleted ? (
@@ -162,6 +181,7 @@ export default function AccountSettings() {
                 </div>
 
             </div>
+            <h6 className="text-danger">{PasswordError}</h6>
         </form>
 
         <hr className="container" />
@@ -172,7 +192,7 @@ export default function AccountSettings() {
                     <h5>Change email</h5>
                 </div>
                 <div className="col-4">
-                    <input type="text" className="form-control" onChange={e => setEmail(e.target.value)} />
+                    <input type="text" className="form-control" onChange={e => setEmail(e.target.value)} required />
                 </div>
                 <div className="col-4">
                     {isEmailCompleted ? (
@@ -192,6 +212,7 @@ export default function AccountSettings() {
                 </div>
 
             </div>
+            <h6 className="text-danger">{EmailError}</h6>
         </form>
 
         <hr className="container" />
@@ -202,7 +223,7 @@ export default function AccountSettings() {
                     <h5>Change username</h5>
                 </div>
                 <div className="col-4">
-                    <input type="text" className="form-control" onChange={e => setUsername(e.target.value)} />
+                    <input type="text" className="form-control" onChange={e => setUsername(e.target.value)} required />
                 </div>
                 <div className="col-4">
                     {isUsernameCompleted ? (
@@ -222,6 +243,7 @@ export default function AccountSettings() {
                 </div>
 
             </div>
+            <h6 className="text-danger">{UsernameError}</h6>
         </form>
 
         <hr className="container" />
@@ -263,7 +285,7 @@ export default function AccountSettings() {
                     <h5>Update profile image</h5>
                 </div>
                 <div className="col-4">
-                    <input type="file" className="form-control" onChange={onSelectFile} />
+                    <input type="file" className="form-control" accept=".jpg,.png,.jpeg" onChange={onSelectFile} required />
                 </div>
                 <div className="col-4">
                     {isProfileImageCompleted ? (

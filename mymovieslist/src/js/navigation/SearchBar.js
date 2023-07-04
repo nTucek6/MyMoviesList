@@ -31,7 +31,7 @@ export default function SearchBar() {
     const handleInputBlur = () => {
         setTimeout(() => {
             setIsFocused(false);
-        }, 100);
+        }, 300);
     };
 
     const navigateToInfo = (data) => {
