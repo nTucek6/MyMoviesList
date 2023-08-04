@@ -12,6 +12,7 @@ using Services.Frontpage;
 using Services.MovieInfo;
 using Services.PersonInfo;
 using MyMoviesList.Extensions;
+using MyMoviesList.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,6 +56,7 @@ builder.Services.AddTransient<IFrontpageService, FrontpageService>();
 builder.Services.AddTransient<IMovieInfoService, MovieInfoService>();
 builder.Services.AddTransient<IPersonInfoService, PersonInfoService>();
 
+builder.Services.AddHostedService<CalculateScoreTimer>();
 // ---------------------------------------------------------------------------------
 
 

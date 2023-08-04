@@ -31,7 +31,7 @@ import CalculateMovieRating from './js/MoviesAdmin/CalculateMovieRating';
 
 function App() {
 
-   useEffect(() => {
+ /*  useEffect(() => {
       // Calculate the milliseconds until the next execution
       const now = new Date();
       const targetDate = new Date(now);
@@ -56,7 +56,7 @@ function App() {
   
       // Clean up the interval when the component unmounts
       return () => clearInterval(interval);
-    }, []);
+    }, []); */
 
    return (
       <BrowserRouter>
