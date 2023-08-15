@@ -27,7 +27,8 @@ export default function GetPage() {
     const isAllActors = !!matchPath(decodeURI(location.pathname), '/movie/'+id+'/' + title + "/characters&actors");
     const isSearchResult = !!matchPath(decodeURI(location.pathname), '/searchresult/'+type+'/' + search);
     const isSearchUsers = !!matchPath(decodeURI(location.pathname), '/searchusers');
-
+    const isUserSupport = !!matchPath(location.pathname, '/support');
+    const isIssues = !!matchPath(location.pathname, '/issues');
     if (isHome) {
         return <h6>Home page</h6>;
     }
@@ -103,6 +104,14 @@ export default function GetPage() {
     else if(isSearchUsers)
     {
         return <h6>Search users</h6> 
+    }
+    else if(isUserSupport)
+    {
+        return <h6>Support</h6>
+    }
+    else if(isIssues)
+    {
+        return <h6>User Issues</h6>
     }
 
 }

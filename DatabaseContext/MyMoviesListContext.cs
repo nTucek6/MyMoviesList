@@ -19,5 +19,7 @@ namespace DatabaseContext
         public DbSet<MoviesDirectorEntity> MoviesDirector { get; set; }
         public DbSet<MoviesActorsEntity> MoviesActors { get; set; }
         public DbSet<MoviesWritersEntity> MoviesWriters { get; set; }
+        public DbSet<IssuesListEntity> IssuesList { get; set; }
+
     }
 }

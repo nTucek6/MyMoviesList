@@ -32,6 +32,7 @@
     <ProjectReference Include="..\Services.PersonAdmin\Services.PersonAdmin.csproj" />
     <ProjectReference Include="..\Services.PersonInfo\Services.PersonInfo.csproj" />
     <ProjectReference Include="..\Services.Profile\Services.Profile.csproj" />
+    <ProjectReference Include="..\Services.UserSupport\Services.UserSupport.csproj" />
     <ProjectReference Include="..\Services.Users\Services.UsersAdmin.csproj" />
   </ItemGroup>
 
