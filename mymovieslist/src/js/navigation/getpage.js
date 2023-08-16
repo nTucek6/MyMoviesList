@@ -29,6 +29,8 @@ export default function GetPage() {
     const isSearchUsers = !!matchPath(decodeURI(location.pathname), '/searchusers');
     const isUserSupport = !!matchPath(location.pathname, '/support');
     const isIssues = !!matchPath(location.pathname, '/issues');
+    const isMyDiscussions = !!matchPath(location.pathname, '/mydiscussions/' + username);
+
     if (isHome) {
         return <h6>Home page</h6>;
     }
@@ -112,6 +114,10 @@ export default function GetPage() {
     else if(isIssues)
     {
         return <h6>User Issues</h6>
+    }
+    else if(isMyDiscussions)
+    {
+        return <h6>My discussions</h6>
     }
 
 }

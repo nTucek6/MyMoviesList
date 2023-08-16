@@ -65,6 +65,28 @@ namespace MyMoviesList.Controllers.Discussions
             return Ok(comments);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetMyDiscussions(int UserId,int PostPerPage, int Page,string? Search)
+        {
+            var discussions = await discussionsService.GetMyDiscussions(UserId,PostPerPage, Page, Search);
+
+            return Ok(discussions);
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetMyDiscussionsCount(int UserId)
+        {
+            var count = await discussionsService.GetMyDiscussionsCount(UserId);
+
+            return Ok(count);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteMyDiscussions(int Id)
+        {
+            await discussionsService.DeleteMyDiscussions(Id);
+            return Ok();
+        }
+
 
 
     }

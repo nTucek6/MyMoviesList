@@ -20,7 +20,7 @@ export default function GenreMovies() {
     const [HasMoreData, setHasMoreData] = useState(false);
 
     const [page, setPage] = useState(1);
-    const postPerPage = 3;
+    const postPerPage = 9;
 
     const shouldLoadData = useRef(true);
 

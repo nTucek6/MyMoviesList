@@ -27,6 +27,7 @@ import SearchResult from './routes/1.all/SearchResult';
 import SearchUsers from './routes/1.all/SearchUsers';
 import UserSupport from './routes/1.all/UserSupport';
 import Issues from './routes/2.admin/Issues';
+import MyDiscussions from './routes/3.user/MyDiscussions';
 
 function App() {
    return (
@@ -56,6 +57,7 @@ function App() {
 
                <Route element={<PrivateRoutes />}>
                   <Route path="/accountsettings/:username" element={<AccountSettings />} />
+                  <Route path="/mydiscussions/:username" element={<MyDiscussions />} />
                </Route>
 
                <Route element={<PrivateAdminModeratorRoutes />}>

@@ -15,6 +15,8 @@ namespace Services.Discussions
         Task<List<Comments>> GetDiscussionsComments(int DiscussionId, int PostPerPage, int Page);
         Task AddDiscussion(string DiscussionTitle,string Discussion,int UserId);
         Task AddDiscussionComment(CommentP comment);
-
+        Task<List<Discussions>> GetMyDiscussions(int UserId,int PostPerPage, int Page, string? Search);
+        Task<int> GetMyDiscussionsCount(int UserId);
+        Task DeleteMyDiscussions(int Id);
     }
 }

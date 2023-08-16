@@ -5,9 +5,12 @@ export default function IssueModalData({Issue,setIsOpen})
     const handleSubmit = async e => {
         e.preventDefault();
         const Id = Issue.id
-        ResolveIssue({Id});
-        setIsOpen(false);
-        window.location.reload();
+        ResolveIssue({Id}).then(()=>{
+            setIsOpen(false);
+            window.location.reload();
+        });
+       
+        
     }
 
     return(<>
@@ -18,7 +21,12 @@ export default function IssueModalData({Issue,setIsOpen})
             <div className="form-group mb-2">
                 <p>Issue: {Issue.inquiryText}</p>
             </div>
-            <button className="btn btn-outline-danger">Resolve</button>
+            {
+                !Issue.isResolved ?
+                <button className="btn btn-outline-danger">Resolve</button>:
+                <button className="btn btn-outline-danger" disabled>Resolve</button>
+            }
+           
         </form>
 
     </>)

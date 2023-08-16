@@ -20,7 +20,7 @@ export default function Discussions() {
     const [DiscussionCount, setDiscussionsCount] = useState(0);
     const [HasMoreData, setHasMoreData] = useState(false);
     const navigate = useNavigate();
-    const PostPerPage = 15;
+    const PostPerPage = 30;
     const [page, setPage] = useState(1);
 
     const shouldLoadData = useRef(true);
@@ -44,16 +44,13 @@ export default function Discussions() {
     }, []);
 
     useEffect(() => {
-
-        if(DiscussionCount !== Discussions.length)
-        {
+        if (DiscussionCount !== Discussions.length) {
             setHasMoreData(true);
         }
-        else
-        {
+        else {
             setHasMoreData(false);
         }
-     
+
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [Discussions]);

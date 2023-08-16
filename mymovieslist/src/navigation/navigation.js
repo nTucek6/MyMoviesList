@@ -56,6 +56,7 @@ export default function Navigation() {
                                 <NavDropdown title={Username} className="">
                                     <NavDropdown.Item as={Link} to={"/profile/" + Username} className="" onClick={() => SetProfileId(Id)} ><FontAwesomeIcon icon={faUser} /> Profile</NavDropdown.Item>
                                     <NavDropdown.Item as={Link} to={"/movieslist/" + Username} className="" ><FontAwesomeIcon icon={faList} /> Movies List</NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to={"/mydiscussions/" + Username} className="" ><FontAwesomeIcon icon={faList} /> My discussions</NavDropdown.Item>
                                     <NavDropdown.Item as={Link} to={"/accountsettings/" + Username} className=""><FontAwesomeIcon icon={faGear} /> Account settings</NavDropdown.Item>
                                     <Dropdown.Divider />
                                     <NavDropdown.Item onClick={() => LogOut()} className=" "><FontAwesomeIcon icon={faRightFromBracket} /> Logout</NavDropdown.Item>

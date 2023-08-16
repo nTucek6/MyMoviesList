@@ -7,7 +7,9 @@ namespace Entities.Enum
     {
         [Description("Bug report")]
         Bug_report = 0,
-        Login = 1
+        Login = 1,
+        [Description("Movie recommendation")]
+        movie_recommendation = 2,
 
     }
 }

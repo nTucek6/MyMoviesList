@@ -1,6 +1,7 @@
 ﻿using DatabaseContext;
 using Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Services.Discussions
 {
@@ -134,7 +135,48 @@ namespace Services.Discussions
             }
            
         }
+        public async Task<List<Discussions>> GetMyDiscussions(int UserId, int PostPerPage, int Page ,string? Search)
+        {
+            Expression<Func<DiscussionsEntity, bool>> predicate = x => true;
 
+            if (!String.IsNullOrEmpty(Search))
+            {
+                predicate = x => x.Title.Contains(Search);
+            }
 
+            var discussions = await myMoviesListContext.Discussions
+                .Where(predicate)
+                .Where(q=>q.UserId == UserId)
+                .OrderByDescending(o => o.TimePosted).
+                Select(d => new Discussions
+                {
+                Id = d.Id,
+                User = myMoviesListContext.Users.Where(u => u.Id == d.UserId).Select(u => new User { Id = u.Id, Username = u.Username }).FirstOrDefault(),
+                Title = d.Title,
+                TimePosted = d.TimePosted,
+                Discussion = d.Discussion
+                })
+                .Skip((Page - 1) * PostPerPage)
+                .Take(PostPerPage)
+                .ToListAsync();
+
+            return discussions;
+        }
+
+        public async Task<int> GetMyDiscussionsCount(int UserId)
+        {
+            var count = await myMoviesListContext.Discussions
+                 .Where(q => q.UserId == UserId)
+                 .CountAsync();
+
+            return count;
+        }
+
+        public async Task DeleteMyDiscussions(int Id)
+        {
+            await myMoviesListContext.Discussions.Where(q => q.Id == Id).ExecuteDeleteAsync();
+            await myMoviesListContext.DiscussionsComments.Where(q => q.DiscussionId == Id).ExecuteDeleteAsync();
+            await myMoviesListContext.SaveChangesAsync();
+        }
     }
 }

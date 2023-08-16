@@ -14,8 +14,7 @@ export default async function WriteComment({comment,discussionId,userId})
         }
     })
         .then(function (response) {
-         
-          console.log(response);
+          //console.log(response);
         })
         .catch(function (response) {
             console.log(response);

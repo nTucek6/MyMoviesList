@@ -6,9 +6,7 @@ import GetUserIssues from "../../js/Issues/GetUserIssues";
 import GetUserIssuesCount from "../../js/Issues/GetUserIssuesCount";
 import ShowModal from "../../js/modal/modal";
 import IssueModalData from "../../js/Issues/IssueModalData";
-import customStyles from "../../js/MoviesAdmin/customStyles";
-import Modal from 'react-modal';
-
+import customStyles from "./../../js/MovieInfo/customStyles";
 
 export default function Issues() {
     const postPerPage = 10;
@@ -71,7 +69,7 @@ export default function Issues() {
                         <tr>
                             <th>Rbr.</th>
                             <th>Email</th>
-                            <th>Issue type</th>
+                            <th>Issue type or suggestions</th>
                             <th>Time Added</th>
                             <th>Status</th>
                         </tr>
@@ -79,7 +77,7 @@ export default function Issues() {
                     <tbody>
                         {Issues.map((issue, index) => {
                             return (
-                                <tr key={issue.id} onClick={() =>  openModal(issue)}>
+                                <tr key={issue.id} onClick={() =>  openModal(issue)}  style={{ cursor: "pointer" }} >
                                     <td>{index + 1}</td>
                                     <td>{issue.email}</td>
                                     <td>{issue.issueType}</td>
@@ -109,23 +107,6 @@ export default function Issues() {
                 )}
             </div>
         </div>
- 
-
         <ShowModal modalIsOpen={modalIsOpen} closeModal={closeModal} customStyles={customStyles} ModalData={() => IssueModalData({ Issue,setIsOpen })} text={"Issue"} />
-
     </>);
-
-/*
-       <Modal
-            isOpen={modalIsOpen}
-            //onAfterOpen={afterOpenModal}
-            onRequestClose={closeModal}
-            style={customStyles}
-            ariaHideApp={false}
-            contentLabel={""}>
-            <h2 className="text-center ">{""}</h2>
-            <IssueModalData Issue={Issue} setIsOpen={setIsOpen} />
-        </Modal>
-
-*/
 }
