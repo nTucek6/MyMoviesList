@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Services.EmailSender;
 using Services.UserSupport;
 
 namespace MyMoviesList.Controllers.UserSupport
@@ -8,10 +9,12 @@ namespace MyMoviesList.Controllers.UserSupport
     public class UserSupportController : Controller
     {
         private readonly IUserSupportService userSupportService;
+        private readonly IEmailSenderService emailSenderService;
 
-        public UserSupportController(IUserSupportService userSupportService) 
+        public UserSupportController(IUserSupportService userSupportService, IEmailSenderService emailSenderService) 
         {
             this.userSupportService = userSupportService;
+            this.emailSenderService = emailSenderService;
         }
 
         [HttpGet]
@@ -44,9 +47,10 @@ namespace MyMoviesList.Controllers.UserSupport
         }
 
         [HttpGet]
-        public async Task<IActionResult> ResolveIssue(int Id)
+        public async Task<IActionResult> ResolveIssue(int Id, string Email)
         {
             await userSupportService.ResolveIssue(Id);
+            await emailSenderService.SendEmailAsync(Email, "MyMoviesList: Inquiry resolved", "Your inquiry has been resolved.");
             return Ok();
         }
 

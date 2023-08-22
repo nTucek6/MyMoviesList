@@ -20,8 +20,8 @@ export default function ReviewModalData({setIsOpen,userId,movieId})
         </div>
         <hr />
         <div className="mt-2 d-flex flex-row-reverse">
-        <button type="submit" className="btn btn-success mt-3 p-2">Save</button>
-                <button className="btn btn-outline-danger mt-3 p-2" onClick={() => setIsOpen(false)}>Close</button>
+        <button type="submit" className="col btn btn-outline-info mt-3 p-2">Save</button>
+                <button className="col btn btn-outline-danger mt-3 p-2" onClick={() => setIsOpen(false)}>Close</button>
             </div>
     </form>
     </>);

@@ -15,8 +15,9 @@ import ReviewModalData from "../../js/MovieInfo/ReviewModalData";
 import ShowModal from "../../js/modal/modal";
 import GetReview from "../../js/MovieInfo/GetReview";
 import { format } from 'date-fns'
+import customStyles from "../../js/MovieInfo/customStyles";
 
-const customStyles = {
+/*const customStyles = {
     content: {
         top: '50%',
         left: '50%',
@@ -28,7 +29,7 @@ const customStyles = {
         height: "70%",
         overflowy: "auto",
     }
-}
+} */
 
 export default function MovieInfo() {
 

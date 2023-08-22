@@ -14,6 +14,7 @@ using Services.PersonInfo;
 using MyMoviesList.Extensions;
 using MyMoviesList.Service;
 using Services.UserSupport;
+using Services.EmailSender;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,6 +58,7 @@ builder.Services.AddTransient<IFrontpageService, FrontpageService>();
 builder.Services.AddTransient<IMovieInfoService, MovieInfoService>();
 builder.Services.AddTransient<IPersonInfoService, PersonInfoService>();
 builder.Services.AddTransient<IUserSupportService, UserSupportService>();
+builder.Services.AddTransient<IEmailSenderService, EmailSenderService>();
 
 builder.Services.AddHostedService<CalculateScoreTimer>();
 // ---------------------------------------------------------------------------------

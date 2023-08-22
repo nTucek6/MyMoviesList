@@ -113,7 +113,7 @@ export default function GetPage() {
     }
     else if(isIssues)
     {
-        return <h6>User Issues</h6>
+        return <h6>User Issues & recommendations</h6>
     }
     else if(isMyDiscussions)
     {

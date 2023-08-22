@@ -1,7 +1,7 @@
 import config from './../../config.json';
 import axios from "axios";
 
-export default async function SubmitInquiry({email,issue,inquiry,ClearData,toast}) {
+export default async function SubmitInquiry({email,issue,inquiry,ClearData,notify}) {
 
     await axios({
         method: "post",
@@ -15,9 +15,9 @@ export default async function SubmitInquiry({email,issue,inquiry,ClearData,toast
         }
     })
         .then(function (response) {
-            console.log(response);
+           // console.log(response);
             ClearData();
-            toast("Successfuly submited!");
+            notify();
             
         })
         .catch(function (response) {

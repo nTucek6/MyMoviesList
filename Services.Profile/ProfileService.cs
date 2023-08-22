@@ -78,7 +78,7 @@ namespace Services.Profile
 
                         userMovie.Add(movie);
                     }
-                    return userMovie;
+                    return userMovie.OrderBy(o => o.MovieName).ToList();
                 }
                 
             }

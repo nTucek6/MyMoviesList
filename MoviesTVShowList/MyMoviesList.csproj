@@ -26,6 +26,7 @@
     <ProjectReference Include="..\Services.AddMovie\Services.MoviesAdmin.csproj" />
     <ProjectReference Include="..\Services.Authentication\Services.Authentication.csproj" />
     <ProjectReference Include="..\Services.Discussions\Services.Discussions.csproj" />
+    <ProjectReference Include="..\Services.EmailSender\Services.EmailSender.csproj" />
     <ProjectReference Include="..\Services.Frontpage\Services.Frontpage.csproj" />
     <ProjectReference Include="..\Services.MovieInfo\Services.MovieInfo.csproj" />
     <ProjectReference Include="..\Services.MovieSearch\Services.MovieSearch.csproj" />

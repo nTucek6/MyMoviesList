@@ -107,6 +107,6 @@ export default function Issues() {
                 )}
             </div>
         </div>
-        <ShowModal modalIsOpen={modalIsOpen} closeModal={closeModal} customStyles={customStyles} ModalData={() => IssueModalData({ Issue,setIsOpen })} text={"Issue"} />
+        <ShowModal modalIsOpen={modalIsOpen} closeModal={closeModal} customStyles={customStyles} ModalData={() => IssueModalData({ Issue,setIsOpen })} text={"Issue or recommendation"} />
     </>);
 }

@@ -14,7 +14,7 @@ export default async function GetUsersRoles({UserId,RoleId,notify}) {
         }
     })
         .then(function (response) {
-            console.log(response);
+           // console.log(response);
             notify();
         })
         .catch(function (response) {

@@ -1,7 +1,7 @@
 import GetDiscussions from "../../js/Discussions/GetDiscussions";
 import GetDiscussionsCount from "../../js/Discussions/GetDiscussionsCount";
 import ShowModal from '../../js/modal/modal';
-import customStyles from "../../js/MoviesAdmin/customStyles";
+import customStyles from "../../js/MovieInfo/customStyles";
 import DiscussionModalData from "../../js/Discussions/DiscussionModalData";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -11,6 +11,7 @@ import { format } from 'date-fns'
 import { useRef } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { ThreeDots } from 'react-loader-spinner';
+import getToken from "../../js/token/gettoken";
 
 export default function Discussions() {
 
@@ -22,6 +23,8 @@ export default function Discussions() {
     const navigate = useNavigate();
     const PostPerPage = 30;
     const [page, setPage] = useState(1);
+
+    const token = getToken();
 
     const shouldLoadData = useRef(true);
 
@@ -89,7 +92,12 @@ export default function Discussions() {
         <>
             <div className="container">
                 <div className="text-center">
-                    <button className="btn btn-info" onClick={openModal}>Add discussion</button>
+                    {
+                        token === null ?
+                        <button className="btn btn-info" disabled>Login to add discussion!</button>:
+                        <button className="btn btn-info" onClick={openModal}>Add discussion</button>
+
+                    }
                 </div>
                 <hr />
                 <InfiniteScroll

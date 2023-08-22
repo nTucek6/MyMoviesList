@@ -335,7 +335,7 @@ export default function AddEditMovie() {
                     <hr />
 
                     <div className="mt-2 d-flex flex-row-reverse">
-                        <button type='submit' className="btn btn-outline-danger mt-3 p-2">{text}</button>
+                        <button type='submit' className="btn btn-outline-info mt-3 p-2">{text}</button>
                     </div>
                 </form>
 

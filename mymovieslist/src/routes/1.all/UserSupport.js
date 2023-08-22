@@ -23,7 +23,7 @@ export default function UserSupport() {
     const handleSubmit = async e => {
         e.preventDefault();
         setIsSubmitCompleted(true);
-        SubmitInquiry({ email, issue, inquiry, ClearData,toast });
+        SubmitInquiry({ email, issue, inquiry, ClearData, notify });
         setIsSubmitCompleted(false);
     }
 
@@ -33,13 +33,16 @@ export default function UserSupport() {
         setInquiry("");
     }
 
+    const notify = () => toast("Successfuly submited!");
+
+
     return (
         <>
             <div className="container w-50 border p-5 shadow">
                 <h3 className="text-center">Contact support</h3>
                 <hr></hr>
                 <form onSubmit={handleSubmit} className="mt-5" >
-                    <div className="form-group  mb-2">
+                    <div className="form-group mb-2">
                         <input className="form-control "
                             onChange={d => setEmail(d.target.value)}
                             placeholder="Email"
@@ -73,7 +76,9 @@ export default function UserSupport() {
                             visible={true}
                         />
                     ) : (
-                        <button type="submit" className="btn btn-outline-info">Submit</button>
+                        <div className="row ps-3 pe-3">
+                            <button type="submit" className="btn btn-outline-info col">Submit</button>
+                        </div>   
                     )}
                 </form>
             </div>
