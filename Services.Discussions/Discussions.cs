@@ -8,6 +8,7 @@ namespace Services.Discussions
         public string Discussion { get; set; }
         public User User { get; set; }
         public DateTime TimePosted { get; set; }
+        public int CommentsCount { get; set; }
 
     }
 }

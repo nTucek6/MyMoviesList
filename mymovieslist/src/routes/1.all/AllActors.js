@@ -30,9 +30,9 @@ export default function AllActors() {
                             <div className="col-md-11">
                                 <div className="card-body">
                                     <div className="card-title">
-                                        <h5>Character name: {actor.characterName}</h5>
+                                        <h5><b>{actor.firstName} {actor.lastName}</b></h5>
                                     </div>
-                                    <h6>Actor name: {actor.firstName} {actor.lastName}</h6>
+                                    <span style={{ opacity: 0.8 }}>{actor.characterName}</span>
                                 </div>
                             </div>
                             <hr className=" mt-1" />

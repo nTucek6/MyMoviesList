@@ -27,12 +27,12 @@ namespace Services.Authentication
 
         public async Task<string> Register(Register user)
         {
-            if ((await myMoviesListContext.Users.Where(u => u.Username == user.Username).SingleOrDefaultAsync()) != null)
-                throw new Exception("User exist!");
-   
-            if ((await myMoviesListContext.Users.Where(u => u.Username == user.Username).SingleOrDefaultAsync()) != null )
-                throw new Exception("User cannot have same username!");
+            if ((await myMoviesListContext.Users.Where(u => u.Email == user.Email).SingleOrDefaultAsync()) != null)
+                throw new Exception("Email taken!");
 
+            if ((await myMoviesListContext.Users.Where(u => u.Username == user.Username).SingleOrDefaultAsync()) != null)
+                throw new Exception("Username taken!");
+   
             string passwordHash = GenerateHash(user.Password);
 
           

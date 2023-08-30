@@ -124,7 +124,11 @@ export default function AddEditPerson() {
                 </div>
 
                 <div className="form-group mb-2">
-                    <input type="file" className="form-control" accept=".jpg,.png,.jpeg" onChange={onSelectFile} required />
+                    {person !== null ? 
+                    <input type="file" className="form-control" accept=".jpg,.png,.jpeg" onChange={onSelectFile} />:
+                    <input type="file" className="form-control" accept=".jpg,.png,.jpeg" onChange={onSelectFile} required /> 
+                }
+                   
                 </div>
 
                 <div className='d-flex justify-content-center'>

@@ -51,7 +51,7 @@ export default function Discussions() {
                         <div className="mb-2" key={discussion.id}>
                             <div style={{cursor:"pointer"}} onClick={() => toDiscussion('discussions/discussion/'+discussion.id+"/" + discussion.title, discussion)}>
                                 <h5>{discussion.title}</h5>
-                                <h6>User: {discussion.user.username}, posted: {format(new Date(discussion.timePosted), 'dd.MM.yyyy HH:mm:ss')} </h6>
+                                <h6>User: {discussion.user.username}, posted: {format(new Date(discussion.timePosted), 'dd.MM.yyyy HH:mm:ss')}, comments: {discussion.commentsCount} </h6>
                             </div>
                         </div>
                     )

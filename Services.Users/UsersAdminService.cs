@@ -31,7 +31,7 @@ namespace Services.UsersAdmin
             var users = await myMoviesListContext.Users
                     .Where(predicate)
                     .Where(u => u.RoleId != RolesEnum.Admin)
-                    .OrderBy(t => t.Email)
+                    .OrderBy(t => t.Username)
                     .Select(x => new Users
                     {
                         Id = x.Id,

@@ -22,9 +22,8 @@ namespace Services.MoviesAdmin
         public List<Actor> Actors { get; set; }
 
         public DateTime ReleaseDate { get; set; }
-
         public decimal Duration { get; set; }
-
+        public int? RatingsCount { get; set; }
         public byte[] MovieImageData { get; set; }
 
     }

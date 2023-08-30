@@ -49,17 +49,15 @@ export default function Register() {
             })
             .catch(function (error) {
 
-                if (error.response.data.Message === "User exist!") {
+                if (error.response.data.Message === "Email taken!") {
                     setRegisterError(error.response.data.Message)
                 }
-                else if (error.response.data.Message === "User cannot have same username!") {
+                else if (error.response.data.Message === "Username taken!") {
                     setRegisterError(error.response.data.Message)
                 }
                 else {
-                    setRegisterError("An error occurred!");
+                    setRegisterError("An error has occurred!");
                 }
-
-                console.log(error.response.data);
                 setIsRegisterCompleted(false);
             });
     }
@@ -131,7 +129,7 @@ export default function Register() {
 
                         <div className="border mb-3 p-3">
                             <FontAwesomeIcon icon={faCircleExclamation} style={{ color: "#ff0000", }} className="d-inline" />
-                            <p className="d-inline">{RegisterError}</p>
+                            <p className="d-inline"> {RegisterError}</p>
                         </div>
                         :
                         null

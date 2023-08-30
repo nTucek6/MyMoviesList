@@ -9,6 +9,7 @@ import GetLastUpdate from "../../js/Profile/GetLastUpdate";
 import GetUserProfileImage from "../../js/Profile/GetUserProfileImage";
 import format from "date-fns/format";
 import DefaultAvatar from "../../img/DefaultAvatar.jpg";
+import TimeSplitter from "../../js/Profile/TimeSplitter";
 
 export default function Profile() {
 
@@ -59,7 +60,7 @@ export default function Profile() {
                         <div className="col-6">
                             <h6 className="">Movies stats</h6>
                             <hr className="mt-0" />
-                            <h6>Days: {TimeSpentWatching.toFixed(2)}</h6>
+                            <h6>Time spent watching: <TimeSplitter TimeSpentWatching={TimeSpentWatching} /></h6>
                             <br />
                             {
                                 StatusInfo.length > 0 ? StatusInfo.map(s => {

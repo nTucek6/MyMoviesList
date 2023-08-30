@@ -26,7 +26,6 @@ export default function Frontpage() {
                     <hr />
                     <SwiperMovies RecentMovies={RecentMovies} />
                 </div>
-
                 <div className="mt-5">
                     <div className="row ">
                         <h6 className="col-6">Discussions</h6>
@@ -34,11 +33,8 @@ export default function Frontpage() {
                         <hr />
                         <Discussions />
                     </div>
-
                 </div>
-
             </div>
         </>
     );
-
 }

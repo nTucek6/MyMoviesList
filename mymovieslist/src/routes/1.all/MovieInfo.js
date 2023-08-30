@@ -118,7 +118,7 @@ export default function MovieInfo() {
             name="watchstatus"
             options={statusList}
             defaultValue={watchStatus}
-            onChange={s => UpdateUserListStatus(s.value)}
+            onChange={s => UpdateUserListStatus(s)}
         />)
     }
 
@@ -126,7 +126,7 @@ export default function MovieInfo() {
         return (
             <Select
                 name="score"
-                placeholder="Select score"
+                placeholder="Select score from 1 to 5"
                 options={
                     [
                         { value: 5, label: 5 },
@@ -152,7 +152,10 @@ export default function MovieInfo() {
         });
     }
 
-    const UpdateUserListStatus = (statusId) => {
+    const UpdateUserListStatus = (status) => {
+
+        const statusId = status.value;
+        setWatchStatus(status);
 
         UpdateMovieUserList({ userId, movieId, score, statusId });
         toast("Successfuly updated list!");
@@ -203,6 +206,8 @@ export default function MovieInfo() {
         }
     }
 
+    
+
     return (
         <div className="container">
             <div className="row container m-0 p-0">
@@ -231,11 +236,10 @@ export default function MovieInfo() {
 
                 <div className="col-md-9 ">
                     <div className="row border border-start-0">
-                        <div className="col-1">
-                            <h6 className="text-center mt-2">Score</h6>
+                        <div className="col-1 mt-2 mb-2 border border-start-0 border-top-0 border-bottom-0">
+                            <h6 className="text-center">Score</h6>
                             {movie.rating === null ?  <h4 className="text-center">N/A</h4> : <h4 className="text-center">{movie.rating}</h4> }
-                           
-
+                            {movie.rating === null ?  null : movie.ratingsCount > 1 ? <p className="text-center text-muted">{movie.ratingsCount} users</p> : <p className="text-center text-muted">{movie.ratingsCount} user</p>  }
                         </div>
                     </div>
                     <br />
@@ -278,9 +282,9 @@ export default function MovieInfo() {
                                         <div className="col-md-11">
                                             <div className="card-body">
                                                 <div className="card-title">
-                                                    <h5>Character name: {actor.characterName}</h5>
+                                                    <h5><b>{actor.firstName} {actor.lastName}</b></h5>
                                                 </div>
-                                                <h6>Actor name: {actor.firstName} {actor.lastName}</h6>
+                                                <span style={{opacity:0.8}}>{actor.characterName}</span>
                                             </div>
                                         </div>
                                         <hr className=" mt-1" />

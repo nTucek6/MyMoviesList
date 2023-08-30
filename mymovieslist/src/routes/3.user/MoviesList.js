@@ -46,6 +46,7 @@ export default function MoviesList() {
         navigate(link);
       }
 
+
     return (
         <>
             <div className='container'>

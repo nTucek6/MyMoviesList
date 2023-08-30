@@ -221,13 +221,13 @@ export default function AddEditMovie() {
                     <div className="form-group mb-2">
                         <input type="text" placeholder="Movie title" className="form-control"
                             value={MovieName}
-                            onChange={d => setMovieName(d.target.value)} required/>
+                            onChange={d => setMovieName(d.target.value)} required />
                     </div>
 
                     <div className="form-group mb-2">
                         <input type="text" className="form-control" placeholder="Duration"
                             value={Duration}
-                            onChange={d => setDuration(d.target.value)} required/>
+                            onChange={d => setDuration(d.target.value)} required />
                     </div>
 
                     <div className="form-group mb-2">
@@ -324,7 +324,9 @@ export default function AddEditMovie() {
                     </div>
 
                     <div className="form-group mb-2">
-                        <input type="file" className="form-control" accept=".jpg,.png,.jpeg" onChange={onSelectFile} required />
+                        {movie !== null ?
+                            <input type="file" className="form-control" accept=".jpg,.png,.jpeg" onChange={onSelectFile}/> :
+                            <input type="file" className="form-control" accept=".jpg,.png,.jpeg" onChange={onSelectFile} required />}
                     </div>
 
 

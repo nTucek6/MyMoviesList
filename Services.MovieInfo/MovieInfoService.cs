@@ -76,6 +76,9 @@ namespace Services.MovieInfo
                     label = ((GenresEnum)(Convert.ToInt32(d))).GetDescription()
                 });
             }
+
+            int RatingsCount = await myMoviesListContext.UsersMovieList.Where(q=> q.MovieId == movieData.Id && q.Score != null).CountAsync();
+
             movie = new Movies
             {
                 Id = movieData.Id,
@@ -88,7 +91,8 @@ namespace Services.MovieInfo
                 MovieImageData = movieData.MovieImageData,
                 Synopsis = movieData.Synopsis,
                 Genres = genres,
-                Rating = movieData.Rating
+                Rating = movieData.Rating,
+                RatingsCount = RatingsCount
             };
 
             return movie;

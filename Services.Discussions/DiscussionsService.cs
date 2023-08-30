@@ -27,6 +27,11 @@ namespace Services.Discussions
                 .Skip((Page - 1) * PostPerPage)
                 .Take(PostPerPage)
                 .ToListAsync();
+
+            foreach (var discussion in discussions)
+            {
+               discussion.CommentsCount = await myMoviesListContext.DiscussionsComments.Where(q=> q.DiscussionId == discussion.Id).CountAsync();
+            }
                 
             return discussions;
         }

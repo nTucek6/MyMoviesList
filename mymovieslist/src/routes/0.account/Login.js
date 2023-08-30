@@ -111,7 +111,7 @@ export default function Login() {
 
                         <div className="border mb-3 p-3">
                             <FontAwesomeIcon icon={faCircleExclamation} style={{ color: "#ff0000", }} className="d-inline" />
-                            <p className="d-inline">{LoginError}</p>
+                            <p className="d-inline"> {LoginError}</p>
                         </div>
                         :
                         null

@@ -12,7 +12,7 @@ namespace Services.Profile
         public int Id { get; set; }
         public string MovieName { get; set; }
         public byte[] MovieImageData { get; set; }
-        public int? Score { get; set; }
+        public decimal? Score { get; set; }
         public DateTime? TimeAdded { get; set; }
         public string? Status { get; set; }
     }

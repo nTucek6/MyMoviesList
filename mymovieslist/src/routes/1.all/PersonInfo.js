@@ -82,9 +82,9 @@ export default function PersonInfo() {
                                             <div className="col-md-11">
                                                 <div className="card-body">
                                                     <div className="card-title">
-                                                        <h5>Movie name: {movie.movieName}</h5>
+                                                        <h5><b>{movie.movieName}</b></h5>
                                                     </div>
-                                                    <h6>Character name: {movie.characterName}</h6>
+                                                    <span style={{ opacity: 0.8 }}>{movie.characterName}</span>
                                                 </div>
                                             </div>
                                             <hr className=" mt-1" />
@@ -107,7 +107,7 @@ export default function PersonInfo() {
                                             <div className="col-md-11">
                                                 <div className="card-body">
                                                     <div className="card-title">
-                                                        <h5>Movie name: {movie.movieName}</h5>
+                                                        <h5><b>{movie.movieName}</b></h5>
                                                     </div>
                                                 </div>
                                             </div>
@@ -130,7 +130,7 @@ export default function PersonInfo() {
                                             <div className="col-md-11">
                                                 <div className="card-body">
                                                     <div className="card-title">
-                                                        <h5>Movie name: {movie.movieName}</h5>
+                                                        <h5><b>{movie.movieName}</b></h5>
                                                     </div>
                                                 </div>
                                             </div>

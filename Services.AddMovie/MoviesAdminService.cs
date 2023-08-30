@@ -323,7 +323,7 @@ namespace Services.MoviesAdmin
                             {
                                 if (i == score)
                                 {
-                                    ri[i - 1] += 1;
+                                    ri[i - 1]++;
                                 }
                             }
                         }
@@ -331,7 +331,11 @@ namespace Services.MoviesAdmin
 
                     if(ri[4] + ri[3] + ri[2] + ri[1] + ri[0] > 0)
                     {
-                        decimal rating = (5 * ri[4] + 4 * ri[3] + 3 * ri[2] + 2 * ri[1] + 1 * ri[0]) / (ri[4] + ri[3] + ri[2] + ri[1] + ri[0]);
+                        decimal numerator = (5 * ri[4] + 4 * ri[3] + 3 * ri[2] + 2 * ri[1] + 1 * ri[0]);
+                        decimal denominator = (ri[4] + ri[3] + ri[2] + ri[1] + ri[0]);
+
+                        decimal rating = Decimal.Divide(numerator, denominator);
+
                         m.Rating = rating;
                     }
                 }

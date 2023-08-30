@@ -72,7 +72,7 @@ namespace Services.Profile
                             Id = s.Id,
                             MovieName = s.MovieName,
                             MovieImageData = s.MovieImageData,
-                            Score = m.Score
+                            Score = s.Rating
 
                         }).FirstOrDefaultAsync();
 
@@ -114,7 +114,7 @@ namespace Services.Profile
   
                     }
                    
-                return minutes / 1440;
+                return minutes / 60;
                 }
 
 

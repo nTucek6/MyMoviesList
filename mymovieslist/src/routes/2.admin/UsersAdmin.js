@@ -13,7 +13,7 @@ export default function UsersAdmin() {
     const [usersCount, setUsersCount] = useState(null);
     const [usersRoles, setUsersRoles] = useState([]);
 
-    const postPerPage = 10;
+    const postPerPage = 5;
     const [search, setSearch] = useState(null);
     const [page, setPage] = useState(1);
     const [isCompleted, setIsCompleted] = useState(false);
