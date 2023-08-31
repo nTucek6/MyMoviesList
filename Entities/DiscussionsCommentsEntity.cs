@@ -8,6 +8,8 @@ namespace Entities
         public int UserId { get; set; }
         public string Comment { get; set; }
         public DateTime TimePosted { get; set; }
+        public DateTime? TimeUpdated { get; set; }
+
 
     }
 }

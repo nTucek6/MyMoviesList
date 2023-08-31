@@ -1,7 +1,10 @@
 ﻿using DatabaseContext;
 using Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
+using System.Data;
 using System.Linq.Expressions;
+using System.Xml.Linq;
 
 namespace Services.Discussions
 {
@@ -112,15 +115,38 @@ namespace Services.Discussions
         {
             var data = await myMoviesListContext.DiscussionsComments
                     .Where(q => q.DiscussionId == DiscussionId)
-                    .OrderByDescending(o=> o.TimePosted)
                     .Skip((Page - 1) * PostPerPage)
                     .Take(PostPerPage).ToListAsync();
 
-            if(data.Count() > 0)
+            if (data.Count() > 0)
             {
+                List<DateTime?> dates = new List<DateTime?>();
+
+                foreach (var t in data)
+                {
+                    if (t.TimePosted < t.TimeUpdated)
+                    {
+                        dates.Add(t.TimeUpdated);
+                    }
+                    else
+                    {
+                        dates.Add(t.TimePosted);
+                    }
+                }
+
+                dates = dates.OrderByDescending(t => t.Value).ToList();
+
+                List<DiscussionsCommentsEntity> sortedList = new List<DiscussionsCommentsEntity>();
+
+                foreach (var d in dates)
+                {
+                    sortedList.Add(data.Where(q => q.TimePosted == d || q.TimeUpdated == d).FirstOrDefault());
+                }
+
+
                 List<Comments> comments = new List<Comments>();
 
-                foreach (var c in data)
+                foreach (var c in sortedList)
                 {
                     string d = await myMoviesListContext.Users.Where(q => q.Id == c.UserId).Select(s => s.Username).FirstOrDefaultAsync();
                     comments.Add(new Comments
@@ -128,7 +154,9 @@ namespace Services.Discussions
                         Id = c.Id,
                         Comment = c.Comment,
                         Username = d,
-                        TimePosted = c.TimePosted
+                        TimePosted = c.TimePosted,
+                        TimeUpdated = c.TimeUpdated
+                        
                     });
                 }
 
@@ -183,5 +211,35 @@ namespace Services.Discussions
             await myMoviesListContext.DiscussionsComments.Where(q => q.DiscussionId == Id).ExecuteDeleteAsync();
             await myMoviesListContext.SaveChangesAsync();
         }
+
+        public async Task DeleteComment(int Id)
+        {
+            await myMoviesListContext.DiscussionsComments.Where(q => q.Id == Id).ExecuteDeleteAsync();
+            await myMoviesListContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateComment(int Id, string comment)
+        {
+            var c = await myMoviesListContext.DiscussionsComments.Where(q => q.Id == Id).FirstOrDefaultAsync();
+
+            if(c != null)
+            {
+                c.Comment = comment;
+                c.TimeUpdated = DateTime.Now;
+                await myMoviesListContext.SaveChangesAsync();
+            }
+            else
+            {
+                throw new Exception("Comment not found!");
+            }
+
+        }
+
+        public async Task<int> GetCommentsCount(int DiscussionId)
+        {
+            var count = await myMoviesListContext.DiscussionsComments.Where(q=>q.DiscussionId == DiscussionId).CountAsync();
+            return count;
+        }
+
     }
 }

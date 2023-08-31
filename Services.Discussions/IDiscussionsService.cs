@@ -1,10 +1,4 @@
-﻿using Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Services.Discussions
 {
     public interface IDiscussionsService
@@ -18,5 +12,9 @@ namespace Services.Discussions
         Task<List<Discussions>> GetMyDiscussions(int UserId,int PostPerPage, int Page, string? Search);
         Task<int> GetMyDiscussionsCount(int UserId);
         Task DeleteMyDiscussions(int Id);
+        Task DeleteComment(int Id);
+        Task UpdateComment(int Id, string comment);
+        Task<int> GetCommentsCount(int DiscussionId);
+
     }
 }

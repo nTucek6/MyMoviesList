@@ -88,6 +88,31 @@ namespace MyMoviesList.Controllers.Discussions
         }
 
 
+        [HttpGet]
+        public async Task<IActionResult> DeleteComment(int Id)
+        {
+            await discussionsService.DeleteComment(Id);
+            return Ok();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UpdateComment(int Id, string comment)
+        {
+            await discussionsService.UpdateComment(Id,comment);
+            return Ok();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCommentsCount(int DiscussionId)
+        {
+           var count = await discussionsService.GetCommentsCount(DiscussionId);
+            return Ok(count);
+        }
+
+
+        
+
+
 
     }
 }

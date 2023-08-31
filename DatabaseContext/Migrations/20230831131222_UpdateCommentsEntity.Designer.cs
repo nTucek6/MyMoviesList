@@ -4,6 +4,7 @@ using DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatabaseContext.Migrations
 {
     [DbContext(typeof(MyMoviesListContext))]
-    partial class MyMoviesListContextModelSnapshot : ModelSnapshot
+    [Migration("20230831131222_UpdateCommentsEntity")]
+    partial class UpdateCommentsEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,7 +43,7 @@ namespace DatabaseContext.Migrations
                     b.Property<DateTime>("TimePosted")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("TimeUpdated")
+                    b.Property<DateTime>("TimeUpdated")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")
