@@ -17,7 +17,6 @@ export default function Frontpage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-
     return (
         <>
             <div className="container">
@@ -29,7 +28,7 @@ export default function Frontpage() {
                 <div className="mt-5">
                     <div className="row ">
                         <h6 className="col-6">Discussions</h6>
-                        <Link to="/discussions" className="col-6"><p className="float-end">View more</p></Link>
+                        <Link to="/discussions" className="col-6 text-dark"><p className="float-end">View more</p></Link>
                         <hr />
                         <Discussions />
                     </div>

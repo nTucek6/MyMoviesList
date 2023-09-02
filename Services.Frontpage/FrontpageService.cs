@@ -20,7 +20,7 @@ namespace Services.Frontpage
                 MovieName = s.MovieName,
                 MovieImageData = s.MovieImageData
             }
-         ).Take(6).ToListAsync();
+         ).Take(8).ToListAsync();
 
            return data;
         }

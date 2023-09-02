@@ -98,78 +98,51 @@ namespace Services.MovieSearch
 
         public async Task<List<SearchData>> SearchBar(string Search,string? type)
         {
-            
             List<SearchData> searchData = new List<SearchData>();
-
             string person = "person";
             string movie = "movie";
-
             if(type == "all")
             {
-                var movies = await myMoviesListContext.Movies
-                    .Where(q=>q.MovieName.Contains(Search))
-                    .Select(s=> new SearchData 
+                var movies = await myMoviesListContext.Movies.Where(q=>q.MovieName.Contains(Search)).Select(s=> new SearchData 
                     {
                         Id = s.Id,
                         Name = s.MovieName,
                         SearchImageData = s.MovieImageData,
                         type = movie
-                    })
-                    .Take(5)
-                    .ToListAsync();
-
-                var people = await myMoviesListContext.People
-                    .Where(q=> q.FirstName.Contains(Search) || q.LastName.Contains(Search))
-                    .Select(s => new SearchData
+                    }).Take(5).ToListAsync();
+                var people = await myMoviesListContext.People.Where(q=> q.FirstName.Contains(Search) || q.LastName.Contains(Search)).Select(s => new SearchData
                      {
                             Id = s.Id,
                             Name = s.FirstName + " " + s.LastName,
                             SearchImageData = s.PersonImageData,
                             type = person
-                      })
-                    .Take(5)
-                    .ToListAsync();
-
+                      }).Take(5).ToListAsync();
                 searchData.AddRange(movies);
                 searchData.AddRange(people);
-
             }
             else if(type == "movies")
             {
-                var movies = await myMoviesListContext.Movies
-                  .Where(q => q.MovieName.Contains(Search))
-                  .Select(s => new SearchData
+                var movies = await myMoviesListContext.Movies.Where(q => q.MovieName.Contains(Search)).Select(s => new SearchData
                   {
                       Id = s.Id,
                       Name = s.MovieName,
                       SearchImageData = s.MovieImageData,
                       type = movie
-                  })
-                  .Take(5)
-                  .ToListAsync();
-
+                  }).Take(5).ToListAsync();
                 searchData.AddRange(movies);
-
             }
             else if(type == "people")
             {
-                var people = await myMoviesListContext.People
-                             .Where(q => q.FirstName.Contains(Search) || q.LastName.Contains(Search))
-                             .Select(s => new SearchData
+                var people = await myMoviesListContext.People.Where(q => q.FirstName.Contains(Search) || q.LastName.Contains(Search)).Select(s => new SearchData
                              {
                                  Id = s.Id,
                                  Name = s.FirstName + " " + s.LastName,
                                  SearchImageData = s.PersonImageData,
                                  type = person
-                             })
-                             .Take(5)
-                             .ToListAsync();
-
+                             }).Take(5).ToListAsync();
                 searchData.AddRange(people);
             }
-        
             return searchData;
-
         }
 
 

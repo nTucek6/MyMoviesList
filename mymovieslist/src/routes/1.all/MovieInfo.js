@@ -312,7 +312,16 @@ export default function MovieInfo() {
             </div>
 
             <ShowModal modalIsOpen={modalIsOpen} closeModal={closeModal} customStyles={customStyles} ModalData={() => ReviewModalData({ setIsOpen, userId, movieId })} text={"Write a review"} />
-            <ToastContainer />
+            <ToastContainer
+            position="top-center"
+            autoClose={1500}
+            hideProgressBar={false}
+            newestOnTop={true}
+            rtl={false}
+            pauseOnFocusLoss
+            draggable = {false}
+            pauseOnHover={false}
+            />
         </div>
     );
 }

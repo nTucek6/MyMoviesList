@@ -209,6 +209,31 @@ body,input,select
 
 /* Swiper css */
 
+/*
+.movie-card {
+  position: relative;
+  width: 200px; 
+  margin: 20px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.movie-name {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  
+  color: white;
+  text-align: center;
+  padding: 5px;
+  font-size: 16px;
+}
+*/
 
 
 /* end ............................... */

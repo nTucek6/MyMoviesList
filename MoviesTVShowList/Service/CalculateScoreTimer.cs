@@ -9,7 +9,6 @@ namespace MyMoviesList.Service
         private Timer _timer;
         private readonly IServiceProvider _serviceProvider;
 
-
         public CalculateScoreTimer(ILogger<CalculateScoreTimer> logger, IServiceProvider serviceProvider)
         {
             _logger = logger;
@@ -44,7 +43,6 @@ namespace MyMoviesList.Service
 
             return Task.CompletedTask;
         }
-
         private async Task DoWorkAsync(object state)
         {
             _logger.LogInformation("TimerService is working at specific time.");
@@ -54,7 +52,6 @@ namespace MyMoviesList.Service
             var mySingletonService = scope.ServiceProvider.GetRequiredService<IMoviesAdminService>();
 
             await mySingletonService.UpdateMoviesScore();
-
         }
 
         public Task StopAsync(CancellationToken cancellationToken)

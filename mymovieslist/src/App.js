@@ -28,6 +28,7 @@ import SearchUsers from './routes/1.all/SearchUsers';
 import UserSupport from './routes/1.all/UserSupport';
 import Issues from './routes/2.admin/Issues';
 import MyDiscussions from './routes/3.user/MyDiscussions';
+import NotFound from './routes/1.all/NotFound';
 
 function App() {
    return (
@@ -71,6 +72,8 @@ function App() {
                   <Route path="/usersadmin" element={<UsersAdmin />} exact />
                   <Route path="/issues" element={<Issues />} exact />
                </Route>
+
+               <Route path="*" element={<NotFound/>} />
 
             </Route >
             {/* Routes without navbar */}

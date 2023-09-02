@@ -10,55 +10,58 @@ import 'swiper/css/scrollbar';
 import 'swiper/css/autoplay';
 
 export default function SwiperMovies({ RecentMovies }) {
-  const imageStyle = 
-  { 
+  const imageStyle =
+  {
     width: '200px',
-    height:'300px' 
-     };
+    height: '300px'
+  };
 
-     const navigate = useNavigate();
+  const navigate = useNavigate();
 
   if (RecentMovies == null) {
     return null;
   }
 
   const toMovieInfo = (link, data) => {
-    sessionStorage.setItem("movieName",data.movieName);
+    sessionStorage.setItem("movieName", data.movieName);
     navigate(link);
   }
 
+  console.log(RecentMovies);
+
   return (
     <div className='swiper-container'>
-    <Swiper
-      modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-      spaceBetween={10}
-      slidesPerView={3}
-      navigation
-      autoplay={{
-        delay: 3500,
-        disableOnInteraction: false,
-      }}
-      pagination={{ clickable: true }}
-      scrollbar={{ draggable: true }}
-      className='myswiper'
-    //onSlideChange={() => console.log('slide change')}
-    //onSwiper={(swiper) => console.log(swiper)} 
-    >
-      {(RecentMovies.length > 0 ?
-        RecentMovies.map((movie) => {
-          return (<SwiperSlide key={movie.id}>
-            <div style={{cursor:"pointer"}} onClick={() => toMovieInfo('/movie/' + movie.id + '/' + movie.movieName, movie)}>
-            <img className='swiperslide' style={imageStyle} src={"data:image/png;base64," + movie.movieImageData} />
-            </div>
-          
+      <Swiper
+        modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
+        spaceBetween={0}
+        slidesPerView={4}
+        navigation
+        autoplay={{
+          delay: 3500,
+          disableOnInteraction: false,
+        }}
+        pagination={{ clickable: true }}
+        scrollbar={{ draggable: true }}
+        className='myswiper'
+      >
+        {(RecentMovies.length > 0 ?
+          RecentMovies.map((movie) => {
+            return (
+              <SwiperSlide key={movie.id} className='mb-5 movie-card' style={{ cursor: "pointer" }} onClick={() => toMovieInfo('/movie/' + movie.id + '/' + movie.movieName, movie)}>
+                <img style={imageStyle} src={"data:image/png;base64," + movie.movieImageData} />
+                {/*
+                  <div className='movie-name'>
+                    {movie.movieName}
+                  </div>
+                  */
+                }
+              </SwiperSlide>)
+          }
+          ) : null
+        )}
 
-          </SwiperSlide>)
-        }
-        ) : null
-      )}
 
-
-    </Swiper>
+      </Swiper>
     </div>
   );
 };
