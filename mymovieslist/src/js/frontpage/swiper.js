@@ -27,8 +27,6 @@ export default function SwiperMovies({ RecentMovies }) {
     navigate(link);
   }
 
-  console.log(RecentMovies);
-
   return (
     <div className='swiper-container'>
       <Swiper

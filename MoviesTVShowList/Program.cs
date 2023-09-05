@@ -25,6 +25,9 @@ builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
            .AllowAnyHeader();
 }));
 
+
+//builder.WebHost.UseUrls("https://192.168.1.23:7169");
+
 // Add services to the container.
 
 builder.Services.AddControllers();
