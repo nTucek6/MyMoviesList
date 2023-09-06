@@ -71,6 +71,13 @@ namespace MyMoviesList.Controllers.MoviesAdmin
             return Ok();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CheckMovieSimilarity(MovieSimilarityDTO movie) 
+        {
+            var check = await addMovieService.CheckMovieSimilarity(movie);
+            return Ok(check);
+        }
+
 
 
     }

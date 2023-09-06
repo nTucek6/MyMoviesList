@@ -12,7 +12,7 @@ namespace Services.MoviesAdmin
       Task<List<PeopleSelect>> GetPeopleSelect();
       Task<List<PeopleSelect>> GetPeopleSelectSearch(string search);
       Task UpdateMoviesScore();
-
+      Task<bool> CheckMovieSimilarity(MovieSimilarityDTO movie);
 
     }
 }

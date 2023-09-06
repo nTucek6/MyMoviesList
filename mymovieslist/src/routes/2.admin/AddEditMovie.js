@@ -7,6 +7,9 @@ import previewImage from '../../img/preview.jpg';
 import GetPeopleSelectSearch from "../../js/MoviesAdmin/GetPeopleSelectSearch";
 import { useLocation } from 'react-router-dom';
 import CRUDLoading from "../../js/modal/loading";
+import axios from "axios";
+import config from "../../config.json";
+import YesNoDialog from "../../js/modal/yesorno";
 
 export default function AddEditMovie() {
 
@@ -30,12 +33,11 @@ export default function AddEditMovie() {
     const [GetWriters, setGetWriters] = useState([]);
     const [GetActors, setGetActors] = useState([]);
 
-    // const [search, setSearch] = useState("");
-
     const [selectedFile, setSelectedFile] = useState();
     const [preview, setPreview] = useState();
 
     const [loadingBar, setLoadingBar] = useState(false);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     const location = useLocation();
     const movie = location.state;
@@ -104,13 +106,10 @@ export default function AddEditMovie() {
         }
     }, [])
 
-
-
     const imageStyle = {
         height: "400px",
         width: "300px",
     }
-
 
     const onSelectFile = e => {
         if (!e.target.files || e.target.files.length === 0) {
@@ -123,6 +122,37 @@ export default function AddEditMovie() {
         e.preventDefault();
         setLoadingBar(true);
 
+        if (movie !== null) {
+            AddUpdateMovie();
+        }
+        else {
+            let isNotCopy = true;
+            await axios({
+                method: "POST",
+                url: config.SERVER_URL + "MoviesAdmin/CheckMovieSimilarity",
+                headers: { 'Content-Type': 'application/json' },
+                data: {
+                    MovieName: MovieName
+                }
+            })
+                .then(function (response) {
+                    isNotCopy = response.data;
+                    console.log(response.data);
+                })
+                .catch(function (response) {
+                    console.log(response);
+                });
+
+            if (isNotCopy) {
+                AddUpdateMovie();
+            }
+            else {
+                openDialog();
+            }
+        }
+    }
+
+    const AddUpdateMovie = async () => {
         let list = convertObjectToArray();
 
         const actorList = Actors.map(actor => {
@@ -138,7 +168,6 @@ export default function AddEditMovie() {
             if (data !== null) {
                 return data;
             }
-
         });
 
         const Movie = new FormData();
@@ -158,6 +187,24 @@ export default function AddEditMovie() {
             setLoadingBar(false);
         });
     }
+
+    const openDialog = () => {
+        setIsDialogOpen(true);
+    };
+
+    const closeDialog = () => {
+        setIsDialogOpen(false);
+    };
+
+    const handleYesClick = () => {
+        closeDialog();
+        AddUpdateMovie();
+    };
+
+    const handleNoClick = () => {
+        setLoadingBar(false);
+        closeDialog();
+    };
 
     function ClearData() {
         setId(0);
@@ -325,7 +372,7 @@ export default function AddEditMovie() {
 
                     <div className="form-group mb-2">
                         {movie !== null ?
-                            <input type="file" className="form-control" accept=".jpg,.png,.jpeg" onChange={onSelectFile}/> :
+                            <input type="file" className="form-control" accept=".jpg,.png,.jpeg" onChange={onSelectFile} /> :
                             <input type="file" className="form-control" accept=".jpg,.png,.jpeg" onChange={onSelectFile} required />}
                     </div>
 
@@ -342,6 +389,12 @@ export default function AddEditMovie() {
                 </form>
 
                 <CRUDLoading loadingBar={loadingBar} />
+                <YesNoDialog
+                    isOpen={isDialogOpen}
+                    onRequestClose={closeDialog}
+                    onYesClick={handleYesClick}
+                    onNoClick={handleNoClick}
+                />
             </div>
         </>
     )

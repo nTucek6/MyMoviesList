@@ -344,6 +344,19 @@ namespace Services.MoviesAdmin
 
         }
 
+        public async Task<bool> CheckMovieSimilarity(MovieSimilarityDTO movie)
+        {
+            var find = await myMoviesListContext.Movies.Where(q=> q.MovieName == movie.MovieName).FirstOrDefaultAsync();
+
+            if(find == null)
+            { 
+                return true; 
+            }
+            else
+            { 
+                return false; 
+            }
+        }
 
         private byte[] ImageToByte(IFormFile image)
         {
@@ -357,6 +370,6 @@ namespace Services.MoviesAdmin
             return s;
         }
 
-
+    
     }
 }
