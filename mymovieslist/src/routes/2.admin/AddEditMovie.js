@@ -394,6 +394,7 @@ export default function AddEditMovie() {
                     onRequestClose={closeDialog}
                     onYesClick={handleYesClick}
                     onNoClick={handleNoClick}
+                    text = "There is a movie with a same name. Do you wish to continue?"
                 />
             </div>
         </>

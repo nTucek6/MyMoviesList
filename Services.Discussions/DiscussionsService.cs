@@ -1,10 +1,8 @@
 ﻿using DatabaseContext;
 using Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
 using System.Data;
 using System.Linq.Expressions;
-using System.Xml.Linq;
 
 namespace Services.Discussions
 {
@@ -50,14 +48,6 @@ namespace Services.Discussions
         {
             var data = await myMoviesListContext.Discussions
                 .Where(q => q.Id == DiscussionId)
-               /* .Select(s=> new Discussions
-                {
-                    Id = s.Id,
-                    Title = s.Title,
-                    Discussion = s.Discussion,
-                    TimePosted = s.TimePosted
-
-                })*/
                 .FirstOrDefaultAsync();
 
             if(data != null)
@@ -115,57 +105,24 @@ namespace Services.Discussions
         {
             var data = await myMoviesListContext.DiscussionsComments
                     .Where(q => q.DiscussionId == DiscussionId)
-                    .Skip((Page - 1) * PostPerPage)
-                    .Take(PostPerPage).ToListAsync();
+                    .OrderByDescending(q => q.TimeUpdated ?? q.TimePosted)
+                    .Select(s=> new Comments
+                    {
+                        Id = s.Id,
+                        Comment = s.Comment,
+                        Username = myMoviesListContext.Users.Where(q => q.Id == s.UserId).Select(s => s.Username).FirstOrDefault(),
+                        TimePosted = s.TimePosted,
+                        TimeUpdated = s.TimeUpdated
 
-            if (data.Count() > 0)
+                    })
+                    .Skip((Page - 1) * PostPerPage).Take(PostPerPage)
+                    .ToListAsync();
+
+            if(data != null)
             {
-                List<DateTime?> dates = new List<DateTime?>();
-
-                foreach (var t in data)
-                {
-                    if (t.TimePosted < t.TimeUpdated)
-                    {
-                        dates.Add(t.TimeUpdated);
-                    }
-                    else
-                    {
-                        dates.Add(t.TimePosted);
-                    }
-                }
-
-                dates = dates.OrderByDescending(t => t.Value).ToList();
-
-                List<DiscussionsCommentsEntity> sortedList = new List<DiscussionsCommentsEntity>();
-
-                foreach (var d in dates)
-                {
-                    sortedList.Add(data.Where(q => q.TimePosted == d || q.TimeUpdated == d).FirstOrDefault());
-                }
-
-
-                List<Comments> comments = new List<Comments>();
-
-                foreach (var c in sortedList)
-                {
-                    string d = await myMoviesListContext.Users.Where(q => q.Id == c.UserId).Select(s => s.Username).FirstOrDefaultAsync();
-                    comments.Add(new Comments
-                    {
-                        Id = c.Id,
-                        Comment = c.Comment,
-                        Username = d,
-                        TimePosted = c.TimePosted,
-                        TimeUpdated = c.TimeUpdated
-                        
-                    });
-                }
-
-                return comments;
+                return data;
             }
-            else
-            {
-                return null;
-            }
+            return null;
            
         }
         public async Task<List<Discussions>> GetMyDiscussions(int UserId, int PostPerPage, int Page ,string? Search)

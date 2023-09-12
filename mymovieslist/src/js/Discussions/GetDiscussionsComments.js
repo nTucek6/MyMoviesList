@@ -16,7 +16,7 @@ export default async function GetDiscussionComments({setComments,discussionId,Po
         .then(function (response) {
             if(response.data !== null && response.data !== "")
             {
-                setComments(response.data);
+                setComments(prevData => [...prevData, ...response.data]);
             }
          // console.log(response);
         })

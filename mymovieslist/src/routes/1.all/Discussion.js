@@ -10,8 +10,6 @@ import DeleteComment from "../../js/Discussions/DeleteComment";
 import ShowModal from "../../js/modal/modal";
 import customStyles from "../../js/MovieInfo/customStyles";
 import UpdateCommentModalData from "../../js/Discussions/UpdateCommentModalData";
-import axios from "axios";
-import config from "../../config.json";
 import GetCommentsCount from "../../js/Discussions/GetCommentsCount";
 
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -44,7 +42,7 @@ export default function Discussion() {
     const [comment, setComment] = useState(null);
     const [commentCount, setCommentCount] = useState(0);
     const [oldComment, setOldComment] = useState(null);
-    const PostPerPage = 20;
+    const PostPerPage = 30;
     const [Page, setPage] = useState(1);
     const [HasMoreData, setHasMoreData] = useState(false);
 
@@ -74,7 +72,7 @@ export default function Discussion() {
 
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [comments]);
+    }, [comments,commentCount]);
 
 
     const handleSubmit = (e) => {
@@ -142,24 +140,7 @@ export default function Discussion() {
         setPage(Page + 1);
         setTimeout(() => {
 
-            axios({
-                method: "get",
-                url: config.SERVER_URL + "Discussions/GetDiscussionsComments",
-                headers: { 'Content-Type': 'application/json' },
-                params: {
-                    discussionId: discussionId,
-                    PostPerPage: PostPerPage,
-                    Page: Page
-                }
-            })
-                .then(function (response) {
-                    if (response.data !== null && response.data !== "") {
-                        setComments(prevData => [...prevData, ...response.data]);
-                    }
-                })
-                .catch(function (response) {
-                    console.log(response);
-                });
+         GetDiscussionComments({ setComments, discussionId, PostPerPage, Page });    
 
         }, 1000);
     }
@@ -195,8 +176,6 @@ export default function Discussion() {
                             }
                         </div>
                     </div>
-
-
                     <InfiniteScroll
                         dataLength={comments.length}
                         next={fetchMoreData}

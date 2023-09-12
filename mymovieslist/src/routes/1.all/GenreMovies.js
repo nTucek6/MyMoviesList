@@ -20,7 +20,7 @@ export default function GenreMovies() {
     const [HasMoreData, setHasMoreData] = useState(false);
 
     const [page, setPage] = useState(1);
-    const postPerPage = 9;
+    const postPerPage = 30;
 
     const shouldLoadData = useRef(true);
 
@@ -29,8 +29,8 @@ export default function GenreMovies() {
     useEffect(() => {
         if (shouldLoadData.current) {
             shouldLoadData.current = false;
-            GetMoviesByGenreCount({setMoviesCount,genre});
-            GetGenreMovies({ movies, setMovies, postPerPage, page, genre });
+            GetMoviesByGenreCount({ setMoviesCount, genre });
+            GetGenreMovies({ setMovies, postPerPage, page, genre });
             setPage(page + 1);
         }
 
@@ -38,12 +38,10 @@ export default function GenreMovies() {
 
     useEffect(() => {
 
-        if(moviesCount !== movies.length)
-        {
+        if (moviesCount !== movies.length) {
             setHasMoreData(true);
         }
-        else
-        {
+        else {
             setHasMoreData(false);
         }
 
@@ -54,29 +52,7 @@ export default function GenreMovies() {
 
         setPage(page + 1);
         setTimeout(() => {
-
-            axios({
-                method: "get",
-                url: config.SERVER_URL + "MovieSearch/GetMoviesByGenre",
-                headers: {'Content-Type': 'application/json' },
-                params: {
-                    genre:genre,
-                    PostPerPage:postPerPage,
-                    Page:page
-                }    
-            })
-                .then(function (response) {
-                    if (response) {
-                        setMovies([
-                            ...movies,
-                            ...response.data
-                        ]);
-                    }
-                })
-                .catch(function (response) {
-                    console.log(response);
-                });
-
+            GetGenreMovies({ setMovies, postPerPage, page, genre });
         }, 1000);
     }
 
@@ -117,7 +93,6 @@ export default function GenreMovies() {
                         }}
                     >
                         <div className="row row-cols-3 mt-5 ">
-
                             {
                                 movies.map((movie, index) => {
                                     return (

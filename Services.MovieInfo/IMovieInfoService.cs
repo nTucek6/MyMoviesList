@@ -11,7 +11,9 @@ namespace Services.MovieInfo
         Task<StatusSelect> GetWatchStatus(int userId, int movieId);
         Task UpdateMovieUserList(int userId, int movieId, int? score, int? statusId);
         Task<int> GetUserScore(int userId, int movieId);
-        Task<List<Review>> GetRecentReviews(int movieId);
+        Task<List<Review>> GetReviews(int movieId, int PostPerPage, int Page);
+        Task<int> GetReviewsCount(int movieId);
         Task UpdateReview(Review review);
+
     }
 }

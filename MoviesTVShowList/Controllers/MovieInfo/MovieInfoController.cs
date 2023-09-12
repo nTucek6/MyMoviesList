@@ -51,10 +51,16 @@ namespace MyMoviesList.Controllers.MovieInfo
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetRecentReviews(int movieId)
+        public async Task<IActionResult> GetReviews(int movieId, int PostPerPage, int Page)
         {
-             var reviews = await movieInfoService.GetRecentReviews(movieId);
+            var reviews = await movieInfoService.GetReviews(movieId, PostPerPage, Page);
             return Ok(reviews);
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetReviewsCount(int movieId)
+        {
+            var count = await movieInfoService.GetReviewsCount(movieId);
+            return Ok(count);
         }
 
         [HttpPost]

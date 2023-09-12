@@ -1,4 +1,5 @@
-﻿using DatabaseContext;
+﻿using Azure;
+using DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
 namespace Services.Frontpage
@@ -6,6 +7,8 @@ namespace Services.Frontpage
     public class FrontpageService : IFrontpageService
     {
         private readonly MyMoviesListContext myMoviesListContext;
+        private readonly static int RecentTakeCount = 8;
+        private static readonly int CountRequirements = 2;
 
         public FrontpageService(MyMoviesListContext myMoviesListContext)
         {
@@ -20,9 +23,11 @@ namespace Services.Frontpage
                 MovieName = s.MovieName,
                 MovieImageData = s.MovieImageData
             }
-         ).Take(8).ToListAsync();
+         ).Take(RecentTakeCount).ToListAsync();
 
            return data;
         }
+
+  
     }
 }

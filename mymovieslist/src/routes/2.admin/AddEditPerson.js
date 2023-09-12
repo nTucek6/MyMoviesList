@@ -4,6 +4,9 @@ import UpdatePerson from '../../js/PersonAdmin/UpdatePerson';
 import previewImage from '../../img/preview.jpg';
 import { useLocation } from 'react-router-dom';
 import CRUDLoading from '../../js/modal/loading';
+import YesNoDialog from '../../js/modal/yesorno';
+import axios from "axios";
+import config from "../../config.json";
 
 export default function AddEditPerson() {
     const [Id, setId] = useState(0);
@@ -16,6 +19,7 @@ export default function AddEditPerson() {
     const [preview, setPreview] = useState();
 
     const [loadingBar, setLoadingBar] = useState(false);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     const [text, setText] = useState("Add person");
 
@@ -65,6 +69,39 @@ export default function AddEditPerson() {
         e.preventDefault();
         setLoadingBar(true);
 
+        if (person !== null) {
+            AddUpdatePerson();
+        }
+        else {
+            let isNotCopy = true;
+            await axios({
+                method: "POST",
+                url: config.SERVER_URL + "PersonAdmin/CheckPersonSimilarity",
+                headers: { 'Content-Type': 'application/json' },
+                data: {
+                    FirstName: FirstName,
+                    LastName: LastName
+                }
+            })
+                .then(function (response) {
+                    isNotCopy = response.data;
+                    console.log(response.data);
+                })
+                .catch(function (response) {
+                    console.log(response);
+                });
+
+            if (isNotCopy) {
+                AddUpdatePerson();
+            }
+            else {
+                openDialog();
+            }
+        }
+    }
+
+    const AddUpdatePerson = async () => {
+
         const Person = new FormData();
         Person.append("Id", Id);
         Person.append("FirstName", FirstName);
@@ -79,8 +116,25 @@ export default function AddEditPerson() {
         });
     }
 
-    function ClearData()
-    {
+    const openDialog = () => {
+        setIsDialogOpen(true);
+    };
+
+    const closeDialog = () => {
+        setIsDialogOpen(false);
+    };
+
+    const handleYesClick = () => {
+        closeDialog();
+        AddUpdatePerson();
+    };
+
+    const handleNoClick = () => {
+        setLoadingBar(false);
+        closeDialog();
+    };
+
+    function ClearData() {
         setId(0);
         setFirstName("");
         setLastName("");
@@ -124,11 +178,11 @@ export default function AddEditPerson() {
                 </div>
 
                 <div className="form-group mb-2">
-                    {person !== null ? 
-                    <input type="file" className="form-control" accept=".jpg,.png,.jpeg" onChange={onSelectFile} />:
-                    <input type="file" className="form-control" accept=".jpg,.png,.jpeg" onChange={onSelectFile} required /> 
-                }
-                   
+                    {person !== null ?
+                        <input type="file" className="form-control" accept=".jpg,.png,.jpeg" onChange={onSelectFile} /> :
+                        <input type="file" className="form-control" accept=".jpg,.png,.jpeg" onChange={onSelectFile} required />
+                    }
+
                 </div>
 
                 <div className='d-flex justify-content-center'>
@@ -141,6 +195,13 @@ export default function AddEditPerson() {
                 </div>
             </form>
             <CRUDLoading loadingBar={loadingBar} />
+            <YesNoDialog
+                isOpen={isDialogOpen}
+                onRequestClose={closeDialog}
+                onYesClick={handleYesClick}
+                onNoClick={handleNoClick}
+                text = "There is a person with a same name. Do you wish to continue?"
+            />
         </div>
     </>)
 

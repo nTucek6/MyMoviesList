@@ -41,5 +41,14 @@ namespace MyMoviesList.Controllers.PersonAdmin
         }
 
 
+        [HttpPost]
+        public async Task<IActionResult> CheckPersonSimilarity(PersonSimilarityDTO person)
+        {
+            var check = await personAdminService.CheckPersonSimilarity(person);
+
+            return Ok(check);
+        }
+
+
     }
 }

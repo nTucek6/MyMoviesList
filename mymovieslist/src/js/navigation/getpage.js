@@ -30,6 +30,7 @@ export default function GetPage() {
     const isUserSupport = !!matchPath(location.pathname, '/support');
     const isIssues = !!matchPath(location.pathname, '/issues');
     const isMyDiscussions = !!matchPath(location.pathname, '/mydiscussions/' + username);
+    const isTopMovies = !!matchPath(location.pathname, '/topmovies/');
 
     if (isHome) {
         return <h6>Home page</h6>;
@@ -119,5 +120,10 @@ export default function GetPage() {
     {
         return <h6>My discussions</h6>
     }
+    else if(isTopMovies)
+    {
+        return <h6>Top Movies</h6>
+    }
+
 
 }

@@ -87,6 +87,7 @@ export default function Navigation() {
 
                                 <NavDropdown title="Movies" className="dropdown-custom">
                                     <NavDropdown.Item as={Link} to="/moviessearch">Movie Search</NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/topmovies">Top Movies</NavDropdown.Item>
                                 </NavDropdown>
                                 <NavDropdown title="Community" className="dropdown-custom" >
                                     <NavDropdown.Item as={Link} to="/discussions">Discussions</NavDropdown.Item>

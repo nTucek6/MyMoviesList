@@ -167,7 +167,7 @@ namespace Services.MovieInfo
             }
         }
 
-        public async Task<List<Review>> GetRecentReviews(int movieId)
+        public async Task<List<Review>> GetReviews(int movieId, int PostPerPage, int Page)
         {
             var reviews = await myMoviesListContext.MovieReviews
                 .Where(q => q.MovieId == movieId)
@@ -178,7 +178,8 @@ namespace Services.MovieInfo
                     ReviewText = s.Review,
                     TimeCreated = s.TimeCreated
                 })
-               // .Take(5)
+                .Skip((Page - 1) * PostPerPage)
+                .Take(PostPerPage)
                 .ToListAsync();
 
             if(reviews.Count() > 0)
@@ -195,6 +196,13 @@ namespace Services.MovieInfo
                 return null;
             }
         }
+
+        public async Task<int> GetReviewsCount(int movieId)
+        {
+            var count = await myMoviesListContext.MovieReviews.Where(q => q.MovieId == movieId).CountAsync();
+            return count;
+        }
+
 
         public async Task UpdateReview(Review review)
         {

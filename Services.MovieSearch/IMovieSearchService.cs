@@ -1,5 +1,4 @@
-﻿using Entities.Enum;
-using Services.MoviesAdmin;
+﻿using Services.MoviesAdmin;
 
 namespace Services.MovieSearch
 {
@@ -9,7 +8,7 @@ namespace Services.MovieSearch
         Task<int> GetMoviesByGenreCount(int genre);
         Task<List<Actor>> GetMovieActors(int movieId, int PostPerPage, int Page);
         Task<List<SearchData>> SearchBar(string Search,string? type);
-
-
+        Task<List<Movies>> GetTopMovies(int PostPerPage, int Page);
+        Task<int> GetTopMoviesCount();
     }
 }

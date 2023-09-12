@@ -56,29 +56,14 @@ export default function Discussions() {
 
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [Discussions]);
+    }, [Discussions,DiscussionCount]);
 
 
     const fetchMoreData = () => {
 
         setPage(page + 1);
         setTimeout(() => {
-
-            axios({
-                method: "get",
-                url: config.SERVER_URL + "Discussions/GetDiscussions",
-                headers: { 'Content-Type': 'application/json' },
-                params: {
-                    PostPerPage: PostPerPage,
-                    Page: page
-                }
-            })
-                .then(function (response) {
-                    setDiscussions(prevData => [...prevData, ...response.data]);
-                })
-                .catch(function (response) {
-                    console.log(response);
-                });
+        GetDiscussions({ setDiscussions, page, PostPerPage });
 
         }, 1000);
     }

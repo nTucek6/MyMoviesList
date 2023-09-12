@@ -13,7 +13,7 @@ export default async function GetDiscussions({setDiscussions,page,PostPerPage}) 
                 }
             })
                 .then(function (response) {
-                    setDiscussions(response.data);
+                    setDiscussions(prevData => [...prevData, ...response.data]);
     
                 })
                 .catch(function (response) {

@@ -18,6 +18,6 @@ namespace Entities.Enum
         [Description("Science fiction")]
         ScienceFiction = 12,
         Musical = 13,
-
+        Mystery = 14,
     }
 }

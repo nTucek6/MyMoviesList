@@ -1,6 +1,6 @@
 import Modal from 'react-modal';
 
-export default function YesNoDialog({ isOpen, onRequestClose, onYesClick, onNoClick })  {
+export default function YesNoDialog({ isOpen, onRequestClose, onYesClick, onNoClick,text })  {
 
     const customStyles = {
         content: {
@@ -22,10 +22,10 @@ export default function YesNoDialog({ isOpen, onRequestClose, onYesClick, onNoCl
             ariaHideApp={false}
             style={customStyles}
         >
-            <h2>There is a movie with same name. Do you wish to continue?</h2>
+            <h2>{text}</h2>
             <div className='row mt-2'>
-            <button className='btn btn-info col' onClick={onYesClick}>Yes</button>
             <button className='btn btn-danger col' onClick={onNoClick}>No</button>  
+            <button className='btn btn-info col' onClick={onYesClick}>Yes</button>
             </div>
             
         </Modal>

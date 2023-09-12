@@ -45,6 +45,21 @@ namespace MyMoviesList.Controllers.MovieSearch
             return Ok(searchdata);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetTopMovies(int PostPerPage,int Page)
+        {
+            var movies = await movieSearchService.GetTopMovies(PostPerPage, Page);
+
+            return Ok(movies);
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetTopMoviesCount()
+        {
+            var count = await movieSearchService.GetTopMoviesCount();
+
+            return Ok(count);
+        }
+
 
 
     }

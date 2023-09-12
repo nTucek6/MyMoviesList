@@ -41,12 +41,6 @@ export default function MoviesList() {
         }
     }
 
-    const toMovieInfo = (link, data) => {
-        sessionStorage.setItem("movieName",data.movieName);
-        navigate(link);
-      }
-
-
     return (
         <>
             <div className='container'>
@@ -65,7 +59,6 @@ export default function MoviesList() {
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Image</th>
                             <th>Movie name</th>
                             <th>Score</th>
                         </tr>
@@ -73,10 +66,9 @@ export default function MoviesList() {
                     <tbody>
                         {
                             (UserList.length > 0) ? UserList.map((movie, index) => {
-                                return (<tr key={movie.id} style={{cursor:"pointer"}} onClick={() => toMovieInfo('/movie/' + movie.id + '/' + movie.movieName, movie)}>
+                                return (<tr key={movie.id} style={{cursor:"pointer"}} onClick={() => navigate('/movie/' + movie.id + '/' + movie.movieName, movie)}>
                                     <td>{index + 1}</td>
-                                    <td><img className="img-fluid img-thumbnail" style={{width:"50px",height:"70px"}} src={"data:image/png;base64," + movie.movieImageData} alt="" /></td>
-                                    <td>{movie.movieName}</td>
+                                    <td><img className="img-fluid img-thumbnail" style={{width:"50px",height:"70px"}} src={"data:image/png;base64," + movie.movieImageData} alt="" /> {movie.movieName}</td>
                                     <td>{(movie.score != null) ? movie.score : "-"}</td>
                                 </tr>)
                             }) : null

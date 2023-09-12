@@ -157,9 +157,10 @@ export default function UsersAdmin() {
             </div>
             <ToastContainer
                position="top-center"
-               autoClose={1500}
+               autoClose={1000}
                hideProgressBar={false}
                newestOnTop={true}
+               closeOnClick={false}
                rtl={false}
                pauseOnFocusLoss
                draggable = {false}

@@ -6,6 +6,7 @@ using MyMoviesList.Extensions;
 using Services.MoviesAdmin;
 using System.Linq.Expressions;
 using Azure;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace Services.MovieSearch
 {
@@ -13,10 +14,13 @@ namespace Services.MovieSearch
     {
         private readonly MyMoviesListContext myMoviesListContext;
 
+        private static readonly int CountRequirements = 1;
+
         public MovieSearchService(MyMoviesListContext myMoviesListContext)
         {
             this.myMoviesListContext = myMoviesListContext;
         }
+
 
         public async Task<List<Movies>> GetMoviesByGenre(int genre,int PostPerPage,int Page)
         {
@@ -145,9 +149,40 @@ namespace Services.MovieSearch
             return searchData;
         }
 
+        public async Task<List<Movies>> GetTopMovies(int PostPerPage, int Page)
+        {
+            List<Movies> movies = await myMoviesListContext.Movies
+                              .Where(q => q.Rating != null && (myMoviesListContext.UsersMovieList.Where(u => q.Id == u.MovieId && u.Score != null).Count() >= CountRequirements))
+                              .OrderByDescending(o => o.Rating)
+                              .Select(s => new Movies
+                              {
+                                  Id = s.Id,
+                                  MovieName = s.MovieName,
+                                  MovieImageData = s.MovieImageData,
+                                  Rating = s.Rating,
+                              })
+                              .Skip((Page - 1) * PostPerPage)
+                              .Take(PostPerPage)
+                              .ToListAsync();
 
+            if (movies != null)
+            {
+                foreach (var movie in movies)
+                {
+                    var count = await myMoviesListContext.UsersMovieList.Where(q => q.MovieId == movie.Id && q.Score != null).CountAsync();
+                    movie.RatingsCount = count;
+                }
+                movies = movies.OrderByDescending(o => o.Rating).ThenByDescending(o => o.RatingsCount).ToList();
+                return movies;
+            }
+            return null;
+        }
 
-
+        public async Task<int> GetTopMoviesCount()
+        {
+            var count = await myMoviesListContext.Movies.Where(q => q.Rating != null && (myMoviesListContext.UsersMovieList.Where(u => q.Id == u.MovieId &&  u.Score != null).Count() >= CountRequirements) ).CountAsync();
+            return count;
+        }
 
 
     }

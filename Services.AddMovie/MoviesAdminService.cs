@@ -20,7 +20,7 @@ namespace Services.MoviesAdmin
         }
         public async Task<List<GenresSelect>> GetGenres()
         {
-            var genres = Enum.GetValues(typeof(GenresEnum)).Cast<GenresEnum>().ToList().Select(x => new GenresSelect { value = x, label = x.GetDescription()}).ToList();
+            var genres = Enum.GetValues(typeof(GenresEnum)).Cast<GenresEnum>().ToList().Select(x => new GenresSelect { value = x, label = x.GetDescription()}).OrderBy(o=>o.label).ToList();
           
             return genres;
         }
@@ -151,9 +151,6 @@ namespace Services.MoviesAdmin
 
         public async Task SaveMovie(SaveMovie movie)
         {
-
-           // var acc = JsonSerializer.Deserialize<List<SaveActor>>(movie.Actors);
-
             if (movie.Id > 0)
             {
                 var movieDb = await myMoviesListContext.Movies.Where(w => w.Id == movie.Id).FirstOrDefaultAsync();
@@ -177,7 +174,7 @@ namespace Services.MoviesAdmin
                     i++;
                 }
 
-                movieDb.MovieName = movie.MovieName;
+                movieDb.MovieName = movie.MovieName.Trim();
                 movieDb.Synopsis = movie.Synopsis;
                 movieDb.Genres = genres;
                 movieDb.Duration = movie.Duration;
@@ -251,7 +248,7 @@ namespace Services.MoviesAdmin
 
                 await myMoviesListContext.Movies.AddAsync(new MoviesEntity
                 {
-                    MovieName = movie.MovieName,
+                    MovieName = movie.MovieName.Trim(),
                     Synopsis = movie.Synopsis,
                     Genres = genres,
                     Duration = movie.Duration,
@@ -296,7 +293,6 @@ namespace Services.MoviesAdmin
                 await myMoviesListContext.SaveChangesAsync();
             }  
         }
-
 
         public async Task UpdateMoviesScore()
         {

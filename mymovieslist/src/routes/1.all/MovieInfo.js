@@ -16,20 +16,10 @@ import ShowModal from "../../js/modal/modal";
 import GetReview from "../../js/MovieInfo/GetReview";
 import { format } from 'date-fns'
 import customStyles from "../../js/MovieInfo/customStyles";
+import GetReviewCount from "../../js/MovieInfo/GetReviewCount";
 
-/*const customStyles = {
-    content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)',
-        width: "50%",
-        height: "70%",
-        overflowy: "auto",
-    }
-} */
+import InfiniteScroll from "react-infinite-scroll-component";
+import { ThreeDots } from 'react-loader-spinner';
 
 export default function MovieInfo() {
 
@@ -37,7 +27,7 @@ export default function MovieInfo() {
 
     const movieId = id;
 
-    const shouldLoadData = useRef(true);
+    // const shouldLoadData = useRef(true);
 
     const navigate = useNavigate();
 
@@ -52,10 +42,11 @@ export default function MovieInfo() {
     const [statusList, setStatusList] = useState([]);
     const [watchStatus, setWatchStatus] = useState(null);
     const [score, setScore] = useState(0);
-    const [RecentReviews, setRecentReviews] = useState(null);
+    const [RecentReviews, setRecentReviews] = useState([]);
+    const [ReviewsCount, setReviewsCount] = useState(0);
+    const [HasMoreData, setHasMoreData] = useState(false);
 
-    const postperpage = 4;
-
+    const postPerPage = 10;
     const [page, setPage] = useState(1);
 
     const [isNotAdded, setIsNotAdded] = useState(true);
@@ -75,13 +66,12 @@ export default function MovieInfo() {
     }
 
     useEffect(() => {
-        if (shouldLoadData.current) {
-            shouldLoadData.current = false;
 
-        }
         GetMovieInfo({ setMovie, movieId });
-        GetMovieActors({ setMovieActors, movieId, page, postperpage });
-        GetReview({ setRecentReviews, movieId });
+        GetMovieActors({ setMovieActors, movieId, page: 1, postperpage: 4 });
+        GetReview({ setRecentReviews, movieId, postPerPage, page: 1, firstLoad: true });
+        GetReviewCount({ setReviewsCount, movieId });
+
         if (token !== null) {
             GetStatus({ setStatusList });
             GetWatchStatus({ setWatchStatus, setIsNotAdded, userId, movieId });
@@ -89,6 +79,14 @@ export default function MovieInfo() {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [movieId]);
+
+    useEffect(() => {
+        if (ReviewsCount !== RecentReviews.length) {
+            setHasMoreData(true);
+        } else {
+            setHasMoreData(false);
+        }
+    }, [ReviewsCount, RecentReviews]);
 
 
     if (movie === null)
@@ -192,21 +190,15 @@ export default function MovieInfo() {
         return data;
     }
 
-    const GetRecentComments = () => {
-        if (RecentReviews !== null && RecentReviews !== "") {
-            return (RecentReviews.map((review, index) =>
-            (
-                <div key={index}>
-                    <h6>User: {review.userName}, Time created: {format(new Date(review.timeCreated), 'dd.MM.yyyy HH:mm:ss')}</h6>
-                    <p>{review.reviewText}</p>
-                    <hr />
-                </div>
-            )
-            ));
-        }
-    }
+    const fetchMoreData = () => {
 
-    
+        setPage(page + 1);
+        setTimeout(() => {
+
+            GetReview({ setRecentReviews, movieId, postPerPage, page: page + 1, firstLoad: false });
+
+        }, 1000);
+    }
 
     return (
         <div className="container">
@@ -238,8 +230,8 @@ export default function MovieInfo() {
                     <div className="row border border-start-0">
                         <div className="col-1 mt-2 mb-2 border border-start-0 border-top-0 border-bottom-0">
                             <h6 className="text-center">Score</h6>
-                            {movie.rating === null ?  <h4 className="text-center">N/A</h4> : <h4 className="text-center">{movie.rating}</h4> }
-                            {movie.rating === null ?  null : movie.ratingsCount > 1 ? <p className="text-center text-muted">{movie.ratingsCount} users</p> : <p className="text-center text-muted">{movie.ratingsCount} user</p>  }
+                            {movie.rating === null ? <h4 className="text-center">N/A</h4> : <h4 className="text-center">{movie.rating}</h4>}
+                            {movie.rating === null ? null : movie.ratingsCount > 1 ? <p className="text-center text-muted">{movie.ratingsCount} users</p> : <p className="text-center text-muted">{movie.ratingsCount} user</p>}
                         </div>
                     </div>
                     <br />
@@ -284,7 +276,7 @@ export default function MovieInfo() {
                                                 <div className="card-title">
                                                     <h5><b>{actor.firstName} {actor.lastName}</b></h5>
                                                 </div>
-                                                <span style={{opacity:0.8}}>{actor.characterName}</span>
+                                                <span style={{ opacity: 0.8 }}>{actor.characterName}</span>
                                             </div>
                                         </div>
                                         <hr className=" mt-1" />
@@ -299,13 +291,52 @@ export default function MovieInfo() {
                             <h6>Reviews</h6>
                         </div>
                         <div className="col-6">
-                           { 
-                           //<Link className="col-6"><p className="float-end">View more</p></Link> 
-                           }
+                            {
+                                //<Link className="col-6"><p className="float-end">View more</p></Link> 
+                            }
                         </div>
 
                         <hr />
-                        <GetRecentComments />
+                        <InfiniteScroll
+                            dataLength={RecentReviews.length}
+                            next={fetchMoreData}
+                            hasMore={HasMoreData}
+                            className="mb-5"
+                            loader={
+                                <div className="d-flex justify-content-center">
+                                    <ThreeDots
+                                        height="80"
+                                        width="80"
+                                        radius="9"
+                                        color="#4fa94d"
+                                        ariaLabel="three-dots-loading"
+                                        wrapperStyle={{}}
+                                        visible={true}
+                                    />
+                                </div>
+
+                            }
+                            style={{
+                                overflowX: "hidden",
+                                overflowY: "visible"
+                            }}>
+                            {
+                                RecentReviews.length !== 0 ? RecentReviews.map((review, index) =>
+                                (
+                                    <div key={index}>
+                                        <h6>User: {review.userName}, Time created: {format(new Date(review.timeCreated), 'dd.MM.yyyy HH:mm:ss')}</h6>
+                                        <p>{review.reviewText}</p>
+                                        <hr />
+                                    </div>
+                                )
+                                )
+                                    :
+                                    null
+                            }
+                        </InfiniteScroll>
+
+
+
                     </div>
 
                 </div>
@@ -313,14 +344,15 @@ export default function MovieInfo() {
 
             <ShowModal modalIsOpen={modalIsOpen} closeModal={closeModal} customStyles={customStyles} ModalData={() => ReviewModalData({ setIsOpen, userId, movieId })} text={"Write a review"} />
             <ToastContainer
-            position="top-center"
-            autoClose={1500}
-            hideProgressBar={false}
-            newestOnTop={true}
-            rtl={false}
-            pauseOnFocusLoss
-            draggable = {false}
-            pauseOnHover={false}
+                position="top-center"
+                autoClose={1000}
+                hideProgressBar={false}
+                closeOnClick={false}
+                newestOnTop={true}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable={false}
+                pauseOnHover={false}
             />
         </div>
     );

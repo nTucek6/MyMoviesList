@@ -29,6 +29,7 @@ import UserSupport from './routes/1.all/UserSupport';
 import Issues from './routes/2.admin/Issues';
 import MyDiscussions from './routes/3.user/MyDiscussions';
 import NotFound from './routes/1.all/NotFound';
+import TopMovies from './routes/1.all/TopMovies';
 
 function App() {
    return (
@@ -49,6 +50,7 @@ function App() {
                <Route path="/searchresult/:type" element={<SearchResult />} />
                <Route path="/searchusers" element={<SearchUsers />} />
                <Route path="/support" element={<UserSupport/>} />
+               <Route path="/topmovies" element={<TopMovies/>} />
 
                <Route path="/profile/:username" element={<Profile />} />
 

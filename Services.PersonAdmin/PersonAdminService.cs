@@ -53,8 +53,8 @@ namespace Services.PersonAdmin
             if (person.Id > 0)
             {
                 var personDb = await myMoviesListContext.People.Where(w => w.Id == person.Id).FirstOrDefaultAsync();
-                personDb.FirstName = person.FirstName;
-                personDb.LastName = person.LastName;
+                personDb.FirstName = person.FirstName.Trim();
+                personDb.LastName = person.LastName.Trim();
                 personDb.BirthDate = person.BirthDate;
                 personDb.BirthPlace = person.BirthPlace;
 
@@ -74,8 +74,8 @@ namespace Services.PersonAdmin
 
                 await myMoviesListContext.People.AddAsync(new PeopleEntity
                 {
-                    FirstName = person.FirstName,
-                    LastName = person.LastName,
+                    FirstName = person.FirstName.Trim(),
+                    LastName = person.LastName.Trim(),
                     BirthDate = person.BirthDate,
                     BirthPlace = person.BirthPlace,
                     PersonImageData = s
@@ -90,6 +90,20 @@ namespace Services.PersonAdmin
             var count = await myMoviesListContext.People.CountAsync();
 
             return count;
+        }
+
+        public async Task<bool> CheckPersonSimilarity(PersonSimilarityDTO person)
+        {
+            var find = await myMoviesListContext.People.Where(q => q.FirstName == person.FirstName.Trim() && q.LastName == person.LastName.Trim()).FirstOrDefaultAsync();
+
+            if (find == null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
 

@@ -9,6 +9,6 @@ namespace Services.Frontpage
     public interface IFrontpageService
     {
         public Task<List<RecentMovies>> GetRecentMovies();
-
+     
     }
 }

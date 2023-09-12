@@ -1,8 +1,6 @@
-﻿using DatabaseContext;
-using Entities;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using Services.Frontpage;
+using Services.MovieSearch;
 
 namespace MyMoviesList.Controllers.Frontpage
 {
@@ -11,7 +9,8 @@ namespace MyMoviesList.Controllers.Frontpage
     public class FrontpageController : Controller
     {
         private readonly IFrontpageService frontpageService;
-        public FrontpageController(IFrontpageService frontpageService)
+       
+        public FrontpageController(IFrontpageService frontpageService )
         {
             this.frontpageService = frontpageService;
         }
@@ -25,7 +24,7 @@ namespace MyMoviesList.Controllers.Frontpage
 
         }
 
-
+     
 
 
     }

@@ -9,5 +9,6 @@ namespace Services.PersonAdmin
 
         Task<List<PeopleEntity>> GetPeople(int PostPerPage, int Page, string? Search);
         Task<int> GetPeopleCount();
+        Task<bool> CheckPersonSimilarity(PersonSimilarityDTO person);
     }
 }

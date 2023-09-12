@@ -119,8 +119,9 @@ export default function UserSupport() {
             </div>
             <ToastContainer
                position="top-center"
-               autoClose={1500}
+               autoClose={1000}
                hideProgressBar={false}
+               closeOnClick={false}
                newestOnTop={true}
                rtl={false}
                pauseOnFocusLoss

@@ -1,14 +1,13 @@
 import axios from "axios";
 import config from './../../config.json';
 
-export default async function GetGenreMovies({setMovies,postPerPage,page,genre})
+export default async function GetTopMovies({setMovies,postPerPage,page})
 {
    await axios({
         method: "get",
-        url: config.SERVER_URL + "MovieSearch/GetMoviesByGenre",
+        url: config.SERVER_URL + "MovieSearch/GetTopMovies",
         headers: {'Content-Type': 'application/json' },
         params: {
-            genre:genre,
             PostPerPage:postPerPage,
             Page:page
         }    
