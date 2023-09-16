@@ -39,7 +39,8 @@ namespace MyMoviesList.Controllers.PersonInfo
             }
             else    
             {
-                return BadRequest("No movies!");
+                //return BadRequest("No movies!");
+                return Ok();
             }
         }
 
@@ -53,7 +54,8 @@ namespace MyMoviesList.Controllers.PersonInfo
             }
             else
             {
-                return BadRequest("No movies!");
+                // return BadRequest("No movies!");
+                return Ok();
             }
         }
 
@@ -67,7 +69,8 @@ namespace MyMoviesList.Controllers.PersonInfo
             }
             else
             {
-                return BadRequest("No movies!");
+                // return BadRequest("No movies!");
+                return Ok();
             }
         }
 

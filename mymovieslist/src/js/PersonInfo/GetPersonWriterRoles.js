@@ -12,7 +12,11 @@ export default async function GetPersonWriterRoles({setPersonWriterRoles,personI
         }
          })
         .then(function (response) {
-            setPersonWriterRoles(response.data);
+            if(response.data !== null && response.data !== "")
+            {
+                setPersonWriterRoles(response.data);
+            }
+            
         })
         .catch(function (response) {
           console.log(response);

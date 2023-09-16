@@ -226,6 +226,25 @@ namespace Services.MovieInfo
             await myMoviesListContext.SaveChangesAsync();
         }
 
+        public async Task<Review> GetModalReview(int movieId, int userId)
+        {
+            var review = await myMoviesListContext.MovieReviews
+                                .Where(q=> q.MovieId == movieId && q.UserId == userId)
+                                .Select(s=> new Review 
+                                {
+                                    MovieId=s.MovieId,
+                                    UserId=s.UserId,
+                                    ReviewText = s.Review
+
+                                }).FirstOrDefaultAsync();
+
+            if(review != null)
+            {
+                return review;
+            }
+            return null;
+        }
+
 
     }
 }

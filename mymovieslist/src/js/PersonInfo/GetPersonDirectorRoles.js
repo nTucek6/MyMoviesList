@@ -12,8 +12,11 @@ export default async function GetPersonDirectorRoles({setPersonDirectorRoles,per
         }
          })
         .then(function (response) {
-            console.log(response.data);
-            setPersonDirectorRoles(response.data);
+            if(response.data !== null && response.data !== "")
+            {
+                setPersonDirectorRoles(response.data);
+            }
+           
         })
         .catch(function (response) {
           console.log(response);

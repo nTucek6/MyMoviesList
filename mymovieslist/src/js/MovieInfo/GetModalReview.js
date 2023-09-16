@@ -1,22 +1,23 @@
 import axios from "axios";
 import config from './../../config.json';
 
-export default async function GetPersonActorRoles({setPersonActorRoles,personId,postperpage,page})
+export default async function GetModalReview({setOldReview,movieId,userId })
     {
+      
     await axios({
         method: "get",
-        url: config.SERVER_URL + "PersonInfo/GetPersonActorRoles",
+        url: config.SERVER_URL + "MovieInfo/GetModalReview",
         headers: { 'Content-Type': 'application/json' },
         params:{
-            personId:personId
+            movieId:movieId,
+            userId:userId
         }
          })
         .then(function (response) {
-            if(response.data !== null && response.data !== "")
-            {
-                setPersonActorRoles(response.data);
+            if(response.data !== null || response.data !== "")
+            {  
+                setOldReview(response.data);   
             }
-           
         })
         .catch(function (response) {
           console.log(response);

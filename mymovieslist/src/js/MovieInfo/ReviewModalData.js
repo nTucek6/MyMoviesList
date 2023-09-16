@@ -1,9 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UpdateReview from "./UpdateReview";
+import GetModalReview from "./GetModalReview";
 
 export default function ReviewModalData({setIsOpen,userId,movieId})
 {
     const[Review,setReview] = useState("");
+    const[OldReview,setOldReview] = useState("");
+
+    useEffect(()=>{
+        GetModalReview({setOldReview,movieId,userId})
+
+    },[]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -16,7 +23,7 @@ export default function ReviewModalData({setIsOpen,userId,movieId})
     return (<>
     <form onSubmit={handleSubmit}>
         <div className="form-group">
-        <textarea rows="10" style={{height:"100%"}} className="form-control" onChange={r=> setReview(r.target.value)} required></textarea>
+        <textarea rows="10" style={{height:"100%"}} className="form-control" defaultValue={OldReview.reviewText} onChange={r=> setReview(r.target.value)} required></textarea>
         </div>
         <hr />
         <div className="mt-2 d-flex flex-row-reverse">

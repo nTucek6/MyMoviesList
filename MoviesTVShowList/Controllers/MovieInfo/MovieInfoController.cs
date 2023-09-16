@@ -70,6 +70,13 @@ namespace MyMoviesList.Controllers.MovieInfo
             return Ok();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetModalReview(int movieId, int userId)
+        {
+            var review = await movieInfoService.GetModalReview(movieId, userId);
+            return Ok(review);
+        }
+
 
     }
 }
