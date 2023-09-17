@@ -14,6 +14,7 @@ namespace Services.MovieInfo
         Task<List<Review>> GetReviews(int movieId, int PostPerPage, int Page);
         Task<int> GetReviewsCount(int movieId);
         Task UpdateReview(Review review);
+        Task<Review> GetModalReview(int movieId,int userId);
 
     }
 }
