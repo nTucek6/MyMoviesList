@@ -19,5 +19,6 @@ namespace Entities.Enum
         ScienceFiction = 12,
         Musical = 13,
         Mystery = 14,
+        Crime = 15,
     }
 }
