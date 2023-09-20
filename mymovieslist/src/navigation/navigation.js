@@ -97,7 +97,9 @@ export default function Navigation() {
                                     <NavDropdown.Item as={Link} to="/support">Support</NavDropdown.Item>
                                 </NavDropdown>
                             </Nav>
+
                             <SearchBar />
+                            
                         </Navbar.Collapse>
                     </div>
                 </Navbar>
